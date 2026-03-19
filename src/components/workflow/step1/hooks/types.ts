@@ -1,4 +1,4 @@
-import type { Project } from '@/types/project';
+import type { Project, VoiceProvider, ImageProvider } from '@/types/project';
 import type { Dispatch, SetStateAction } from 'react';
 
 export type Setter<T> = Dispatch<SetStateAction<T>>;
@@ -42,10 +42,10 @@ export interface Step1State {
   setVideoLanguage: Dispatch<SetStateAction<any>>;
   storyModel: 'gpt-4' | 'claude-sonnet-4.5' | 'gemini-3-pro';
   setStoryModel: (value: 'gpt-4' | 'claude-sonnet-4.5' | 'gemini-3-pro') => void;
-  voiceProvider: 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie';
-  setVoiceProvider: (value: 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie') => void;
-  imageProvider: 'gemini' | 'modal' | 'modal-edit' | 'kie';
-  setImageProvider: (value: 'gemini' | 'modal' | 'modal-edit' | 'kie') => void;
+  voiceProvider: VoiceProvider;
+  setVoiceProvider: (value: VoiceProvider) => void;
+  imageProvider: ImageProvider;
+  setImageProvider: (value: ImageProvider) => void;
 
   // Constants
   videoLanguages: readonly string[];

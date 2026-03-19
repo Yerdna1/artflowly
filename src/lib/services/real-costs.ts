@@ -213,7 +213,7 @@ export const ACTION_COSTS = {
 } as const;
 
 // Type definitions
-export type Provider = 'gemini' | 'gemini-tts' | 'elevenlabs' | 'grok' | 'kie' | 'claude' | 'claude-sdk' | 'suno' | 'piapi' | 'modal' | 'modal-edit' | 'modal-vectcut' | 'openrouter' | 'openai-tts';
+export type Provider = 'gemini' | 'gemini-tts' | 'elevenlabs' | 'grok' | 'kie' | 'claude' | 'claude-sdk' | 'suno' | 'piapi' | 'modal' | 'modal-edit' | 'modal-vectcut' | 'openrouter' | 'openai-tts' | 'newapi';
 export type ActionType = 'image' | 'video' | 'voiceover' | 'scene' | 'character' | 'prompt' | 'music' | 'videoComposition';
 
 export interface CostEstimate {
