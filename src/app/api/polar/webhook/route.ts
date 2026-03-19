@@ -9,6 +9,7 @@ import {
   verifyWebhookSignature,
   type PlanType,
 } from '@/lib/services/polar';
+import { prisma } from '@/lib/db/prisma';
 
 // Disable body parsing - we need the raw body for signature verification
 export const dynamic = 'force-dynamic';
@@ -58,10 +59,18 @@ export async function POST(request: NextRequest) {
 
     const { type, data } = event;
 
-    // Extract user ID from metadata
-    const userId = data.metadata?.userId;
+    // Extract user ID from metadata, with email fallback
+    let userId = data.metadata?.userId;
     if (!userId) {
-      console.error('No userId in webhook metadata');
+      // Fallback: look up user by customer email
+      const customerEmail = (data as any).customer?.email;
+      if (customerEmail) {
+        const user = await prisma.user.findFirst({ where: { email: customerEmail } });
+        userId = user?.id;
+      }
+    }
+    if (!userId) {
+      console.error('No userId in webhook metadata and no matching user by email');
       return NextResponse.json(
         { error: 'Missing userId' },
         { status: 400 }

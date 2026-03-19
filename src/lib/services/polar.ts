@@ -147,6 +147,10 @@ export async function createCheckout(
         products: [planConfig.productId],
         success_url: successUrl,
         ...(userEmail ? { customer_email: userEmail } : {}),
+        metadata: {
+          userId: userId,
+          plan: plan,
+        },
       }),
     });
 
@@ -166,6 +170,10 @@ export async function createCheckout(
           body: JSON.stringify({
             products: [planConfig.productId],
             success_url: successUrl,
+            metadata: {
+              userId: userId,
+              plan: plan,
+            },
           }),
         });
 
