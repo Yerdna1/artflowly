@@ -160,6 +160,7 @@ model ApiKeys {
   kieVideoModel          String?  @default("grok-imagine/image-to-video")
   preferOwnKeys          Boolean  @default(false)
   kieLlmModel            String?  @default("claude/claude-sonnet-4-20250514")
+  newapiApiKey           String?
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

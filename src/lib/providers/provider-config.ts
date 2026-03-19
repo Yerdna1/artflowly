@@ -9,7 +9,7 @@ const DB_PROVIDER_MAP = {
     apiKeyFields: {
       'gemini': 'geminiApiKey',
       'kie': 'kieApiKey',
-      // newapi uses env var NEW_API_KEY, not a DB field
+      'newapi': 'newapiApiKey',
       // Modal uses endpoints, not API keys
     },
   },
@@ -17,7 +17,7 @@ const DB_PROVIDER_MAP = {
     providerField: 'videoProvider',
     apiKeyFields: {
       'kie': 'kieApiKey',
-      // newapi uses env var NEW_API_KEY, not a DB field
+      'newapi': 'newapiApiKey',
       // Modal uses endpoints, not API keys
     },
   },
@@ -28,7 +28,7 @@ const DB_PROVIDER_MAP = {
       'elevenlabs': 'elevenLabsApiKey',
       'openai-tts': 'openaiApiKey',
       'kie': 'kieApiKey',
-      // newapi uses env var NEW_API_KEY, not a DB field
+      'newapi': 'newapiApiKey',
       // Modal uses endpoints, not API keys
     },
   },
@@ -38,7 +38,7 @@ const DB_PROVIDER_MAP = {
       'kie': 'kieApiKey',
       'piapi': 'piapiApiKey',
       'suno': 'sunoApiKey',
-      // newapi uses env var NEW_API_KEY, not a DB field
+      'newapi': 'newapiApiKey',
       // Modal uses endpoints, not API keys
     },
   },
@@ -48,7 +48,7 @@ const DB_PROVIDER_MAP = {
       'kie': 'kieApiKey',
       'openrouter': 'openRouterApiKey',
       'gemini': 'geminiApiKey',
-      // newapi uses env var NEW_API_KEY, not a DB field
+      'newapi': 'newapiApiKey',
       // Modal and claude-sdk use endpoints, not API keys
     },
   },
@@ -114,6 +114,7 @@ export async function getProviderConfig(
         piapiApiKey: true,
         sunoApiKey: true,
         openRouterApiKey: true,
+        newapiApiKey: true,
         // Modal endpoints
         modalLlmEndpoint: true,
         modalTtsEndpoint: true,
@@ -236,36 +237,42 @@ export async function getProviderConfig(
     }
   }
 
-  // If no provider configured, default to newapi if NEW_API_KEY is available
-  if (!provider && process.env.NEW_API_KEY) {
-    provider = 'newapi' as ProviderType;
-    apiKey = process.env.NEW_API_KEY;
-    userHasOwnApiKey = false;
-
-    // Set default model for newapi based on generation type
-    const { NEW_API_DEFAULT_MODELS } = require('./newapi/client');
-    model = NEW_API_DEFAULT_MODELS[type] || undefined;
-
-    console.log(`[Provider Config] No provider configured, defaulting to newapi for ${type}`);
-  }
-
-  // If still no provider, return error
+  // If no provider configured, default to newapi if user has a per-user key
   if (!provider) {
-    throw new ProviderError(
-      `No ${type} provider configured. Please configure your providers in settings.`,
-      'NO_PROVIDER_CONFIGURED',
-      'none'
-    );
+    // Check if user has a per-user newapi key
+    if (userSettings?.newapiApiKey) {
+      provider = 'newapi' as ProviderType;
+      apiKey = userSettings.newapiApiKey;
+      userHasOwnApiKey = false; // billed via New API proxy, not Artflowly credits
+
+      const { NEW_API_DEFAULT_MODELS } = require('./newapi/client');
+      model = NEW_API_DEFAULT_MODELS[type] || undefined;
+
+      console.log(`[Provider Config] No provider configured, defaulting to newapi (per-user key) for ${type}`);
+    } else {
+      throw new ProviderError(
+        'Subscription required. Please upgrade to start generating.',
+        'NO_PROVIDER_CONFIGURED',
+        'none'
+      );
+    }
   }
 
-  // Handle newapi provider: use env var key, skip DB lookups
+  // Handle newapi provider: use per-user key from DB, no shared env var fallback
   if (provider === 'newapi') {
     if (!apiKey) {
-      apiKey = process.env.NEW_API_KEY || '';
+      // Try per-user key from DB
+      if (userSettings?.newapiApiKey) {
+        apiKey = userSettings.newapiApiKey;
+      } else {
+        throw new ProviderError(
+          'Subscription required. Please upgrade to start generating.',
+          'SUBSCRIPTION_REQUIRED',
+          'newapi'
+        );
+      }
     }
-    if (apiKey) {
-      userHasOwnApiKey = false; // newapi uses org key, so credits are deducted
-    }
+    userHasOwnApiKey = false; // billed via New API proxy, not Artflowly credits
     if (!model) {
       const { NEW_API_DEFAULT_MODELS } = require('./newapi/client');
       model = NEW_API_DEFAULT_MODELS[type] || undefined;

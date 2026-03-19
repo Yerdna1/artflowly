@@ -82,6 +82,7 @@ export async function GET() {
           hasPiApiKey: false,
           hasKieKey: false,
           hasResendKey: false,
+          hasNewapiKey: false,
         },
         {
           headers: {
@@ -141,6 +142,7 @@ export async function GET() {
         hasPiApiKey: !!apiKeys.piapiApiKey,
         hasKieKey: !!apiKeys.kieApiKey,
         hasResendKey: !!apiKeys.resendApiKey,
+        hasNewapiKey: !!apiKeys.newapiApiKey,
       },
       {
         headers: {
@@ -184,6 +186,7 @@ export async function POST(request: NextRequest) {
       piapiApiKey,
       kieApiKey,
       resendApiKey,
+      newapiApiKey,
       kieImageModel,
       kieVideoModel,
       kieTtsModel,
@@ -219,6 +222,7 @@ export async function POST(request: NextRequest) {
         ...(piapiApiKey !== undefined && { piapiApiKey }),
         ...(kieApiKey !== undefined && { kieApiKey }),
         ...(resendApiKey !== undefined && { resendApiKey }),
+        ...(newapiApiKey !== undefined && { newapiApiKey }),
         ...(kieImageModel !== undefined && { kieImageModel }),
         ...(kieVideoModel !== undefined && { kieVideoModel }),
         ...(kieTtsModel !== undefined && { kieTtsModel }),
@@ -253,6 +257,7 @@ export async function POST(request: NextRequest) {
         piapiApiKey: piapiApiKey || null,
         kieApiKey: kieApiKey || null,
         resendApiKey: resendApiKey || null,
+        newapiApiKey: newapiApiKey || null,
         kieImageModel: kieImageModel || DEFAULT_MODELS.kieImageModel,
         kieVideoModel: kieVideoModel || DEFAULT_MODELS.kieVideoModel,
         kieTtsModel: kieTtsModel || DEFAULT_MODELS.kieTtsModel,
