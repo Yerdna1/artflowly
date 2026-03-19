@@ -129,14 +129,34 @@ export async function createCheckout(
       });
     }
 
-    // Create checkout via Polar SDK
     const successUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://artflowly.com'}/billing?success=true`;
-    const checkout = await polar.checkouts.create({
-      products: [planConfig.productId],
-      successUrl,
-      customerEmail: userEmail || undefined,
+
+    // Create checkout session via Polar API
+    const accessToken = process.env.POLAR_ACCESS_TOKEN;
+    if (!accessToken) {
+      return { error: 'POLAR_ACCESS_TOKEN not configured' };
+    }
+
+    const response = await fetch('https://api.polar.sh/v1/checkouts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        products: [planConfig.productId],
+        success_url: successUrl,
+        customer_email: userEmail || undefined,
+      }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Polar checkout API error:', response.status, errorData);
+      return { error: `Polar API error: ${response.status}` };
+    }
+
+    const checkout = await response.json();
     return { url: checkout.url };
   } catch (error: any) {
     console.error('Error creating checkout:', error?.statusCode, error?.body || error?.message || error);
