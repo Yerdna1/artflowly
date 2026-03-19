@@ -146,13 +146,38 @@ export async function createCheckout(
       body: JSON.stringify({
         products: [planConfig.productId],
         success_url: successUrl,
-        customer_email: userEmail || undefined,
+        ...(userEmail ? { customer_email: userEmail } : {}),
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.error('Polar checkout API error:', response.status, errorData);
+
+      // If customer_email validation failed, retry without it
+      if (response.status === 422 && userEmail) {
+        console.log('Retrying Polar checkout without customer_email...');
+        const retryResponse = await fetch('https://api.polar.sh/v1/checkouts/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            products: [planConfig.productId],
+            success_url: successUrl,
+          }),
+        });
+
+        if (retryResponse.ok) {
+          const retryCheckout = await retryResponse.json();
+          return { url: retryCheckout.url };
+        }
+
+        const retryError = await retryResponse.json().catch(() => ({}));
+        console.error('Polar checkout retry also failed:', retryResponse.status, retryError);
+      }
+
       return { error: `Polar API error: ${response.status}` };
     }
 
