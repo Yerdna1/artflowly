@@ -22,6 +22,9 @@ export const API_BASE_URLS = {
   suno: 'https://api.suno.ai', // Direct Suno API
   piapi: 'https://api.piapi.ai', // Unified API for Suno/Udio
 
+  // New API Proxy (routes through to kie.ai with margin pricing)
+  newapi: process.env.NEW_API_URL || 'http://72.61.178.169:3001',
+
   // Other Services
   resend: 'https://api.resend.com',
 } as const;
@@ -62,6 +65,13 @@ export const API_PATHS = {
     generateImage: '/api/v1/jobs/createTask',
     generateVideo: '/api/v1/jobs/createTask',
     generateTts: '/api/v1/jobs/createTask',
+  },
+
+  // New API Proxy
+  newapi: {
+    chat: '/v1/chat/completions',
+    submit: '/v1/video/generations',
+    poll: (taskId: string) => `/v1/video/generations/${taskId}`,
   },
 
   // Grok
@@ -147,6 +157,9 @@ export const DEFAULT_HEADERS = {
     'X-Title': 'ArtFlowly',
   },
   kie: {
+    'Accept': 'application/json',
+  },
+  newapi: {
     'Accept': 'application/json',
   },
 } as const;

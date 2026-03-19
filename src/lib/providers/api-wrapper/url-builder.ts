@@ -25,6 +25,8 @@ export function buildProviderUrl(provider: string, type: GenerationType, model?:
           return getEndpointUrl('gemini', 'generateContent', model || 'gemini-2.0-flash-exp');
         case 'openai':
           return getEndpointUrl('openai', 'chat');
+        case 'newapi':
+          return getEndpointUrl('newapi', 'chat');
         default:
           throw new Error(`Unsupported LLM provider: ${provider}`);
       }
@@ -37,6 +39,8 @@ export function buildProviderUrl(provider: string, type: GenerationType, model?:
           return getEndpointUrl('gemini', 'generateContent', model || 'gemini-3-pro-image-preview');
         case 'grok':
           return getEndpointUrl('grok', 'images');
+        case 'newapi':
+          return getEndpointUrl('newapi', 'submit');
         default:
           throw new Error(`Unsupported image provider: ${provider}`);
       }
@@ -45,6 +49,8 @@ export function buildProviderUrl(provider: string, type: GenerationType, model?:
       switch (provider) {
         case 'kie':
           return getEndpointUrl('kie', 'createTask');
+        case 'newapi':
+          return getEndpointUrl('newapi', 'submit');
         default:
           throw new Error(`Unsupported video provider: ${provider}`);
       }
@@ -60,6 +66,8 @@ export function buildProviderUrl(provider: string, type: GenerationType, model?:
           return getEndpointUrl('kie', 'createTask');
         case 'gemini':
           return getEndpointUrl('gemini', 'generateContent', model || 'gemini-2.0-flash-exp');
+        case 'newapi':
+          return getEndpointUrl('newapi', 'submit');
         default:
           throw new Error(`Unsupported TTS provider: ${provider}`);
       }
@@ -68,6 +76,8 @@ export function buildProviderUrl(provider: string, type: GenerationType, model?:
       switch (provider) {
         case 'kie':
           return getEndpointUrl('kie', 'generateMusic');
+        case 'newapi':
+          return getEndpointUrl('newapi', 'submit');
         default:
           throw new Error(`Unsupported music provider: ${provider}`);
       }

@@ -1,54 +1,103 @@
 // Polar.sh Payment Integration Service
-// Documentation: https://docs.polar.sh
+// Plans are hosted on Polar.sh (org: pt-yerdna) and provisioned via New API webhook bridge.
+// Artflowly links directly to Polar checkout — no Polar SDK needed for checkout flow.
 
 import { Polar } from '@polar-sh/sdk';
 import { prisma } from '@/lib/db/prisma';
 import { addCredits } from './credits';
 
-// Initialize Polar client
+// Initialize Polar client (only needed for customer portal, optional)
 export const polar = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
 });
 
-// Subscription plan configuration
+// Polar.sh org for checkout URLs
+const POLAR_ORG = 'pt-yerdna';
+
+// Polar Product IDs → mapped to New API plans via webhook bridge
+const POLAR_PRODUCTS = {
+  starter:    'b5785e27-04a2-421a-b86c-f2b7d81eccfe',
+  basic:      '00a7bc95-2cd1-436c-acba-191626cbeece',
+  standard:   '25ab9887-8e2b-4be9-99c3-95b35bce77b3',
+  pro:        '1a442a34-fe83-42ef-b20d-095839946bfb',
+  business:   'ce6852a5-a941-4ce9-a42c-c6c2354008cb',
+  enterprise: '922814b0-ec42-43bd-b412-67f8e4eb21ff',
+} as const;
+
+// Subscription plan configuration — matches New API plans on Polar.sh
 export const SUBSCRIPTION_PLANS = {
   free: {
     name: 'Free',
     price: 0,
     credits: 0, // Dynamically set from AppConfig.startingCredits in /api/polar
+    quota: '$0',
     description: 'Try out the app',
-    features: ['Credits on signup', 'Basic features', 'Community support'], // Credits count set dynamically
+    hidden: true,
+    features: ['Credits on signup', 'Basic features', 'Community support'],
   },
   starter: {
     name: 'Starter',
+    price: 1,
+    credits: 0,
+    quota: '$2',
+    description: 'Try AI generation',
+    hidden: true,
+    productId: POLAR_PRODUCTS.starter,
+    features: ['$2 API quota/month', 'All AI models', '300% markup', 'Community support'],
+  },
+  basic: {
+    name: 'Basic',
     price: 9,
-    credits: 500,
+    credits: 0,
+    quota: 'Up to 1 short film',
     description: 'For hobbyists',
-    productId: process.env.POLAR_PRODUCT_STARTER,
-    features: ['500 credits/month', 'All AI models', 'Email support'],
+    productId: POLAR_PRODUCTS.basic,
+    features: ['Up to 1 short film', 'All AI models', 'Image, video, voice & music', 'Email support', '!Personal use only'],
+  },
+  standard: {
+    name: 'Standard',
+    price: 19,
+    credits: 0,
+    quota: 'Up to 1 film',
+    description: 'Best value',
+    productId: POLAR_PRODUCTS.standard,
+    features: ['Up to 1 film', 'All AI models', 'Image, video, voice & music', 'Priority support', '!Personal use only'],
   },
   pro: {
     name: 'Pro',
-    price: 29,
-    credits: 2000,
-    description: 'For regular users',
-    productId: process.env.POLAR_PRODUCT_PRO,
-    features: ['2,000 credits/month', 'Priority generation', 'Priority support'],
+    price: 39,
+    credits: 0,
+    quota: 'Up to 2 films',
+    description: 'For power users',
+    productId: POLAR_PRODUCTS.pro,
+    features: ['Up to 2 films', 'All AI models', 'Image, video, voice & music', 'Priority support', '!Personal use only'],
   },
-  studio: {
-    name: 'Studio',
+  business: {
+    name: 'Business',
     price: 79,
-    credits: 6000,
-    description: 'For creators',
-    productId: process.env.POLAR_PRODUCT_STUDIO,
-    features: ['6,000 credits/month', 'Highest priority', 'Dedicated support'],
+    credits: 0,
+    quota: 'Up to 5 films',
+    description: 'For teams',
+    productId: POLAR_PRODUCTS.business,
+    features: ['Up to 5 films', 'All AI models', 'Image, video, voice & music', 'Dedicated support', '!Personal use only'],
+  },
+  enterprise: {
+    name: 'Enterprise',
+    price: 199,
+    credits: 0,
+    quota: 'Up to 10 films',
+    description: 'Maximum value',
+    productId: POLAR_PRODUCTS.enterprise,
+    features: ['Up to 10 films', 'All AI models', 'Image, video, voice & music', 'Dedicated support', 'Lowest cost per generation'],
   },
 } as const;
 
 export type PlanType = keyof typeof SUBSCRIPTION_PLANS;
 
 /**
- * Create a checkout session for a subscription plan
+ * Create a checkout URL for a subscription plan.
+ * Uses direct Polar.sh checkout link — no Polar SDK needed.
+ * The New API webhook bridge handles provisioning automatically.
  */
 export async function createCheckout(
   userId: string,
@@ -61,11 +110,11 @@ export async function createCheckout(
     }
 
     const planConfig = SUBSCRIPTION_PLANS[plan];
-    if (!planConfig.productId) {
+    if (!('productId' in planConfig) || !planConfig.productId) {
       return { error: `Product ID not configured for ${plan} plan` };
     }
 
-    // Get or create subscription record
+    // Get or create subscription record in Artflowly DB
     let subscription = await prisma.subscription.findUnique({
       where: { userId },
     });
@@ -80,18 +129,17 @@ export async function createCheckout(
       });
     }
 
-    // Create checkout session via Polar
-    const checkout = await polar.checkouts.create({
-      products: [planConfig.productId],
-      successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/billing?success=true`,
-      customerEmail: userEmail,
-      metadata: {
-        userId,
-        plan,
-      },
-    });
+    // Build direct Polar checkout URL
+    // Format: https://polar.sh/api/v1/checkouts/custom?productId=XXX&successUrl=XXX&customerEmail=XXX
+    const successUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://artflowly.com'}/billing?success=true`;
+    const checkoutUrl = new URL(`https://api.polar.sh/v1/checkouts/custom`);
+    checkoutUrl.searchParams.set('productId', planConfig.productId);
+    checkoutUrl.searchParams.set('successUrl', successUrl);
+    if (userEmail) {
+      checkoutUrl.searchParams.set('customerEmail', userEmail);
+    }
 
-    return { url: checkout.url };
+    return { url: checkoutUrl.toString() };
   } catch (error) {
     console.error('Error creating checkout:', error);
     return { error: error instanceof Error ? error.message : 'Failed to create checkout' };

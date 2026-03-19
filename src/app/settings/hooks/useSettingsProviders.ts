@@ -74,6 +74,7 @@ export function useSettingsProviders({
     await syncSettingToDatabase('llmProvider', provider);
 
     const descriptions: Record<LLMProvider, string> = {
+      'newapi': 'Using ArtFlowly AI (included with subscription)',
       'openrouter': tPage('toasts.llmProviderOpenRouter') || 'Using OpenRouter for scene generation',
       'claude-sdk': tPage('toasts.llmProviderClaudeSDK') || 'Using Claude SDK/CLI for scene generation',
       'modal': tPage('toasts.llmProviderModal') || 'Using self-hosted LLM on Modal.com',
@@ -102,6 +103,7 @@ export function useSettingsProviders({
     await syncSettingToDatabase('musicProvider', provider);
 
     const descriptions: Record<MusicProvider, string> = {
+      'newapi': 'Using ArtFlowly AI (included with subscription)',
       'piapi': tPage('toasts.musicProviderPiAPI') || 'Using PiAPI for music generation',
       'suno': tPage('toasts.musicProviderSuno') || 'Using Suno AI for music generation',
       'kie': tPage('toasts.musicProviderKie') || 'Using Kie.ai for music generation',
@@ -117,6 +119,7 @@ export function useSettingsProviders({
     await syncSettingToDatabase('ttsProvider', provider);
 
     const descriptions: Record<TTSProvider, string> = {
+      'newapi': 'Using ArtFlowly AI (included with subscription)',
       'gemini-tts': tPage('toasts.ttsProviderGemini') || 'Using Gemini TTS for voiceovers',
       'elevenlabs': tPage('toasts.ttsProviderElevenLabs') || 'Using ElevenLabs for voiceovers',
       'modal': tPage('toasts.ttsProviderModal') || 'Using self-hosted TTS on Modal.com',
@@ -133,6 +136,7 @@ export function useSettingsProviders({
     await syncSettingToDatabase('imageProvider', provider);
 
     const descriptions: Record<ImageProvider, string> = {
+      'newapi': 'Using ArtFlowly AI (included with subscription)',
       'gemini': tPage('toasts.imageProviderGemini') || 'Using Gemini for image generation',
       'kie': tPage('toasts.imageProviderKie') || 'Using KIE.ai for image generation',
       'modal': tPage('toasts.imageProviderModal') || 'Using Qwen-Image on Modal.com',
@@ -148,6 +152,7 @@ export function useSettingsProviders({
     await syncSettingToDatabase('videoProvider', provider);
 
     const descriptions: Record<VideoProvider, string> = {
+      'newapi': 'Using ArtFlowly AI (included with subscription)',
       'kie': tPage('toasts.videoProviderKie') || 'Using Kie.ai for video generation',
       'modal': tPage('toasts.videoProviderModal') || 'Using self-hosted model on Modal.com',
     };

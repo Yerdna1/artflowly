@@ -1552,6 +1552,7 @@
     "manageSubscription": "Manage Subscription",
     "perMonth": "/month",
     "credits": "credits",
+    "quota": "quota",
     "selectPlan": "Select Plan",
     "active": "Active",
     "canceled": "Canceled",
@@ -1576,7 +1577,17 @@
       "prioritySupport": "Priority support",
       "dedicatedSupport": "Dedicated support",
       "forHobbyists": "For hobbyists",
-      "forRegularUsers": "For regular users"
+      "forRegularUsers": "For regular users",
+      "tryAiGeneration": "Try AI generation",
+      "bestValue": "Best value",
+      "forPowerUsers": "For power users",
+      "forTeams": "For teams",
+      "maximumValue": "Maximum value",
+      "allMediaTypes": "Image, video, voice & music",
+      "personalUseOnly": "Personal use only",
+      "lowestCostPerGeneration": "Lowest cost per generation",
+      "upToShortFilms": "Up to {count} short film",
+      "upToFilms": "Up to {count} films"
     }
   },
   "roles": {

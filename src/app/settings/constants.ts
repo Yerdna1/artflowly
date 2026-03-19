@@ -128,7 +128,7 @@ export interface ApiProvider {
 
 // LLM Provider options for scene generation
 export interface LLMProviderOption {
-  id: 'openrouter' | 'claude-sdk' | 'modal' | 'kie';
+  id: 'openrouter' | 'claude-sdk' | 'modal' | 'kie' | 'newapi';
   name: string;
   description: string;
   requiresApiKey: boolean;
@@ -138,6 +138,12 @@ export interface LLMProviderOption {
 }
 
 export const llmProviderOptions: LLMProviderOption[] = [
+  {
+    id: 'newapi',
+    name: 'ArtFlowly AI (Default - included with subscription)',
+    description: 'No API key needed! Uses your subscription credits for all AI models.',
+    requiresApiKey: false,
+  },
   {
     id: 'kie',
     name: 'KIE.ai (Recommended)',
@@ -170,7 +176,7 @@ export const llmProviderOptions: LLMProviderOption[] = [
 
 // Music Provider options for background music generation
 export interface MusicProviderOption {
-  id: 'piapi' | 'suno' | 'modal' | 'kie';
+  id: 'piapi' | 'suno' | 'modal' | 'kie' | 'newapi';
   name: string;
   description: string;
   requiresApiKey: boolean;
@@ -180,6 +186,12 @@ export interface MusicProviderOption {
 }
 
 export const musicProviderOptions: MusicProviderOption[] = [
+  {
+    id: 'newapi',
+    name: 'ArtFlowly AI (Default - included with subscription)',
+    description: 'No API key needed! Uses your subscription credits for music generation.',
+    requiresApiKey: false,
+  },
   {
     id: 'kie',
     name: 'KIE.ai (Recommended)',
@@ -213,7 +225,7 @@ export const musicProviderOptions: MusicProviderOption[] = [
 
 // TTS Provider options for voiceover generation
 export interface TTSProviderOption {
-  id: 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie';
+  id: 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie' | 'newapi';
   name: string;
   description: string;
   requiresApiKey: boolean;
@@ -223,6 +235,12 @@ export interface TTSProviderOption {
 }
 
 export const ttsProviderOptions: TTSProviderOption[] = [
+  {
+    id: 'newapi',
+    name: 'ArtFlowly AI (Default - included with subscription)',
+    description: 'No API key needed! Uses your subscription credits for TTS.',
+    requiresApiKey: false,
+  },
   {
     id: 'gemini-tts',
     name: 'Gemini TTS (Recommended)',
@@ -263,7 +281,7 @@ export const ttsProviderOptions: TTSProviderOption[] = [
 
 // Image Provider options for image generation
 export interface ImageProviderOption {
-  id: 'gemini' | 'modal' | 'modal-edit' | 'kie';
+  id: 'gemini' | 'modal' | 'modal-edit' | 'kie' | 'newapi';
   name: string;
   description: string;
   requiresApiKey: boolean;
@@ -273,6 +291,12 @@ export interface ImageProviderOption {
 }
 
 export const imageProviderOptions: ImageProviderOption[] = [
+  {
+    id: 'newapi',
+    name: 'ArtFlowly AI (Default - included with subscription)',
+    description: 'No API key needed! Uses your subscription credits for image generation.',
+    requiresApiKey: false,
+  },
   {
     id: 'gemini',
     name: 'Gemini (Recommended)',
@@ -307,7 +331,7 @@ export const imageProviderOptions: ImageProviderOption[] = [
 
 // Video Provider options for video generation
 export interface VideoProviderOption {
-  id: 'kie' | 'modal';
+  id: 'kie' | 'modal' | 'newapi';
   name: string;
   description: string;
   requiresApiKey: boolean;
@@ -317,6 +341,12 @@ export interface VideoProviderOption {
 }
 
 export const videoProviderOptions: VideoProviderOption[] = [
+  {
+    id: 'newapi',
+    name: 'ArtFlowly AI (Default - included with subscription)',
+    description: 'No API key needed! Uses your subscription credits for video generation.',
+    requiresApiKey: false,
+  },
   {
     id: 'kie',
     name: 'KIE.ai',

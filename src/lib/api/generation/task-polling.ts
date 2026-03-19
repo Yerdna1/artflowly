@@ -148,6 +148,22 @@ export const DEFAULT_STATE_MAPPINGS: Record<string, StateMapping> = {
     'succeeded': 'complete',
     'failed': 'error',
   },
+  newapi: {
+    'QUEUED': 'pending',
+    'PENDING': 'pending',
+    'WAITING': 'pending',
+    'IN_PROGRESS': 'processing',
+    'PROCESSING': 'processing',
+    'GENERATING': 'processing',
+    'SUCCESS': 'complete',
+    'COMPLETED': 'complete',
+    'COMPLETE': 'complete',
+    'FAILURE': 'error',
+    'FAILED': 'error',
+    'ERROR': 'error',
+    'CANCELLED': 'cancelled',
+    'CANCELED': 'cancelled',
+  },
 };
 
 export function mapProviderState(

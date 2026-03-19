@@ -123,7 +123,7 @@ export const getKieVoiceName = (elevenLabsVoiceId: string): string => {
 // Returns null if no valid voice is configured for this provider
 export const getVoiceForProvider = (
   voiceId: string | undefined,
-  provider: 'gemini-tts' | 'elevenlabs' | 'openai-tts' | 'modal' | 'kie'
+  provider: 'gemini-tts' | 'elevenlabs' | 'openai-tts' | 'modal' | 'kie' | 'newapi'
 ): string | null => {
   if (!voiceId) return null;
 
@@ -141,8 +141,8 @@ export const getVoiceForProvider = (
     // Modal accepts any voice name
     return voiceId;
   }
-  if (provider === 'kie') {
-    // KIE requires specific voice names
+  if (provider === 'kie' || provider === 'newapi') {
+    // KIE/NewAPI requires specific voice names
     // If voiceId is already a KIE voice name, use it directly
     if (KIE_VOICES.some(v => v.id === voiceId)) {
       return voiceId;
@@ -166,6 +166,7 @@ export const getProviderDisplayName = (provider: string): string => {
     'openai-tts': 'OpenAI TTS',
     'modal': 'Modal TTS',
     'kie': 'Kie.ai TTS',
+    'newapi': 'ArtFlowly AI TTS',
   };
   return names[provider] || provider;
 };

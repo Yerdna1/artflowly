@@ -9,6 +9,7 @@ const DB_PROVIDER_MAP = {
     apiKeyFields: {
       'gemini': 'geminiApiKey',
       'kie': 'kieApiKey',
+      // newapi uses env var NEW_API_KEY, not a DB field
       // Modal uses endpoints, not API keys
     },
   },
@@ -16,6 +17,7 @@ const DB_PROVIDER_MAP = {
     providerField: 'videoProvider',
     apiKeyFields: {
       'kie': 'kieApiKey',
+      // newapi uses env var NEW_API_KEY, not a DB field
       // Modal uses endpoints, not API keys
     },
   },
@@ -26,6 +28,7 @@ const DB_PROVIDER_MAP = {
       'elevenlabs': 'elevenLabsApiKey',
       'openai-tts': 'openaiApiKey',
       'kie': 'kieApiKey',
+      // newapi uses env var NEW_API_KEY, not a DB field
       // Modal uses endpoints, not API keys
     },
   },
@@ -35,6 +38,7 @@ const DB_PROVIDER_MAP = {
       'kie': 'kieApiKey',
       'piapi': 'piapiApiKey',
       'suno': 'sunoApiKey',
+      // newapi uses env var NEW_API_KEY, not a DB field
       // Modal uses endpoints, not API keys
     },
   },
@@ -44,6 +48,7 @@ const DB_PROVIDER_MAP = {
       'kie': 'kieApiKey',
       'openrouter': 'openRouterApiKey',
       'gemini': 'geminiApiKey',
+      // newapi uses env var NEW_API_KEY, not a DB field
       // Modal and claude-sdk use endpoints, not API keys
     },
   },
@@ -168,7 +173,8 @@ export async function getProviderConfig(
     const isAdmin = user?.role === 'admin';
     const isPremium = user?.subscription?.plan && user.subscription.plan !== 'free';
 
-    if (isAdmin || isPremium) {
+    // All authenticated users can use org keys (New API provides default access)
+    if (userIdToCheck) {
       orgSettings = await prisma.organizationApiKeys.findFirst({
         select: {
           geminiApiKey: true,
@@ -230,13 +236,40 @@ export async function getProviderConfig(
     }
   }
 
-  // If no provider configured, return error (user must configure providers)
+  // If no provider configured, default to newapi if NEW_API_KEY is available
+  if (!provider && process.env.NEW_API_KEY) {
+    provider = 'newapi' as ProviderType;
+    apiKey = process.env.NEW_API_KEY;
+    userHasOwnApiKey = false;
+
+    // Set default model for newapi based on generation type
+    const { NEW_API_DEFAULT_MODELS } = require('./newapi/client');
+    model = NEW_API_DEFAULT_MODELS[type] || undefined;
+
+    console.log(`[Provider Config] No provider configured, defaulting to newapi for ${type}`);
+  }
+
+  // If still no provider, return error
   if (!provider) {
     throw new ProviderError(
       `No ${type} provider configured. Please configure your providers in settings.`,
       'NO_PROVIDER_CONFIGURED',
       'none'
     );
+  }
+
+  // Handle newapi provider: use env var key, skip DB lookups
+  if (provider === 'newapi') {
+    if (!apiKey) {
+      apiKey = process.env.NEW_API_KEY || '';
+    }
+    if (apiKey) {
+      userHasOwnApiKey = false; // newapi uses org key, so credits are deducted
+    }
+    if (!model) {
+      const { NEW_API_DEFAULT_MODELS } = require('./newapi/client');
+      model = NEW_API_DEFAULT_MODELS[type] || undefined;
+    }
   }
 
   // Get Modal endpoints if applicable

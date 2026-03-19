@@ -41,6 +41,7 @@ interface SceneHeaderProps {
 }
 
 const IMAGE_PROVIDER_LABELS: Record<ImageProvider, string> = {
+  newapi: 'ArtFlowly AI',
   gemini: 'Gemini',
   modal: 'Modal Qwen',
   'modal-edit': 'Qwen-Edit',

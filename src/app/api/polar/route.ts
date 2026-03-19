@@ -70,8 +70,9 @@ export async function POST(request: NextRequest) {
     const { action, plan } = await request.json();
 
     if (action === 'checkout') {
-      // Validate plan
-      if (!plan || !['starter', 'pro', 'studio'].includes(plan)) {
+      // Validate plan (6 paid plans from New API)
+      const validPlans = ['starter', 'basic', 'standard', 'pro', 'business', 'enterprise'];
+      if (!plan || !validPlans.includes(plan)) {
         return NextResponse.json(
           { error: 'Invalid plan' },
           { status: 400 }

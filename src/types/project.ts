@@ -62,7 +62,7 @@ export type ImageResolution = '1k' | '2k' | '4k';
 
 export type VoiceLanguage = 'sk' | 'en';
 
-export type VoiceProvider = 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie';
+export type VoiceProvider = 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie' | 'newapi';
 
 // Type alias for TTS provider stored in database
 export type TTSProvider = VoiceProvider;
@@ -92,7 +92,7 @@ export interface StoryConfig {
 // Audio version for a specific provider + language combination
 export interface AudioVersion {
   audioUrl: string;
-  provider: 'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie';
+  provider: VoiceProvider;
   language: VoiceLanguage;
   voiceId?: string;
   voiceName?: string;
@@ -109,7 +109,7 @@ export interface DialogueLine {
   // Primary audio (for backwards compatibility and current selection)
   audioUrl?: string;
   audioDuration?: number;
-  ttsProvider?: 'elevenlabs' | 'gemini-tts' | 'modal' | 'openai-tts' | 'kie';
+  ttsProvider?: VoiceProvider;
   // All generated audio versions (provider + language combinations)
   audioVersions?: AudioVersion[];
 }
@@ -190,19 +190,19 @@ export interface Project {
 }
 
 // LLM Provider selection - OpenRouter is default (works everywhere including Vercel)
-export type LLMProvider = 'openrouter' | 'claude-sdk' | 'modal' | 'kie' | 'gemini';
+export type LLMProvider = 'openrouter' | 'claude-sdk' | 'modal' | 'kie' | 'gemini' | 'newapi';
 
 // Music Provider selection - PiAPI is default (unified API for Suno/Udio)
-export type MusicProvider = 'piapi' | 'suno' | 'modal' | 'kie';
+export type MusicProvider = 'piapi' | 'suno' | 'modal' | 'kie' | 'newapi';
 
 // TTS Provider selection for voiceover generation (re-export from VoiceProvider)
 // Note: Already defined as VoiceProvider above, this is for backwards compatibility
 
 // Image Provider selection for image generation
-export type ImageProvider = 'gemini' | 'modal' | 'modal-edit' | 'kie';
+export type ImageProvider = 'gemini' | 'modal' | 'modal-edit' | 'kie' | 'newapi';
 
 // Video Provider selection for video generation
-export type VideoProvider = 'kie' | 'modal';
+export type VideoProvider = 'kie' | 'modal' | 'newapi';
 
 // Modal.com endpoint configuration for self-hosted models
 export interface ModalEndpoints {

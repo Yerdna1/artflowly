@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { Check, Loader2, Sparkles, Zap, Crown } from 'lucide-react';
+import { Check, Loader2, Sparkles, Zap, Crown, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ interface Plan {
   description: string;
   features: string[];
   productId?: string;
+  hidden?: boolean;
 }
 
 interface SubscriptionPlansProps {
@@ -26,22 +27,31 @@ interface SubscriptionPlansProps {
 const planIcons: Record<string, React.ReactNode> = {
   free: null,
   starter: <Sparkles className="w-5 h-5" />,
+  basic: <Sparkles className="w-5 h-5" />,
+  standard: <Zap className="w-5 h-5" />,
   pro: <Zap className="w-5 h-5" />,
-  studio: <Crown className="w-5 h-5" />,
+  business: <Crown className="w-5 h-5" />,
+  enterprise: <Crown className="w-5 h-5" />,
 };
 
 const planColors: Record<string, string> = {
   free: 'border-muted',
-  starter: 'border-blue-500/50 hover:border-blue-500',
+  starter: 'border-slate-500/50 hover:border-slate-500',
+  basic: 'border-blue-500/50 hover:border-blue-500',
+  standard: 'border-green-500/50 hover:border-green-500',
   pro: 'border-purple-500/50 hover:border-purple-500',
-  studio: 'border-amber-500/50 hover:border-amber-500',
+  business: 'border-amber-500/50 hover:border-amber-500',
+  enterprise: 'border-rose-500/50 hover:border-rose-500',
 };
 
 const planBadgeColors: Record<string, string> = {
   free: 'bg-muted text-muted-foreground',
-  starter: 'bg-blue-500/20 text-blue-400',
+  starter: 'bg-slate-500/20 text-slate-400',
+  basic: 'bg-blue-500/20 text-blue-400',
+  standard: 'bg-green-500/20 text-green-400',
   pro: 'bg-purple-500/20 text-purple-400',
-  studio: 'bg-amber-500/20 text-amber-400',
+  business: 'bg-amber-500/20 text-amber-400',
+  enterprise: 'bg-rose-500/20 text-rose-400',
 };
 
 // Feature translation mapping (Polar features to translation keys)
@@ -54,12 +64,20 @@ const featureTranslationMap: Record<string, string> = {
   'Priority support': 'billing.planFeatures.prioritySupport',
   'Highest priority': 'billing.planFeatures.highestPriority',
   'Dedicated support': 'billing.planFeatures.dedicatedSupport',
+  'Image, video, voice & music': 'billing.planFeatures.allMediaTypes',
+  'Personal use only': 'billing.planFeatures.personalUseOnly',
+  'Lowest cost per generation': 'billing.planFeatures.lowestCostPerGeneration',
 };
 
 // Description translation mapping
 const descriptionTranslationMap: Record<string, string> = {
   'For hobbyists': 'billing.planFeatures.forHobbyists',
   'For regular users': 'billing.planFeatures.forRegularUsers',
+  'Try AI generation': 'billing.planFeatures.tryAiGeneration',
+  'Best value': 'billing.planFeatures.bestValue',
+  'For power users': 'billing.planFeatures.forPowerUsers',
+  'For teams': 'billing.planFeatures.forTeams',
+  'Maximum value': 'billing.planFeatures.maximumValue',
 };
 
 export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: SubscriptionPlansProps) {
@@ -80,6 +98,13 @@ export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: Subscrip
     const creditsPerMonthMatch = feature.match(/^(\d+(?:,\d+)*)\s*credits?\/month$/i);
     if (creditsPerMonthMatch) {
       return t('billing.planFeatures.creditsPerMonth', { credits: creditsPerMonthMatch[1] });
+    }
+    // Check for "Up to X film(s)" pattern
+    const filmsMatch = feature.match(/^Up to (\d+) (short )?films?$/i);
+    if (filmsMatch) {
+      const count = filmsMatch[1];
+      const isShort = !!filmsMatch[2];
+      return t(isShort ? 'billing.planFeatures.upToShortFilms' : 'billing.planFeatures.upToFilms', { count });
     }
     // Return original if no translation found
     return feature;
@@ -104,10 +129,12 @@ export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: Subscrip
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {Object.entries(plans).map(([key, plan], index) => {
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {Object.entries(plans)
+        .filter(([, plan]) => !(plan as any).hidden)
+        .map(([key, plan], index) => {
         const isCurrentPlan = key === currentPlan;
-        const isPopular = key === 'pro';
+        const isPopular = key === 'standard';
 
         return (
           <motion.div
@@ -144,16 +171,27 @@ export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: Subscrip
               <CardContent className="flex-1 flex flex-col">
                 <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm mb-4 ${planBadgeColors[key]}`}>
                   <Sparkles className="w-3 h-3" />
-                  {plan.credits.toLocaleString()} {t('billing.credits')}{t('billing.perMonth')}
+                  {(plan as any).quota
+                    ? translateFeature((plan as any).quota)
+                    : `${plan.credits.toLocaleString()} ${t('billing.credits')}${t('billing.perMonth')}`
+                  }
                 </div>
 
                 <ul className="space-y-2 flex-1 mb-4">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                      <span>{translateFeature(feature)}</span>
-                    </li>
-                  ))}
+                  {plan.features.map((feature, i) => {
+                    const isWarning = feature.startsWith('!');
+                    const displayFeature = isWarning ? feature.slice(1) : feature;
+                    return (
+                      <li key={i} className={`flex items-start gap-2 text-sm ${isWarning ? 'text-red-400' : ''}`}>
+                        {isWarning ? (
+                          <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                        ) : (
+                          <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                        )}
+                        <span>{translateFeature(displayFeature)}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <Button

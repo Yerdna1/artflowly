@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useProjectStore } from '@/lib/stores/project-store';
-import type { Project } from '@/types/project';
+import type { Project, VoiceProvider, ImageProvider } from '@/types/project';
 import type { Step1State } from './types';
 import { genres, tones, sceneOptions, storyModels, voiceProviders, imageProviders } from '../constants';
 import { usePromptPolling } from './usePromptPolling';
@@ -75,12 +75,12 @@ export function useStep1State({ project, isAdmin }: UseStep1StateProps) {
     // Free users use default model
     currentProject.settings?.storyModel || 'gemini-3-pro'
   );
-  const [voiceProvider, setVoiceProvider] = useState<'gemini-tts' | 'elevenlabs' | 'modal' | 'openai-tts' | 'kie'>(
+  const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>(
     // Free users use Gemini TTS
     currentProject.settings?.voiceProvider || 'gemini-tts'
   );
-  const [imageProvider, setImageProvider] = useState<'gemini' | 'modal' | 'modal-edit' | 'kie'>(
-    (userConstants?.sceneImageProvider as 'gemini' | 'modal' | 'modal-edit' | 'kie' | undefined) || 'gemini'
+  const [imageProvider, setImageProvider] = useState<ImageProvider>(
+    (userConstants?.sceneImageProvider as ImageProvider | undefined) || 'gemini'
   );
 
   // All users can now select any model/style - no enforcement needed

@@ -56,9 +56,9 @@ interface Plan {
 }
 
 const quickPlans: Record<string, Plan> = {
-  starter: { name: 'Starter', price: 9, credits: 500, description: 'For hobbyists' },
-  pro: { name: 'Pro', price: 29, credits: 2000, description: 'Most popular' },
-  studio: { name: 'Studio', price: 79, credits: 6000, description: 'For creators' },
+  basic: { name: 'Basic', price: 9, credits: 0, description: 'Up to 1 short film' },
+  standard: { name: 'Standard', price: 19, credits: 0, description: 'Up to 1 film — Best value' },
+  pro: { name: 'Pro', price: 39, credits: 0, description: 'Up to 2 films' },
 };
 
 export function InsufficientCreditsModal({
@@ -281,7 +281,7 @@ export function InsufficientCreditsModal({
                   <div>
                     <div className="font-medium">{plan.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      {plan.credits.toLocaleString()} {t('insufficientCredits.creditsMonth')}
+                      {plan.description}
                     </div>
                   </div>
                 </div>

@@ -67,13 +67,22 @@ export function Header() {
       return { label: t('billing.plans.free'), className: 'bg-amber-500/20 text-amber-500 border-amber-500/30' };
     }
     if (subscriptionPlan === 'starter') {
-      return { label: t('billing.plans.starter'), className: 'bg-blue-500/20 text-blue-400 border-blue-500/30' };
+      return { label: 'Starter', className: 'bg-slate-500/20 text-slate-400 border-slate-500/30' };
+    }
+    if (subscriptionPlan === 'basic') {
+      return { label: 'Basic', className: 'bg-blue-500/20 text-blue-400 border-blue-500/30' };
+    }
+    if (subscriptionPlan === 'standard') {
+      return { label: 'Standard', className: 'bg-green-500/20 text-green-400 border-green-500/30' };
     }
     if (subscriptionPlan === 'pro') {
-      return { label: t('billing.plans.pro'), className: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
+      return { label: 'Pro', className: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
     }
-    if (subscriptionPlan === 'studio') {
-      return { label: t('billing.plans.studio'), className: 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30' };
+    if (subscriptionPlan === 'business') {
+      return { label: 'Business', className: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
+    }
+    if (subscriptionPlan === 'enterprise') {
+      return { label: 'Enterprise', className: 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30' };
     }
     return { label: subscriptionPlan, className: 'bg-muted text-muted-foreground' };
   };
@@ -128,21 +137,34 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {!isLandingPage && navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
+            {isLandingPage ? (
+              /* On landing page, only show Pricing link for visibility */
+              <Link href="/billing">
                 <Button
                   variant="ghost"
-                  className={
-                    'isAdmin' in item && item.isAdmin
-                      ? "text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
-                      : `${mutedColor} hover:${textColor} hover:bg-white/5 transition-all duration-200`
-                  }
+                  className={`${mutedColor} hover:${textColor} hover:bg-white/5 transition-all duration-200`}
                 >
-                  <item.icon className="w-4 h-4 mr-2" />
-                  {item.label}
+                  <CreditCard className="w-4 h-4 mr-2" />
+                  {t('nav.pricing')}
                 </Button>
               </Link>
-            ))}
+            ) : (
+              navItems.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <Button
+                    variant="ghost"
+                    className={
+                      'isAdmin' in item && item.isAdmin
+                        ? "text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
+                        : `${mutedColor} hover:${textColor} hover:bg-white/5 transition-all duration-200`
+                    }
+                  >
+                    <item.icon className="w-4 h-4 mr-2" />
+                    {item.label}
+                  </Button>
+                </Link>
+              ))
+            )}
           </nav>
 
           {/* Right side actions */}

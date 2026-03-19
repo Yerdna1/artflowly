@@ -1601,6 +1601,7 @@
     "manageSubscription": "Spravovať predplatné",
     "perMonth": "/mesiac",
     "credits": "kreditov",
+    "quota": "kvóta",
     "selectPlan": "Vybrať plán",
     "active": "Aktívne",
     "canceled": "Zrušené",
@@ -1625,7 +1626,17 @@
       "prioritySupport": "Prioritná podpora",
       "dedicatedSupport": "Vyhradená podpora",
       "forHobbyists": "Pre hobby tvorcov",
-      "forRegularUsers": "Pre bežných používateľov"
+      "forRegularUsers": "Pre bežných používateľov",
+      "tryAiGeneration": "Vyskúšajte AI generovanie",
+      "bestValue": "Najlepšia hodnota",
+      "forPowerUsers": "Pre pokročilých používateľov",
+      "forTeams": "Pre tímy",
+      "maximumValue": "Maximálna hodnota",
+      "allMediaTypes": "Obraz, video, hlas a hudba",
+      "personalUseOnly": "Len na osobné použitie",
+      "lowestCostPerGeneration": "Najnižšia cena za generovanie",
+      "upToShortFilms": "Až {count} krátky film",
+      "upToFilms": "Až {count} filmov"
     }
   },
   "roles": {

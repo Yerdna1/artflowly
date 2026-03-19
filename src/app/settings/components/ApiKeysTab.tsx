@@ -116,6 +116,18 @@ export function ApiKeysTab({
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      {/* Subscription Banner */}
+      <Card className="glass border-border border-l-4 border-l-emerald-500">
+        <CardContent className="p-4">
+          <p className="text-sm font-medium text-emerald-400">
+            Your subscription includes AI credits — no API keys needed!
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            All providers are set to &quot;ArtFlowly AI&quot; by default. You can still use your own API keys if you prefer.
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Provider Selection Grid */}
       <ProviderGrid
         llmProvider={llmProvider}
