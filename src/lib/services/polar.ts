@@ -129,17 +129,15 @@ export async function createCheckout(
       });
     }
 
-    // Build direct Polar checkout URL
-    // Format: https://polar.sh/api/v1/checkouts/custom?productId=XXX&successUrl=XXX&customerEmail=XXX
+    // Create checkout via Polar SDK
     const successUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://artflowly.com'}/billing?success=true`;
-    const checkoutUrl = new URL(`https://api.polar.sh/v1/checkouts/custom`);
-    checkoutUrl.searchParams.set('productId', planConfig.productId);
-    checkoutUrl.searchParams.set('successUrl', successUrl);
-    if (userEmail) {
-      checkoutUrl.searchParams.set('customerEmail', userEmail);
-    }
+    const checkout = await polar.checkouts.create({
+      products: [planConfig.productId],
+      successUrl,
+      customerEmail: userEmail || undefined,
+    });
 
-    return { url: checkoutUrl.toString() };
+    return { url: checkout.url };
   } catch (error) {
     console.error('Error creating checkout:', error);
     return { error: error instanceof Error ? error.message : 'Failed to create checkout' };
