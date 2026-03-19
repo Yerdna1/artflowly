@@ -138,9 +138,10 @@ export async function createCheckout(
     });
 
     return { url: checkout.url };
-  } catch (error) {
-    console.error('Error creating checkout:', error);
-    return { error: error instanceof Error ? error.message : 'Failed to create checkout' };
+  } catch (error: any) {
+    console.error('Error creating checkout:', error?.statusCode, error?.body || error?.message || error);
+    const message = error?.body?.detail || error?.message || 'Failed to create checkout';
+    return { error: typeof message === 'string' ? message : JSON.stringify(message) };
   }
 }
 
