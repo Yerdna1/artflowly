@@ -1,0 +1,22 @@
+{
+  "name": "artflowly-marketing-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/Root.tsx",
+    "render:en": "remotion render src/Root.tsx MarketingVideoEN out/marketing-en.mp4 --codec h264 --crf 18",
+    "render:sk": "remotion render src/Root.tsx MarketingVideoSK out/marketing-sk.mp4 --codec h264 --crf 18"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@remotion/google-fonts": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.5.0"
+  }
+}
