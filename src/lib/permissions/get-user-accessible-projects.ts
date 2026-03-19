@@ -102,6 +102,13 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
           videoUrl: true,
         },
       },
+      // Get first character image as fallback thumbnail
+      characters: {
+        take: 1,
+        select: {
+          imageUrl: true,
+        },
+      },
       // Get counts instead of full data
       _count: {
         select: {
@@ -141,6 +148,12 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
               videoUrl: true,
             },
           },
+          characters: {
+            take: 1,
+            select: {
+              imageUrl: true,
+            },
+          },
           _count: {
             select: {
               scenes: true,
@@ -163,6 +176,7 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
   const ownedWithRole = ownedProjects.map((project) => {
     const sceneImageUrl = project.scenes[0]?.imageUrl;
     const sceneVideoUrl = project.scenes[0]?.videoUrl;
+    const characterImageUrl = project.characters[0]?.imageUrl;
 
     return {
       id: project.id,
@@ -177,7 +191,8 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
       renderedVideoUrl: project.renderedVideoUrl,
       renderedDraftUrl: project.renderedDraftUrl,
       // Only include URLs, not base64 data (which can be 1MB+)
-      thumbnailUrl: isValidUrl(sceneImageUrl) ? sceneImageUrl : null,
+      // Fall back to character image if no scene image
+      thumbnailUrl: isValidUrl(sceneImageUrl) ? sceneImageUrl : isValidUrl(characterImageUrl) ? characterImageUrl : null,
       thumbnailVideoUrl: isValidUrl(sceneVideoUrl) ? sceneVideoUrl : null,
       scenesCount: project._count.scenes,
       charactersCount: project._count.characters,
@@ -193,6 +208,7 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
     .map((membership) => {
       const sceneImageUrl = membership.project.scenes[0]?.imageUrl;
       const sceneVideoUrl = membership.project.scenes[0]?.videoUrl;
+      const characterImageUrl = membership.project.characters[0]?.imageUrl;
 
       return {
         id: membership.project.id,
@@ -207,7 +223,8 @@ export async function getUserAccessibleProjectsSummary(userId: string) {
         renderedVideoUrl: membership.project.renderedVideoUrl,
         renderedDraftUrl: membership.project.renderedDraftUrl,
         // Only include URLs, not base64 data (which can be 1MB+)
-        thumbnailUrl: isValidUrl(sceneImageUrl) ? sceneImageUrl : null,
+        // Fall back to character image if no scene image
+        thumbnailUrl: isValidUrl(sceneImageUrl) ? sceneImageUrl : isValidUrl(characterImageUrl) ? characterImageUrl : null,
         thumbnailVideoUrl: isValidUrl(sceneVideoUrl) ? sceneVideoUrl : null,
         scenesCount: membership.project._count.scenes,
         charactersCount: membership.project._count.characters,
