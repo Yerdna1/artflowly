@@ -7,7 +7,7 @@ import {
   ProviderValidationError
 } from '../types';
 import { uploadMediaToS3 } from '@/lib/api';
-import { getImageCost } from '@/lib/services/real-costs';
+import { getImageCost, type ImageResolution } from '@/lib/services/real-costs';
 
 export abstract class BaseImageProvider implements Provider<ImageGenerationRequest, ImageGenerationResponse> {
   abstract name: string;
@@ -61,7 +61,7 @@ export abstract class BaseImageProvider implements Provider<ImageGenerationReque
       }
 
       // Calculate costs
-      const realCost = getImageCost(resolution as any);
+      const realCost = getImageCost(resolution as ImageResolution);
 
       return {
         status: 'complete',
@@ -92,7 +92,7 @@ export abstract class BaseImageProvider implements Provider<ImageGenerationReque
   }
 
   estimateCost(request: ImageGenerationRequest): number {
-    return getImageCost(request.resolution as any || '2k');
+    return getImageCost((request.resolution as ImageResolution) || '2k');
   }
 
   /**

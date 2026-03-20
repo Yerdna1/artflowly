@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useProjectStore } from '@/lib/stores/project-store';
-import type { Project, Scene, Caption, TransitionType } from '@/types/project';
+import type { Project, Scene, TransitionType } from '@/types/project';
 
 export interface TimelineEditorState {
   zoom: number; // pixels per second (default 100)

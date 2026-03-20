@@ -20,7 +20,6 @@ interface PremiumFeatureProps {
 export function PremiumFeature({
     isPremium,
     children,
-    featureName,
     compact = false
 }: PremiumFeatureProps) {
     const t = useTranslations('premium');

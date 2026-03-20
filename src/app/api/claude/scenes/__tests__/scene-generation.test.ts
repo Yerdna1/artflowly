@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import { createTestUser } from '@/test/factories/user'
 import { createTestCredits } from '@/test/factories/credits'
@@ -381,6 +381,128 @@ describe('Scene Generation Cost Tests', () => {
         where: { type: 'scene' }
       })
       expect(transaction?.metadata).toEqual(expect.objectContaining({ isPromptGeneration: true }))
+    })
+  })
+
+  describe('Music Generation Costs', () => {
+    it('music generation costs 10 credits', () => {
+      expect(COSTS.MUSIC_GENERATION).toBe(10)
+    })
+
+    it('deducts 10 credits for music generation', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100 })
+      const project = await createTestProject(user.id)
+
+      const result = await spendCredits(
+        user.id,
+        COSTS.MUSIC_GENERATION,
+        'music',
+        'Music generation',
+        project.id,
+        'piapi',
+        undefined,
+        0.05
+      )
+
+      expect(result.success).toBe(true)
+      expect(result.balance).toBe(90)
+
+      const transaction = await prisma.creditTransaction.findFirst({
+        where: { type: 'music', credits: { userId: user.id } }
+      })
+      expect(transaction).toBeDefined()
+      expect(transaction?.amount).toBe(-10)
+      expect(transaction?.provider).toBe('piapi')
+    })
+
+    it('fails when insufficient credits for music', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 5 })
+
+      const result = await spendCredits(
+        user.id,
+        COSTS.MUSIC_GENERATION,
+        'music',
+        'Music generation'
+      )
+
+      expect(result.success).toBe(false)
+      expect(result.error).toContain('Insufficient')
+    })
+  })
+
+  describe('Video Composition Costs', () => {
+    it('video composition base costs 5 credits per scene', () => {
+      expect(COSTS.VIDEO_COMPOSITION_BASE).toBe(5)
+    })
+
+    it('video composition music overlay costs 2 credits', () => {
+      expect(COSTS.VIDEO_COMPOSITION_MUSIC).toBe(2)
+    })
+
+    it('video composition caption costs 1 credit per 10 captions', () => {
+      expect(COSTS.VIDEO_COMPOSITION_CAPTION).toBe(1)
+    })
+
+    it('transition suggestion costs 1 credit', () => {
+      expect(COSTS.TRANSITION_SUGGESTION).toBe(1)
+    })
+
+    it('calculates total composition cost for multi-scene project', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 200 })
+      const project = await createTestProject(user.id)
+
+      // Simulate 10-scene composition with music and captions
+      const sceneCount = 10
+      const captionGroups = 3 // 30 captions / 10 per group
+      const totalCost = (COSTS.VIDEO_COMPOSITION_BASE * sceneCount) +
+        COSTS.VIDEO_COMPOSITION_MUSIC +
+        (COSTS.VIDEO_COMPOSITION_CAPTION * captionGroups) +
+        COSTS.TRANSITION_SUGGESTION
+
+      const result = await spendCredits(
+        user.id,
+        totalCost,
+        'video',
+        `Video composition (${sceneCount} scenes)`,
+        project.id
+      )
+
+      expect(result.success).toBe(true)
+      expect(totalCost).toBe(56) // 50 + 2 + 3 + 1
+      expect(result.balance).toBe(200 - 56)
+    })
+  })
+
+  describe('Image Resolution Costs', () => {
+    it('1K and 2K images cost 27 credits', () => {
+      expect(COSTS.IMAGE_GENERATION_1K).toBe(27)
+      expect(COSTS.IMAGE_GENERATION_2K).toBe(27)
+      expect(COSTS.IMAGE_GENERATION).toBe(27) // default
+    })
+
+    it('4K images cost 48 credits', () => {
+      expect(COSTS.IMAGE_GENERATION_4K).toBe(48)
+    })
+
+    it('deducts correct cost for 4K image generation', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100 })
+      const project = await createTestProject(user.id)
+
+      const result = await spendCredits(
+        user.id,
+        COSTS.IMAGE_GENERATION_4K,
+        'image',
+        '4K image generation',
+        project.id,
+        'gemini'
+      )
+
+      expect(result.success).toBe(true)
+      expect(result.balance).toBe(52) // 100 - 48
     })
   })
 

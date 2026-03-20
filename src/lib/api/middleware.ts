@@ -11,7 +11,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { checkBalance } from '@/lib/services/credits';
 import { getUserPermissions, type OperationType } from '@/lib/services/user-permissions';
-import type { Session } from 'next-auth';
 
 // Authenticated session type
 export interface AuthenticatedSession {

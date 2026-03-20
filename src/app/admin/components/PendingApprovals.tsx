@@ -90,7 +90,6 @@ export const PendingApprovals = ({
         totalItems={pendingUsers.length}
         itemsPerPage={itemsPerPage}
         itemName="pending"
-        t={t}
       />
     </div>
   );

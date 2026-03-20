@@ -2,14 +2,13 @@ import { useCallback } from 'react';
 import type { Scene } from '@/types/project';
 import type { UserApiKeys } from '../types';
 import { getImageCreditCost } from '@/lib/services/credits';
-import { ACTION_COSTS } from '@/lib/services/real-costs';
 
 interface UseSceneGeneratorCreditsProps {
   creditsData: { credits: { balance: number } } | undefined;
   imageResolution: string;
   userApiKeys: UserApiKeys | null;
-  apiKeysData: any;
-  projectSettings: any;
+  apiKeysData: { hasOpenRouterKey?: boolean; hasClaudeKey?: boolean; modalLlmEndpoint?: string } | null | undefined;
+  projectSettings: { sceneCount?: number };
   scenes: Scene[];
   handleGenerateSceneImage: (sceneId: string) => Promise<void>;
   handleGenerateAllSceneImages: () => Promise<void>;
@@ -92,12 +91,6 @@ export function useSceneGeneratorCredits({
       console.warn('[Step3] API keys data not loaded yet, waiting...');
       return false;
     }
-
-    // Bypass credit check if user has ANY LLM provider configured
-    // Check for: OpenRouter, Claude SDK, or Modal (self-hosted)
-    const hasOpenRouterKey = apiKeysData?.hasOpenRouterKey;
-    const hasClaudeKey = apiKeysData?.hasClaudeKey;
-    const hasModalLlm = apiKeysData?.modalLlmEndpoint;
 
     // Return true to indicate caller should show the dialog
     // Note: The actual generation happens after dialog confirmation

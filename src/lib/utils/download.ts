@@ -18,17 +18,6 @@ function getAlphabeticalFilename(index: number): string {
 }
 
 /**
- * Downloads an image from a URL and returns it as a Blob
- */
-async function downloadImageAsBlob(url: string): Promise<Blob> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch image: ${response.statusText}`);
-  }
-  return response.blob();
-}
-
-/**
  * Triggers a browser download for a blob
  */
 function triggerDownload(blob: Blob, filename: string): void {

@@ -40,7 +40,6 @@ export const TYPE_TO_ACTION: Record<string, ActionType> = {
  * Uses getActionCost for provider-specific pricing from DB or fallback
  */
 export function getImageCreditCost(
-  aspectRatio: string = '16:9',
   resolution: '1k' | '2k' | '4k' = '2k',
   provider: string = 'gemini'
 ): number {

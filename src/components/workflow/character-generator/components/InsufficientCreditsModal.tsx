@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Key, Coins } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Key, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface InsufficientCreditsModalProps {
@@ -27,7 +25,6 @@ export function InsufficientCreditsModal({
   currentCredits,
   generationType = 'image',
 }: InsufficientCreditsModalProps) {
-  const t = useTranslations();
   const hasEnoughCredits = currentCredits !== undefined && creditsNeeded !== undefined && currentCredits >= creditsNeeded;
   const isForText = generationType === 'text';
   const isForVideo = generationType === 'video';

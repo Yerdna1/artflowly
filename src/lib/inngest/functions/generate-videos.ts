@@ -75,6 +75,7 @@ async function generateSingleVideo(
     }
 
     // Build request body based on provider
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let requestBody: any;
     const enhancedPrompt = enhancePromptForMotion(scene.prompt);
 

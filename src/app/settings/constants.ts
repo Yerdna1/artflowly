@@ -1,4 +1,4 @@
-import { Sparkles, Mic, Zap, Image as ImageIcon, Router, Music, Mail } from 'lucide-react';
+import { Sparkles, Mic, Zap, Router, Music, Mail } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 // OpenRouter model options

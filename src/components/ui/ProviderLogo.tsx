@@ -1,6 +1,6 @@
 'use client';
 
-import { Sparkles, Mic, Zap, Router, Music, Mail, ImageIcon, FileText, Video } from 'lucide-react';
+import { Sparkles, Mic, Zap, Router, Music, Mail, FileText, Video } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

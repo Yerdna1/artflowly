@@ -38,6 +38,7 @@ export function StyleExamplesGrid({ project, updateProject, isReadOnly }: StyleE
                   : 'border-border hover:border-purple-300 dark:hover:border-purple-600'
               }`}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imagePath}
                 alt={t(style.labelKey)}

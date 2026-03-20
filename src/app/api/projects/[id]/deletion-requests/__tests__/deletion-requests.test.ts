@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import {
   createTestUser,
@@ -129,7 +129,7 @@ describe('Deletion Request Flow Tests', () => {
     it('cascade deletes related data', async () => {
       const admin = await createTestUser({ name: 'Admin' })
       const project = await createTestProject(admin.id)
-      const scenes = await createTestScenes(project.id, 2)
+      await createTestScenes(project.id, 2)
 
       // Delete project should cascade to scenes
       await prisma.project.delete({ where: { id: project.id } })
@@ -167,7 +167,7 @@ describe('Deletion Request Flow Tests', () => {
     it('non-admin cannot reject', async () => {
       const { users, project, scenes } = await createFullTestEnvironment()
 
-      const request = await createDeletionRequest(project.id, users.collaborator.id, {
+      await createDeletionRequest(project.id, users.collaborator.id, {
         targetType: 'scene',
         targetId: scenes[0].id
       })

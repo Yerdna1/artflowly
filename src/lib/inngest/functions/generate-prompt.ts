@@ -6,6 +6,9 @@ import { callExternalApi } from '@/lib/providers/api-wrapper';
 import { spendCredits, COSTS } from '@/lib/services/credits';
 import type { Provider } from '@/lib/services/real-costs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyError = any;
+
 interface PromptGenerationData {
   projectId: string;
   userId: string;
@@ -69,7 +72,7 @@ export const generatePromptBatch = inngest.createFunction(
       llmModel = providerConfig.model || '';
 
       console.log(`[Inngest Prompt] Provider config: provider=${llmProvider}, model=${llmModel}`);
-    } catch (error: any) {
+    } catch (error: AnyError) {
       console.error('[Inngest Prompt] Failed to get provider config:', error);
       await step.run('update-job-failed-no-provider', async () => {
         await prisma.promptGenerationJob.update({
@@ -218,7 +221,7 @@ Format the output with clear CHARACTER: and SCENE: sections.`;
       console.log(`[Inngest Prompt] Job ${jobId} completed successfully`);
       return { success: true, promptLength: generatedText.length };
 
-    } catch (error: any) {
+    } catch (error: AnyError) {
       console.error('[Inngest Prompt] Error generating prompt:', error);
 
       // Update job status to failed

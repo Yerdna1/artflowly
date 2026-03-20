@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 interface StepNavigationProps {
     currentStep: number;
     onStepClick: (step: number) => void;

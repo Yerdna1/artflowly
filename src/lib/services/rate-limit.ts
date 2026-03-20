@@ -146,7 +146,7 @@ export async function rateLimit(
   }
 
   const identifier = getClientIdentifier(request, userId);
-  const { limited, remaining, resetAt } = isRateLimited(identifier, routeType);
+  const { limited, resetAt } = isRateLimited(identifier, routeType);
 
   if (limited) {
     const retryAfter = Math.ceil((resetAt - Date.now()) / 1000);

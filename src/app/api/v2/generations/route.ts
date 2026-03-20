@@ -1,7 +1,7 @@
 // Unified Generations API v2
 // Handles all generation types through a single endpoint
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { withAuth } from '@/lib/api/middleware';
 import {
   createProvider,
@@ -9,7 +9,6 @@ import {
   selectOptimalProvider,
   type UnifiedGenerationRequest,
   type UnifiedGenerationResponse,
-  type GenerationType,
   type ProviderType
 } from '@/lib/providers';
 import { withCredits, type CreditTrackingResult } from '@/lib/api/generation';
@@ -164,15 +163,14 @@ export const POST = withAuth(async (request, _, { userId }) => {
 });
 
 // GET /api/v2/generations - List generations
-export const GET = withAuth(async (request, _, { userId }) => {
+export const GET = withAuth(async (request, _context, _auth) => {
   const url = new URL(request.url);
-  const projectId = url.searchParams.get('projectId');
   const type = url.searchParams.get('type');
 
   // For now, return active generations
   // In production, query from database filtered by userId
   const generations = Array.from(activeGenerations.entries())
-    .filter(([_, gen]) => {
+    .filter(([, gen]) => {
       if (type && gen.type !== type) return false;
       return true;
     })

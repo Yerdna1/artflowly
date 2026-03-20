@@ -3,15 +3,6 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 import { DEFAULT_MODELS } from '@/lib/constants/default-models';
 
-/**
- * SECURITY: Mask API key for safe display in browser
- * Shows only last 4 characters to confirm key is set
- */
-function maskApiKey(key: string | null): string {
-  if (!key || key.length < 8) return '';
-  return `${'•'.repeat(Math.min(key.length - 4, 20))}${key.slice(-4)}`;
-}
-
 // GET - Fetch user's API keys (masked for security)
 export async function GET() {
   try {

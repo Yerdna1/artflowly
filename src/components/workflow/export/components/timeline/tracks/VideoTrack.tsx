@@ -32,7 +32,7 @@ interface VideoTrackProps {
 export function VideoTrack({
   scenes,
   pixelsPerScene,
-  scrollLeft,
+  scrollLeft: _scrollLeft,
   selectedSceneId,
   onSelectScene,
   onReorderScenes,

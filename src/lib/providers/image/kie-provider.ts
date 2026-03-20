@@ -67,7 +67,7 @@ export class KieImageProvider extends BaseImageProvider implements AsyncProvider
     const request: ImageGenerationRequest = {
       prompt,
       aspectRatio,
-      resolution: resolution as any,
+      resolution,
       referenceImages: referenceImages || [],
     };
 
@@ -165,7 +165,7 @@ export class KieImageProvider extends BaseImageProvider implements AsyncProvider
     const kieResolution = resolutionMap[modelDefaultResolution] || '1536';
 
     // Build the request body
-    const body: any = {
+    const body: Record<string, unknown> = {
       text: prompt,
       model: apiModelId,
       resolution: kieResolution,

@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import type { Project } from '@/types/project';
 
 interface SceneSelectorProps {
@@ -41,6 +40,7 @@ export function SceneSelector({
             )}
           >
             {scene.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={scene.imageUrl}
                 alt={scene.title}

@@ -19,7 +19,7 @@ export function CaptionSettings({ videoComposer }: CaptionSettingsProps) {
         <label className="text-xs text-muted-foreground">{t('steps.export.captionPosition')}</label>
         <Select
           value={videoComposer.options.captionStyle.position}
-          onValueChange={(value) => videoComposer.setCaptionStyle({ position: value as any })}
+          onValueChange={(value) => videoComposer.setCaptionStyle({ position: value as 'top' | 'center' | 'bottom' })}
         >
           <SelectTrigger className="h-9">
             <SelectValue />
@@ -36,7 +36,7 @@ export function CaptionSettings({ videoComposer }: CaptionSettingsProps) {
         <label className="text-xs text-muted-foreground">{t('steps.export.fontSize')}</label>
         <Select
           value={videoComposer.options.captionStyle.fontSize}
-          onValueChange={(value) => videoComposer.setCaptionStyle({ fontSize: value as any })}
+          onValueChange={(value) => videoComposer.setCaptionStyle({ fontSize: value as 'small' | 'medium' | 'large' })}
         >
           <SelectTrigger className="h-9">
             <SelectValue />

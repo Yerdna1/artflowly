@@ -1,9 +1,8 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/lib/stores/project-store';
-import type { ActionCosts } from '../types';
 import { useSettingsState } from './useSettingsState';
 import { useSettingsApiKeys } from './useSettingsApiKeys';
 import { useSettingsProviders } from './useSettingsProviders';
@@ -13,7 +12,7 @@ import type { TranslationFunction } from './utils';
 
 export function useSettings() {
   const tPage = useTranslations('settingsPage') as TranslationFunction;
-  const { apiConfig, setApiConfig, projects } = useProjectStore();
+  const { setApiConfig, projects } = useProjectStore();
 
   // State management
   const state = useSettingsState();
@@ -91,21 +90,22 @@ export function useSettings() {
   });
 
   // Action costs (cached in state)
+  const { actionCosts, setActionCosts, setCostsLoading } = state;
   const fetchActionCosts = useCallback(async () => {
-    if (state.actionCosts) return state.actionCosts;
-    state.setCostsLoading(true);
+    if (actionCosts) return actionCosts;
+    setCostsLoading(true);
     try {
       const response = await fetch('/api/costs');
       const data = await response.json();
-      state.setActionCosts(data.costs);
+      setActionCosts(data.costs);
       return data.costs;
     } catch (error) {
       console.error('Failed to fetch action costs:', error);
       return null;
     } finally {
-      state.setCostsLoading(false);
+      setCostsLoading(false);
     }
-  }, [state.actionCosts, state.setActionCosts, state.setCostsLoading]);
+  }, [actionCosts, setActionCosts, setCostsLoading]);
 
   return {
     // State

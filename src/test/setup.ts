@@ -1,12 +1,11 @@
 import { beforeAll, afterAll, afterEach, vi, expect, beforeEach } from 'vitest'
-
-// Test database URL - must match the URL in vitest.config.mts
-const TEST_DB_URL = 'postgresql://neondb_owner:npg_9XMixI8ElAJa@ep-rough-butterfly-agblumty.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require'
+import type { PrismaClient as PrismaClientType } from '@prisma/client'
 
 // Use vi.hoisted to create a SINGLE shared client that's available to vi.mock
 // vi.hoisted runs before vi.mock, ensuring the client exists when the mock factory runs
 const { testPrisma } = vi.hoisted(() => {
-  const { PrismaClient } = require('@prisma/client')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaClient } = require('@prisma/client') as { PrismaClient: new (opts: { datasources: { db: { url: string } } }) => PrismaClientType }
   const client = new PrismaClient({
     datasources: {
       db: {
@@ -86,13 +85,13 @@ afterAll(async () => {
 export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 // Assert helpers
-export const expectToThrow = async (fn: () => Promise<any>, errorMessage?: string) => {
+export const expectToThrow = async (fn: () => Promise<unknown>, errorMessage?: string) => {
   try {
     await fn()
     throw new Error('Expected function to throw')
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (errorMessage) {
-      expect(error.message).toContain(errorMessage)
+      expect((error as Error).message).toContain(errorMessage)
     }
   }
 }

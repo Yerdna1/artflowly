@@ -1,10 +1,10 @@
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
+export function debounce<A extends unknown[], R>(
+  func: (...args: A) => R,
   wait: number
-): ((...args: Parameters<T>) => void) & { cancel: () => void } {
+): ((...args: A) => void) & { cancel: () => void } {
   let timeout: NodeJS.Timeout | null = null;
 
-  const debounced = function(...args: Parameters<T>) {
+  const debounced = function(...args: A) {
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -14,7 +14,6 @@ export function debounce<T extends (...args: any[]) => any>(
     }, wait);
   };
 
-  // Add cancel method to clear pending timeout
   debounced.cancel = () => {
     if (timeout) {
       clearTimeout(timeout);

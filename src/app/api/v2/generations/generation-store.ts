@@ -8,7 +8,7 @@ export interface ActiveGeneration {
   provider: ProviderType;
   status: 'pending' | 'processing' | 'complete' | 'error' | 'cancelled';
   createdAt: Date;
-  result?: any;
+  result?: unknown;
   error?: string;
 }
 

@@ -48,8 +48,9 @@ export class ModalTTSProvider extends BaseTTSProvider {
           this.name
         );
       }
-    } catch (error: any) {
-      if (error?.code === 'ECONNREFUSED' || error?.cause?.code === 'ECONNREFUSED') {
+    } catch (error: unknown) {
+      const err = error as { code?: string; cause?: { code?: string } };
+      if (err?.code === 'ECONNREFUSED' || err?.cause?.code === 'ECONNREFUSED') {
         throw new ProviderValidationError(
           'Cannot connect to Modal TTS endpoint',
           this.name
@@ -65,7 +66,7 @@ export class ModalTTSProvider extends BaseTTSProvider {
     format?: string,
     languageCode?: string
   ): Promise<{ audio: Buffer; format: string }> {
-    const body: any = {
+    const body: Record<string, unknown> = {
       text,
       voice: voice || 'default',
       language: languageCode || 'en-US',
@@ -141,12 +142,13 @@ export class ModalTTSProvider extends BaseTTSProvider {
         audio: audioBuffer,
         format: result.format || format || 'mp3',
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof ProviderError) {
         throw error;
       }
 
-      if (error?.cause?.code === 'ECONNRESET' || error?.cause?.code === 'ETIMEDOUT') {
+      const err = error as { message?: string; cause?: { code?: string } };
+      if (err?.cause?.code === 'ECONNRESET' || err?.cause?.code === 'ETIMEDOUT') {
         throw new ProviderError(
           'Modal TTS endpoint timeout - container may be cold starting',
           'TIMEOUT',
@@ -155,10 +157,10 @@ export class ModalTTSProvider extends BaseTTSProvider {
       }
 
       throw new ProviderError(
-        `Modal TTS request failed: ${error.message}`,
+        `Modal TTS request failed: ${err.message}`,
         'REQUEST_ERROR',
         this.name,
-        { error: error.message }
+        { error: err.message }
       );
     }
   }

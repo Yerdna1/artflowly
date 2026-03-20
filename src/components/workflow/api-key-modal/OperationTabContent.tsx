@@ -12,7 +12,7 @@ interface OperationTabContentProps {
   hasApiKey: (key: string) => boolean;
   values: Record<string, string>;
   errors: Record<string, string>;
-  kieModels: Record<string, any[]>;
+  kieModels: Record<string, { modelId: string; name: string }[]>;
   loadingKieModels: boolean;
   onSelectProvider: (providerId: string) => Promise<void>;
   onInputChange: (key: string, value: string) => void;

@@ -17,7 +17,7 @@ export interface CreditTrackingOptions {
   realCostUserId?: string;
   ownerId?: string;
   estimatedCost?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   execute: () => Promise<BaseGenerationResponse>;
 }
 
@@ -55,7 +55,7 @@ export async function withCredits(
   } = options;
 
   // Determine credit cost
-  const creditCost = estimatedCost || getActionCost(mapGenerationTypeToActionType(action) as any, provider as any);
+  const creditCost = estimatedCost || getActionCost(mapGenerationTypeToActionType(action) as string, provider as string);
 
   // Determine which user to deduct credits from
   const creditUserId = (skipCheck || userHasOwnApiKey) ? undefined : userId;
@@ -156,7 +156,7 @@ export async function withCredits(
 function buildDescription(
   action: GenerationType,
   provider: ProviderType,
-  metadata: Record<string, any>
+  metadata: Record<string, unknown>
 ): string {
   const parts = [
     capitalizeFirst(provider),
@@ -186,12 +186,12 @@ function buildDescription(
 export function calculateCreditCost(
   action: GenerationType,
   provider: ProviderType,
-  metadata: Record<string, any>
+  metadata: Record<string, unknown>
 ): number {
   // This should be moved to a centralized place
   // For now, using the getActionCost function
   // TODO: Use metadata for more accurate cost calculation (e.g., resolution, duration)
-  return getActionCost(mapGenerationTypeToActionType(action) as any, provider as any);
+  return getActionCost(mapGenerationTypeToActionType(action) as string, provider as string);
 }
 
 /**
@@ -203,13 +203,13 @@ export async function withBatchCredits(
     action: GenerationType;
     provider: ProviderType;
     estimatedCost?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }>,
   execute: () => Promise<BaseGenerationResponse[]>
 ): Promise<CreditTrackingResult[] | NextResponse> {
   // Calculate total cost
   const totalCost = operations.reduce((sum, op) => {
-    const cost = op.estimatedCost || getActionCost(mapGenerationTypeToActionType(op.action) as any, op.provider as any);
+    const cost = op.estimatedCost || getActionCost(mapGenerationTypeToActionType(op.action) as string, op.provider as string);
     return sum + cost;
   }, 0);
 
@@ -226,7 +226,7 @@ export async function withBatchCredits(
   const trackedResults: CreditTrackingResult[] = await Promise.all(
     results.map(async (result, index) => {
       const op = operations[index];
-      const creditCost = op.estimatedCost || getActionCost(mapGenerationTypeToActionType(op.action) as any, op.provider as any);
+      const creditCost = op.estimatedCost || getActionCost(mapGenerationTypeToActionType(op.action) as string, op.provider as string);
       const realCost = result.realCost || result.cost || 0;
 
       await spendCredits(

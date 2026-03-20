@@ -6,7 +6,7 @@ import { Image, Copy } from 'lucide-react';
 import { useProjectStore } from '@/lib/stores/project-store';
 import { useApiKeys, useCredits } from '@/hooks';
 import { ACTION_COSTS } from '@/lib/services/real-costs';
-import type { Scene, ImageProvider } from '@/types/project';
+import type { ImageProvider } from '@/types/project';
 import { DEFAULT_MODELS } from '@/lib/constants/default-models';
 import {
   useSceneGenerator,
@@ -25,7 +25,7 @@ import type { Step3Props } from './types';
 export function Step3SceneGenerator({
   project: initialProject,
   permissions,
-  userRole,
+  userRole: _userRole,
   isReadOnly = false,
   isAuthenticated = false,
 }: Step3Props) {
@@ -91,7 +91,7 @@ export function Step3SceneGenerator({
     showPromptsDialog,
     setShowPromptsDialog,
     sceneAspectRatio,
-    setSceneAspectRatio,
+    setSceneAspectRatio: _setSceneAspectRatio,
     isGeneratingScenes,
     generatingImageForScene,
     isGeneratingAllImages,
@@ -113,7 +113,7 @@ export function Step3SceneGenerator({
     handleGenerateSceneImage,
     handleGenerateAllSceneImages,
     handleStopImageGeneration,
-    handleRegenerateAllImages,
+    handleRegenerateAllImages: _handleRegenerateAllImages,
     handleStartBackgroundGeneration,
     handleGenerateBatch,
     handleCancelSceneGeneration,
@@ -164,7 +164,7 @@ export function Step3SceneGenerator({
     handleSaveOpenRouterKey,
     showGenerateDialog,
     setShowGenerateDialog,
-    isConfirmGenerating,
+    isConfirmGenerating: _isConfirmGenerating,
     setIsConfirmGenerating,
     showGenerateImagesDialog,
     setShowGenerateImagesDialog,

@@ -82,7 +82,7 @@ export default function ProjectStatisticsPage({ params }: { params: Promise<{ id
       }
     }
     fetchStats();
-  }, [projectId]);
+  }, [projectId, t]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { withAuth } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { inngest } from '@/lib/inngest/client';

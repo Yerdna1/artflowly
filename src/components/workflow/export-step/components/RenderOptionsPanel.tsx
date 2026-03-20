@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   X,
   Clapperboard,
-  Settings,
   Music,
   Download,
 } from 'lucide-react';

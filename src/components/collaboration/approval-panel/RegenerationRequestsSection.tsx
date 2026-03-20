@@ -226,7 +226,7 @@ export function RegenerationRequestsSection({
 
                       {batch.reason && (
                         <div className="mt-2 p-2 bg-white/5 rounded text-sm text-muted-foreground">
-                          "{batch.reason}"
+                          &quot;{batch.reason}&quot;
                         </div>
                       )}
                     </div>
@@ -379,7 +379,7 @@ export function RegenerationRequestsSection({
                         {t('collaborationModals.approvalPanel.regenerateType', { type: request.targetType })}
                       </span>
                       {request.targetName && (
-                        <span className="text-muted-foreground truncate">"{request.targetName}"</span>
+                        <span className="text-muted-foreground truncate">&quot;{request.targetName}&quot;</span>
                       )}
                     </>
                   }

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import type { Character } from '@/types/project';
 import type { StateCreator } from '../types';
 import { debounceSync } from '../utils';
@@ -9,7 +8,7 @@ export interface CharacterSlice {
   deleteCharacter: (projectId: string, characterId: string) => Promise<void>;
 }
 
-export const createCharacterSlice: StateCreator<CharacterSlice> = (set, get) => ({
+export const createCharacterSlice: StateCreator<CharacterSlice> = (set) => ({
   addCharacter: async (projectId, character) => {
     // Create character in database first to get the real ID
     try {

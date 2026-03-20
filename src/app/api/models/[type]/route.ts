@@ -2,43 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { auth } from '@/lib/auth';
 import { unstable_cache } from 'next/cache';
-import type {
-  KieImageModel,
-  KieVideoModel,
-  KieTtsModel,
-  KieMusicModel,
-  KieLlmModel,
-  ImageModel,
-  VideoModel,
-  TtsModel,
-  MusicModel,
-  LlmModel,
-  Provider
-} from '@prisma/client';
-
 // Valid model types
 const VALID_MODEL_TYPES = ['image', 'video', 'tts', 'music', 'llm'] as const;
 type ModelType = typeof VALID_MODEL_TYPES[number];
 
-// Union type for all model types
-type AnyModel =
-  | (KieImageModel & { providerId: string; displayName: string; apiModelId: string })
-  | (KieVideoModel & { providerId: string; displayName: string; apiModelId: string })
-  | (KieTtsModel & { providerId: string; displayName: string; apiModelId: string })
-  | (KieMusicModel & { providerId: string; displayName: string; apiModelId: string })
-  | (KieLlmModel & { providerId: string; displayName: string; apiModelId: string })
-  | (ImageModel & { provider: Provider })
-  | (VideoModel & { provider: Provider })
-  | (TtsModel & { provider: Provider })
-  | (MusicModel & { provider: Provider })
-  | (LlmModel & { provider: Provider });
-
 // Cache models for 5 minutes
 const getCachedModels = unstable_cache(
   async (type: ModelType, providerId?: string) => {
-    const where = { isActive: true };
-
-    const models: any[] = [];
+    const models: Record<string, unknown>[] = [];
 
     // For KIE provider, use existing KIE-specific tables
     if (!providerId || providerId === 'kie') {
@@ -185,14 +156,14 @@ export async function GET(
     const models = await getCachedModels(modelType, providerId);
 
     // Transform models to consistent format
-    const transformedModels = models.map((model: any) => {
+    const transformedModels = models.map((model: Record<string, unknown>) => {
       const baseModel = {
         id: model.id,
         modelId: model.modelId,
         name: model.name,
         displayName: model.displayName || model.name,
-        providerId: model.providerId || model.provider?.providerId || '',
-        providerName: model.provider?.displayName || undefined,
+        providerId: model.providerId || (model.provider as Record<string, unknown>)?.providerId || '',
+        providerName: (model.provider as Record<string, unknown>)?.displayName || undefined,
         description: model.description,
         apiModelId: model.apiModelId || model.modelId,
         cost: model.cost,
@@ -203,50 +174,50 @@ export async function GET(
       if (modelType === 'image') {
         return {
           ...baseModel,
-          qualityOptions: (model as any).qualityOptions,
-          supportedAspectRatios: (model as any).supportedAspectRatios,
-          supportedResolutions: (model as any).supportedResolutions,
-          maxPromptLength: (model as any).maxPromptLength,
-          maxImages: (model as any).maxImages,
+          qualityOptions: (model as Record<string, unknown>).qualityOptions,
+          supportedAspectRatios: (model as Record<string, unknown>).supportedAspectRatios,
+          supportedResolutions: (model as Record<string, unknown>).supportedResolutions,
+          maxPromptLength: (model as Record<string, unknown>).maxPromptLength,
+          maxImages: (model as Record<string, unknown>).maxImages,
         };
       }
 
       if (modelType === 'video') {
         return {
           ...baseModel,
-          supportedResolutions: (model as any).supportedResolutions,
-          supportedDurations: (model as any).supportedDurations,
-          supportedAspectRatios: (model as any).supportedAspectRatios,
-          defaultResolution: (model as any).defaultResolution,
-          defaultDuration: (model as any).defaultDuration,
-          defaultAspectRatio: (model as any).defaultAspectRatio,
+          supportedResolutions: (model as Record<string, unknown>).supportedResolutions,
+          supportedDurations: (model as Record<string, unknown>).supportedDurations,
+          supportedAspectRatios: (model as Record<string, unknown>).supportedAspectRatios,
+          defaultResolution: (model as Record<string, unknown>).defaultResolution,
+          defaultDuration: (model as Record<string, unknown>).defaultDuration,
+          defaultAspectRatio: (model as Record<string, unknown>).defaultAspectRatio,
         };
       }
 
       if (modelType === 'tts') {
         return {
           ...baseModel,
-          supportedLanguages: 'languageList' in model ? (model as any).languageList : (model as any).supportedLanguages,
-          voiceOptions: (model as any).voiceOptions,
-          maxTextLength: (model as any).maxTextLength,
+          supportedLanguages: 'languageList' in model ? (model as Record<string, unknown>).languageList : (model as Record<string, unknown>).supportedLanguages,
+          voiceOptions: (model as Record<string, unknown>).voiceOptions,
+          maxTextLength: (model as Record<string, unknown>).maxTextLength,
         };
       }
 
       if (modelType === 'music') {
         return {
           ...baseModel,
-          durationOptions: (model as any).durationOptions,
-          genreSupport: (model as any).genreSupport,
-          maxDuration: (model as any).maxDuration,
+          durationOptions: (model as Record<string, unknown>).durationOptions,
+          genreSupport: (model as Record<string, unknown>).genreSupport,
+          maxDuration: (model as Record<string, unknown>).maxDuration,
         };
       }
 
       if (modelType === 'llm') {
         return {
           ...baseModel,
-          contextWindow: (model as any).contextWindow,
-          maxOutputTokens: (model as any).maxOutputTokens,
-          capabilities: (model as any).capabilities,
+          contextWindow: (model as Record<string, unknown>).contextWindow,
+          maxOutputTokens: (model as Record<string, unknown>).maxOutputTokens,
+          capabilities: (model as Record<string, unknown>).capabilities,
         };
       }
 

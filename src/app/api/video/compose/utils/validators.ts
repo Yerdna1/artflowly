@@ -1,6 +1,5 @@
 // Video Composition - Validation Utilities
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { checkBalance } from '@/lib/services/credits';
 import type { Scene } from '@/types/project';

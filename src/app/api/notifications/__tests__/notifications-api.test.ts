@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import { createTestUser } from '@/test/factories/user'
 import { createTestProject } from '@/test/factories/project'

@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 import { useProjectStore } from '@/lib/stores/project-store';
 import type { Project, VoiceProvider, ImageProvider } from '@/types/project';
 import type { Step1State } from './types';
-import { genres, tones, sceneOptions, storyModels, voiceProviders, imageProviders } from '../constants';
+import { genres, tones, sceneOptions } from '../constants';
 import { usePromptPolling } from './usePromptPolling';
 
 const videoLanguages = ['en', 'sk', 'cs', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh'] as const;

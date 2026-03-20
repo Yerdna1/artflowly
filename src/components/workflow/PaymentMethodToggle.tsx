@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { useApiKeys } from '@/contexts/ApiKeysContext';
-import { useCredits } from '@/contexts/CreditsContext';
 import type { OperationType } from '@/lib/services/user-permissions';
 import { useSession } from 'next-auth/react';
 
@@ -45,8 +44,8 @@ export function PaymentMethodToggle({ operation, onMethodChange, className }: Pa
         const { paymentMethods } = await response.json();
 
         if (paymentMethods) {
-          const canUseCredits = paymentMethods.some((m: any) => m.type === 'credits' && m.available);
-          const canUseKeys = paymentMethods.some((m: any) => m.type === 'apiKeys' && m.available);
+          const canUseCredits = paymentMethods.some((m: { type: string; available: boolean }) => m.type === 'credits' && m.available);
+          const canUseKeys = paymentMethods.some((m: { type: string; available: boolean }) => m.type === 'apiKeys' && m.available);
 
           // Show toggle only if both methods are available
           setShowToggle(canUseCredits && canUseKeys);
@@ -138,7 +137,7 @@ export function PaymentMethodToggle({ operation, onMethodChange, className }: Pa
 }
 
 // Compact version for inline use
-export function PaymentMethodToggleCompact({ operation, onMethodChange }: PaymentMethodToggleProps) {
+export function PaymentMethodToggleCompact({ onMethodChange }: PaymentMethodToggleProps) {
   const { apiKeys, updatePaymentPreference } = useApiKeys();
   const { data: session } = useSession();
   const [showToggle, setShowToggle] = useState(false);

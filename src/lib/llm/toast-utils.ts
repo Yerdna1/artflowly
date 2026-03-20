@@ -145,7 +145,7 @@ export function getModelDisplayName(model: string): string {
  * @param data - Data object that might contain provider/model info
  * @returns Object with provider and model, or null if not found
  */
-export function extractProviderModel(data: any): { provider: string; model: string } | null {
+export function extractProviderModel(data: Record<string, unknown> | null | undefined): { provider: string; model: string } | null {
   if (!data || typeof data !== 'object') {
     return null;
   }

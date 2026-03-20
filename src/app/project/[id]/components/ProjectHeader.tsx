@@ -5,8 +5,6 @@ import {
     ArrowLeft,
     ChevronDown,
     CreditCard,
-    Crown,
-    Edit3,
     Eye,
     Film,
     Globe,

@@ -1,5 +1,3 @@
-import type { DeletionRequest, RegenerationRequest, PromptEditRequest } from '@/types/collaboration';
-
 export interface ProjectInfo {
   id: string;
   name: string;

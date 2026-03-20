@@ -21,7 +21,7 @@ export function parseLLMResponse(fullResponse: string, batchIndex: number): Scen
         scenes = JSON.parse(jsonArrayMatch[0]);
       } catch (parseError2) {
         // Strategy 3: Try to fix common JSON issues
-        let fixedJson = jsonArrayMatch[0]
+        const fixedJson = jsonArrayMatch[0]
           .replace(/,\s*}/g, '}')  // Remove trailing commas in objects
           .replace(/,\s*\]/g, ']') // Remove trailing commas in arrays
           .replace(/[\x00-\x1F\x7F]/g, ' '); // Remove control characters

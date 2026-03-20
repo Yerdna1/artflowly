@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -15,18 +14,15 @@ interface TimelineHeaderProps {
   compact?: boolean;
 }
 
-const SCENE_DURATION = 6; // seconds per scene
-
 export function TimelineHeader({
   totalDuration,
   zoom,
-  scrollLeft,
+  scrollLeft: _scrollLeft,
   onZoomChange,
   onZoomIn,
   onZoomOut,
   compact = false,
 }: TimelineHeaderProps) {
-  const t = useTranslations();
 
   // Generate time markers
   const markerInterval = zoom >= 100 ? 6 : 12; // Show markers every 6s or 12s based on zoom
@@ -69,7 +65,7 @@ export function TimelineHeader({
           {/* Minor ticks (every 2 seconds when zoomed in) */}
           {zoom >= 100 &&
             Array.from({ length: Math.ceil(totalDuration / 2) }, (_, i) => i * 2)
-              .filter(t => t % markerInterval !== 0)
+              .filter(sec => sec % markerInterval !== 0)
               .map((time) => (
                 <div
                   key={`minor-${time}`}

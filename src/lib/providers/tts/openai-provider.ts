@@ -49,7 +49,7 @@ export class OpenAITTSProvider extends BaseTTSProvider {
     voice?: string,
     voiceSettings?: TTSGenerationRequest['voiceSettings'],
     format?: string,
-    languageCode?: string
+    _languageCode?: string
   ): Promise<{ audio: Buffer; format: string }> {
     // OpenAI voices
     const voices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];

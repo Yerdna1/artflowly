@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useProjectStore } from '@/lib/stores/project-store';
 import type { ActionCosts } from '../types';
 import type {
+  ApiConfig,
   LLMProvider,
   MusicProvider,
   TTSProvider,
@@ -22,7 +23,7 @@ export interface SettingsState {
   // UI State
   showKeys: Record<string, boolean>;
   savedKeys: Record<string, boolean>;
-  localConfig: Record<string, any>;
+  localConfig: ApiConfig;
   isExporting: boolean;
 
   // UI Preferences
@@ -60,11 +61,11 @@ export function useSettingsState() {
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
   const [savedKeys, setSavedKeys] = useState<Record<string, boolean>>({});
   const [localConfig, setLocalConfig] = useState(apiConfig);
-  const [language, setLanguage] = useState('en');
-  const [darkMode, setDarkMode] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [notifyOnComplete, setNotifyOnComplete] = useState(true);
-  const [autoSave, setAutoSave] = useState(true);
+  const [language, setLanguage] = useState(() => getCookieValue('NEXT_LOCALE') || localStorage.getItem('app-language') || 'en');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('app-dark-mode') !== 'false');
+  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('app-reduced-motion') === 'true');
+  const [notifyOnComplete, setNotifyOnComplete] = useState(() => localStorage.getItem('app-notify-complete') !== 'false');
+  const [autoSave, setAutoSave] = useState(() => localStorage.getItem('app-auto-save') !== 'false');
   const [isExporting, setIsExporting] = useState(false);
   const [actionCosts, setActionCosts] = useState<ActionCosts | null>(null);
   const [costsLoading, setCostsLoading] = useState(false);
@@ -75,7 +76,7 @@ export function useSettingsState() {
   const [imageProvider, setImageProvider] = useState<ImageProvider>('gemini');
   const [videoProvider, setVideoProvider] = useState<VideoProvider>('kie');
   const [modalEndpoints, setModalEndpoints] = useState<ModalEndpoints>({});
-  const [currency, setCurrency] = useState<Currency>('EUR');
+  const [currency, setCurrency] = useState<Currency>(() => getCurrency());
   const [kieImageModel, setKieImageModel] = useState<string>(DEFAULT_MODELS.kieImageModel);
   const [kieVideoModel, setKieVideoModel] = useState<string>(DEFAULT_MODELS.kieVideoModel);
   const [kieTtsModel, setKieTtsModel] = useState<string>(DEFAULT_MODELS.kieTtsModel);
@@ -88,7 +89,7 @@ export function useSettingsState() {
       const migrationDone = localStorage.getItem('app-settings-migrated');
       if (migrationDone === 'true') return;
 
-      const localStorageData: Record<string, any> = {};
+      const localStorageData: Record<string, string> = {};
       const keys = [
         'app-llm-provider',
         'app-openrouter-model',
@@ -133,23 +134,6 @@ export function useSettingsState() {
     };
 
     migrateLocalStorage();
-  }, []);
-
-  // Load UI preferences from localStorage
-  useEffect(() => {
-    const savedLanguage = getCookieValue('NEXT_LOCALE') || localStorage.getItem('app-language') || 'en';
-    const savedDarkMode = localStorage.getItem('app-dark-mode') !== 'false';
-    const savedReducedMotion = localStorage.getItem('app-reduced-motion') === 'true';
-    const savedNotify = localStorage.getItem('app-notify-complete') !== 'false';
-    const savedAutoSave = localStorage.getItem('app-auto-save') !== 'false';
-    const savedCurrency = getCurrency();
-
-    setLanguage(savedLanguage);
-    setCurrency(savedCurrency);
-    setDarkMode(savedDarkMode);
-    setReducedMotion(savedReducedMotion);
-    setNotifyOnComplete(savedNotify);
-    setAutoSave(savedAutoSave);
   }, []);
 
   // Fetch API keys from database

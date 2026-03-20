@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { motion } from 'framer-motion';
 import {
   Upload,
   Image as ImageIcon,
@@ -206,7 +205,7 @@ export function ImportProjectDialog({ open, onOpenChange }: ImportProjectDialogP
       files: { characterImages, sceneImages, sceneVideos },
       autoDetected,
     });
-  }, []);
+  }, [t]);
 
   const handleDrop = useCallback(
     async (e: React.DragEvent) => {

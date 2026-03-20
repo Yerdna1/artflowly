@@ -8,7 +8,7 @@ import type { Project } from '@/types/project';
 interface SceneCountSelectorProps {
   project: Project;
   sceneOptions: readonly number[];
-  updateSettings: (id: string, settings: any) => void;
+  updateSettings: (id: string, settings: Record<string, unknown>) => void;
   isReadOnly: boolean;
 }
 

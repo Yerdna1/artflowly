@@ -5,7 +5,7 @@ import { useCredits } from '@/contexts/CreditsContext';
 import { useApiKeys } from '@/contexts/ApiKeysContext';
 import { getUserPermissions, checkRequiredApiKeys, shouldUseOwnApiKeys } from '@/lib/client/user-permissions';
 import type { Character, Project } from '@/types/project';
-import type { AspectRatio, ImageResolution } from '@/lib/services/real-costs';
+import type { AspectRatio } from '@/lib/services/real-costs';
 import type { ImageProvider } from '@/types/project';
 import type { CharacterImageState } from '../types';
 
@@ -160,7 +160,7 @@ export function useCharacterImage(project: Project, aspectRatio: AspectRatio, pr
       setTimeout(() => setGenerationProgress({ current: 0, total: 0 }), 500);
       setPendingCharacter(null);
     }
-  }, [pendingCharacter, project.id, project.settings?.imageResolution, aspectRatio, provider, model, updateCharacter, handleApiResponse, requestGenerateCharacterImage]);
+  }, [pendingCharacter, project.id, project.settings?.imageResolution, aspectRatio, provider, model, updateCharacter, handleApiResponse, requestGenerateCharacterImage, showApiKeyModal]);
 
   // Direct generate without dialog (for programmatic use)
   const generateCharacterImage = useCallback(async (character: Character) => {

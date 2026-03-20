@@ -22,6 +22,7 @@ export function ImagePreviewModal({ imageUrl, onClose }: ImagePreviewModalProps)
             exit={{ scale: 0.9 }}
             className="relative max-w-4xl max-h-[90vh]"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
               alt="Preview"

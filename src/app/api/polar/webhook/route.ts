@@ -63,7 +63,8 @@ export async function POST(request: NextRequest) {
     let userId = data.metadata?.userId;
     if (!userId) {
       // Fallback: look up user by customer email
-      const customerEmail = (data as any).customer?.email;
+      const customerData = (data as unknown as Record<string, Record<string, unknown>>).customer;
+      const customerEmail = customerData?.email as string | undefined;
       if (customerEmail) {
         const user = await prisma.user.findFirst({ where: { email: customerEmail } });
         userId = user?.id;

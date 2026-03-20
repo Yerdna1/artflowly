@@ -2,7 +2,8 @@ import { callExternalApi } from '@/lib/providers/api-wrapper';
 import { getProviderConfig } from '@/lib/providers';
 import { uploadMediaToS3 } from '@/lib/api';
 import { spendCredits, getImageCreditCost, trackRealCostOnly } from '@/lib/services/credits';
-import { getImageCost, type ImageResolution } from '@/lib/services/real-costs';
+import { type ImageResolution } from '@/lib/services/real-costs';
+import type { Provider } from '@/lib/services/real-costs';
 import { buildKieRequestBody, buildModalRequestBody, buildModalEditRequestBody, calculateKieRealCost } from './request-builders';
 import { pollKieTask } from './kie-polling';
 
@@ -24,6 +25,7 @@ export interface WrapperGenerationOptions {
 
 interface ApiResponse {
   status: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   error?: string;
 }
@@ -98,7 +100,7 @@ export async function generateWithWrapper(options: WrapperGenerationOptions): Pr
   } = options;
 
   // Build request body based on provider
-  let requestBody: any;
+  let requestBody: Record<string, unknown>;
   let kieModelId: string | undefined; // Track KIE model for cost calculation
   const randomSeed = Math.floor(Math.random() * 2147483647);
 
@@ -190,7 +192,7 @@ export async function generateWithWrapper(options: WrapperGenerationOptions): Pr
       'image',
       `${provider} image ${actionType} (${resolution.toUpperCase()})`,
       projectId,
-      provider as any,
+      provider as Provider,
       { isRegeneration, sceneId },
       realCost
     );
@@ -201,7 +203,7 @@ export async function generateWithWrapper(options: WrapperGenerationOptions): Pr
       'image',
       `${provider} image ${actionType} (${resolution.toUpperCase()}) - prepaid`,
       projectId,
-      provider as any,
+      provider as Provider,
       { isRegeneration, sceneId, prepaidRegeneration: true }
     );
   }

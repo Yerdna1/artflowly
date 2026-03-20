@@ -161,7 +161,7 @@ export class KieMusicProvider extends BaseMusicProvider implements AsyncProvider
     }
 
     // Build the request body
-    const body: any = {
+    const body: Record<string, unknown> = {
       prompt: description || prompt,
       model: apiModelId,
       duration,

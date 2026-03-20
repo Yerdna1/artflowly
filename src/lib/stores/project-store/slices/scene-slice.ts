@@ -12,7 +12,7 @@ export interface SceneSlice {
   refreshScenes: (projectId: string, scenes: Scene[]) => void;
 }
 
-export const createSceneSlice: StateCreator<SceneSlice> = (set, get) => ({
+export const createSceneSlice: StateCreator<SceneSlice> = (set) => ({
   addScene: async (projectId, scene) => {
     const tempId = uuidv4();
     const newScene: Scene = { ...scene, id: tempId };

@@ -10,7 +10,7 @@ export function VideoPreview({
   scene,
   isPlaying,
   isRestricted,
-  isFirstVideo,
+  isFirstVideo: _isFirstVideo,
   cachedVideoUrl,
   status,
   progress,
@@ -32,6 +32,7 @@ export function VideoPreview({
           onPause={onPause}
         />
       ) : scene.imageUrl ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
         <img
           key={scene.imageUrl}
           src={scene.imageUrl}

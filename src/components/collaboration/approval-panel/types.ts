@@ -1,5 +1,5 @@
-import type { RegenerationRequest, DeletionRequest, PromptEditRequest } from '@/types/collaboration';
-import { Film, Image as ImageIcon, User, Video, RefreshCw } from 'lucide-react';
+import type { RegenerationRequest } from '@/types/collaboration';
+import { Film, Image as ImageIcon, User, Video } from 'lucide-react';
 
 // Extended type for RegenerationRequest with batchId
 export interface RegenerationRequestWithBatch extends RegenerationRequest {

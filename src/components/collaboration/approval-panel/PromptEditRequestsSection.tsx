@@ -102,7 +102,7 @@ export function PromptEditRequestsSection({
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-medium">{fieldLabels[request.fieldName] || request.fieldName}</span>
                       {request.sceneName && (
-                        <span className="text-muted-foreground">Scene: "{request.sceneName}"</span>
+                        <span className="text-muted-foreground">Scene: &quot;{request.sceneName}&quot;</span>
                       )}
                     </div>
 

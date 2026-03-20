@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Subtitles, GripHorizontal } from 'lucide-react';
+import { Subtitles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { Scene, Caption } from '@/types/project';
 

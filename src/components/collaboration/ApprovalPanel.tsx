@@ -14,6 +14,9 @@ import {
   DeletionRequestsSection,
   type RegenerationRequestWithBatch,
 } from './approval-panel';
+import type { DeletionRequest, PromptEditRequest } from '@/types/collaboration';
+
+type SectionMutate<T> = (updater: (current: { requests: T[] } | undefined) => { requests: T[] } | undefined, revalidate: boolean) => void;
 
 interface ApprovalPanelProps {
   projectId: string;
@@ -108,21 +111,21 @@ export function ApprovalPanel({ projectId, canApprove }: ApprovalPanelProps) {
       <RegenerationRequestsSection
         {...sharedProps}
         requests={regenerationRequests}
-        mutate={mutateRegenerationRequests as any}
+        mutate={mutateRegenerationRequests as unknown as SectionMutate<RegenerationRequestWithBatch>}
       />
 
       {/* Prompt Edit Requests Section */}
       <PromptEditRequestsSection
         {...sharedProps}
         requests={promptEditRequests}
-        mutate={mutatePromptEditRequests as any}
+        mutate={mutatePromptEditRequests as unknown as SectionMutate<PromptEditRequest>}
       />
 
       {/* Deletion Requests Section */}
       <DeletionRequestsSection
         {...sharedProps}
         requests={deletionRequests}
-        mutate={mutateDeletionRequests as any}
+        mutate={mutateDeletionRequests as unknown as SectionMutate<DeletionRequest>}
       />
     </div>
   );

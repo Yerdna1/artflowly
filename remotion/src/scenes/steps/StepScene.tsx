@@ -23,7 +23,6 @@ interface StepSceneProps {
 
 export const StepScene: React.FC<StepSceneProps> = ({ step, stepNumber }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
 
   const fadeIn = interpolate(frame, [0, 25], [0, 1], {
     extrapolateRight: "clamp",

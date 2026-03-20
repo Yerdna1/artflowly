@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, CheckCircle2, AlertCircle, CloudOff } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';

@@ -5,7 +5,7 @@ export interface UserConstantsSlice {
   updateUserConstants: (constants: Partial<UserConstants>) => Promise<void>;
 }
 
-export const createUserConstantsSlice: StateCreator<UserConstantsSlice> = (set, get) => ({
+export const createUserConstantsSlice: StateCreator<UserConstantsSlice> = (set) => ({
   loadUserConstants: async () => {
     try {
       const response = await fetch('/api/user/constants');

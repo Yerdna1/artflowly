@@ -49,7 +49,7 @@ export function ConfirmDeleteDialog({
             {description || (
               <>
                 {t('common.deleteConfirmation')}
-                {itemName && <strong className="text-foreground"> "{itemName}"</strong>}
+                {itemName && <strong className="text-foreground"> &quot;{itemName}&quot;</strong>}
                 ? {t('common.actionCannotBeUndone')}
               </>
             )}

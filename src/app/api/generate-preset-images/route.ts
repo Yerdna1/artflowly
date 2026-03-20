@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db/prisma';
 import { KieImageProvider } from '@/lib/providers/image/kie-provider';
-import type { ImageProvider } from '@/types/project';
 import { DEFAULT_MODELS } from '@/lib/constants/default-models';
 
 const PRESETS = [
@@ -38,7 +36,7 @@ const PRESETS = [
   }
 ];
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {

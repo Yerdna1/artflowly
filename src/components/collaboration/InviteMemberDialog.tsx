@@ -44,7 +44,6 @@ interface InviteMemberDialogProps {
 
 export function InviteMemberDialog({
   projectId,
-  projectName,
   open,
   onOpenChange,
   onInviteSent,
@@ -98,7 +97,7 @@ export function InviteMemberDialog({
 
       setInviteLink(data.inviteLink);
       onInviteSent?.();
-    } catch (e) {
+    } catch {
       setError(t('error.failedToSendInvitation'));
     } finally {
       setIsLoading(false);
@@ -112,7 +111,7 @@ export function InviteMemberDialog({
       await navigator.clipboard.writeText(inviteLink);
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
-    } catch (e) {
+    } catch {
       console.error(t('error.failedToCopyLink'));
     }
   };

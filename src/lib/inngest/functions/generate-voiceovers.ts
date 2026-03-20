@@ -97,11 +97,12 @@ async function generateSingleAudio(
         throw new Error('No audio generated');
       }
 
-      const mimeType = (generatedAudio as any).mimeType || 'audio/mp3';
+      const mimeType = (generatedAudio as Record<string, unknown>).mimeType as string || 'audio/mp3';
       audioUrl = `data:${mimeType};base64,${generatedAudio.base64}`;
 
     } else {
       // Use API wrapper for other providers
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let requestBody: any;
 
       // Map model name for KIE
@@ -281,7 +282,7 @@ async function generateSingleAudio(
       } else {
         // ElevenLabs and OpenAI return binary audio data
         if (response.data instanceof ArrayBuffer || response.data instanceof Buffer) {
-          const base64 = Buffer.from(response.data as any).toString('base64');
+          const base64 = Buffer.from(response.data as ArrayBuffer).toString('base64');
           audioUrl = `data:audio/mpeg;base64,${base64}`;
         } else if (response.data.audio) {
           audioUrl = response.data.audio.startsWith('data:')
@@ -303,8 +304,8 @@ async function generateSingleAudio(
     });
 
     if (scene) {
-      const dialogue = scene.dialogue as any[];
-      const updatedDialogue = dialogue.map((line: any) => {
+      const dialogue = scene.dialogue as Array<Record<string, unknown>>;
+      const updatedDialogue = dialogue.map((line: Record<string, unknown>) => {
         if (line.id === audioLine.lineId) {
           return { ...line, audioUrl };
         }
@@ -413,7 +414,7 @@ export const generateVoiceoversBatch = inngest.createFunction(
       const batchResults = await step.run(`generate-parallel-batch-${batchIndex + 1}`, async () => {
         console.log(`[Inngest] Parallel batch ${batchIndex + 1}/${totalBatches}: lines ${startIdx + 1}-${endIdx}`);
 
-        const promises = batchLines.map((line: any) =>
+        const promises = batchLines.map((line: typeof audioLines[0]) =>
           generateSingleAudio(line, userId, projectId, language, userHasOwnApiKey)
         );
 

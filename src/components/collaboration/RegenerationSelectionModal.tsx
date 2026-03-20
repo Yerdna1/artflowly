@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import NextImage from 'next/image';
 import {
   Dialog,
   DialogContent,
@@ -131,9 +132,11 @@ export function RegenerationSelectionModal({
                   }`}
                 >
                   {request.targetType === 'image' ? (
-                    <img
+                    <NextImage
                       src={url}
                       alt={`Option ${index + 1}`}
+                      width={400}
+                      height={250}
                       className="w-full aspect-[16/10] min-h-[200px] object-cover"
                     />
                   ) : (

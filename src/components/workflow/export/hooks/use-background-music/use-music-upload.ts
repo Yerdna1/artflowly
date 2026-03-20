@@ -6,11 +6,11 @@ import type { BackgroundMusic } from '@/types/project';
 import { DEFAULT_VALUES } from './constants';
 
 export interface UseMusicUploadReturn {
-  uploadMusic: (file: File, projectId: string, updateProject: (id: string, data: any) => void) => Promise<void>;
+  uploadMusic: (file: File, projectId: string, updateProject: (id: string, data: Record<string, unknown>) => void) => Promise<void>;
 }
 
 export function useMusicUpload(): UseMusicUploadReturn {
-  const uploadMusic = useCallback(async (file: File, projectId: string, updateProject: (id: string, data: any) => void) => {
+  const uploadMusic = useCallback(async (file: File, projectId: string, updateProject: (id: string, data: Record<string, unknown>) => void) => {
     try {
       const reader = new FileReader();
 

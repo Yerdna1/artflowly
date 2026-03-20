@@ -22,7 +22,7 @@ export interface Model {
   defaultDuration?: string;
   defaultAspectRatio?: string;
   supportedLanguages?: string[];
-  voiceOptions?: any;
+  voiceOptions?: Record<string, unknown>;
   maxTextLength?: number;
   durationOptions?: string[];
   genreSupport?: string[];
@@ -42,7 +42,7 @@ interface UseModelsOptions {
 interface UseModelsReturn {
   models: Model[];
   isLoading: boolean;
-  error: any;
+  error: Error | undefined;
   mutate: () => void;
 }
 

@@ -1,9 +1,6 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Settings2, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import type { Project } from '@/types/project';
 import {
   AspectRatioSelector,
@@ -20,7 +17,7 @@ interface SettingsPanelProps {
   videoLanguage: string;
   setVideoLanguage: (lang: string | ((prev: string) => string)) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
-  updateSettings: (id: string, settings: any) => void;
+  updateSettings: (id: string, settings: Record<string, unknown>) => void;
   sceneOptions: readonly number[];
   videoLanguages: readonly string[];
   isPremiumUser?: boolean;
@@ -37,7 +34,7 @@ export function SettingsPanel({
   updateSettings,
   sceneOptions,
   videoLanguages,
-  isPremiumUser = false,
+  isPremiumUser: _isPremiumUser = false,
 }: SettingsPanelProps) {
   const t = useTranslations();
 

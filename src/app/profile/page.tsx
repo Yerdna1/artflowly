@@ -10,7 +10,6 @@ import {
   User,
   Film,
   Coins,
-  Settings,
   Image as ImageIcon,
   Video,
   Mic,

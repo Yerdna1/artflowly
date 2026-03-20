@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 
 // Fix missing projectId on image transactions by matching count with project scenes
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth();
 
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET - Preview what would be fixed without making changes
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await auth();
 

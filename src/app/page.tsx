@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [importProjectOpen, setImportProjectOpen] = useState(false);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [userStatus, setUserStatus] = useState<{ isApproved: boolean; isBlocked: boolean } | null>(null);
-  const [statusLoading, setStatusLoading] = useState(true);
+  const [statusLoading, setStatusLoading] = useState(() => status === 'authenticated');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Check user approval status
@@ -37,8 +37,6 @@ export default function DashboardPage() {
           }
         })
         .catch(() => setStatusLoading(false));
-    } else {
-      setStatusLoading(false);
     }
   }, [status, router]);
 

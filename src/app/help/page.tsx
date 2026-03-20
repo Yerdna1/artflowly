@@ -37,7 +37,6 @@ import { Badge } from '@/components/ui/badge';
 
 export default function HelpPage() {
   const t = useTranslations('help');
-  const tCommon = useTranslations('common');
 
   const workflowSteps = [
     {
@@ -375,7 +374,7 @@ export default function HelpPage() {
               {t('proTips')}
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
-              {tipKeys.map((key, index) => (
+              {tipKeys.map((key) => (
                 <Card key={key} className="glass border-white/10">
                   <CardContent className="p-4">
                     <h4 className="font-medium mb-2 text-yellow-400">{t(`tips.${key}`)}</h4>

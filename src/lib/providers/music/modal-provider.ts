@@ -50,8 +50,9 @@ export class ModalMusicProvider extends BaseMusicProvider {
           this.name
         );
       }
-    } catch (error: any) {
-      if (error?.code === 'ECONNREFUSED' || error?.cause?.code === 'ECONNREFUSED') {
+    } catch (error: unknown) {
+      const err = error as { code?: string; cause?: { code?: string } };
+      if (err?.code === 'ECONNREFUSED' || err?.cause?.code === 'ECONNREFUSED') {
         throw new ProviderValidationError(
           'Cannot connect to Modal music endpoint',
           this.name
@@ -76,7 +77,7 @@ export class ModalMusicProvider extends BaseMusicProvider {
       enhancedPrompt += ` featuring ${instruments.join(', ')}`;
     }
 
-    const body: any = {
+    const body: Record<string, unknown> = {
       prompt: enhancedPrompt,
       duration,
       temperature: 1.0,
@@ -144,12 +145,13 @@ export class ModalMusicProvider extends BaseMusicProvider {
         format: result.format || 'mp3',
         tags: result.tags || [style].filter(Boolean),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof ProviderError) {
         throw error;
       }
 
-      if (error?.cause?.code === 'ECONNRESET' || error?.cause?.code === 'ETIMEDOUT') {
+      const err = error as { message?: string; cause?: { code?: string } };
+      if (err?.cause?.code === 'ECONNRESET' || err?.cause?.code === 'ETIMEDOUT') {
         throw new ProviderError(
           'Modal music endpoint timeout - container may be cold starting or processing',
           'TIMEOUT',
@@ -158,10 +160,10 @@ export class ModalMusicProvider extends BaseMusicProvider {
       }
 
       throw new ProviderError(
-        `Modal music request failed: ${error.message}`,
+        `Modal music request failed: ${err.message}`,
         'REQUEST_ERROR',
         this.name,
-        { error: error.message }
+        { error: err.message }
       );
     }
   }

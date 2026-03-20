@@ -1,5 +1,5 @@
 import { useCredits, useStatistics, useProjectCosts } from '@/hooks';
-import type { CreditsData, ProjectCostsData, CreditsBreakdown } from '../types';
+import type { CreditsData, ProjectCostsData } from '../types';
 
 /**
  * Dashboard data hook that uses centralized SWR hooks.

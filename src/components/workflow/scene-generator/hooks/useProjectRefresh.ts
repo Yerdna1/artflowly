@@ -46,7 +46,7 @@ export function useProjectRefresh(project: Project) {
               updateScene(project.id, scene.id, { imageUrl: scene.imageUrl });
             }
           }
-          console.log(`[Refresh] Synced images for ${updatedProject.scenes.filter((s: any) => s.imageUrl).length} scenes`);
+          console.log(`[Refresh] Synced images for ${updatedProject.scenes.filter((s: { imageUrl?: string | null }) => s.imageUrl).length} scenes`);
         }
       }
     } catch (error) {

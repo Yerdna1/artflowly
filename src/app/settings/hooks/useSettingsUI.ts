@@ -92,7 +92,7 @@ export function useSettingsUI({
     });
   }, [setCurrency, tPage]);
 
-  const fetchActionCosts = useCallback(async (actionCosts: any) => {
+  const fetchActionCosts = useCallback(async (actionCosts: import('../types').ActionCosts | null) => {
     if (actionCosts) return actionCosts;
     try {
       const response = await fetch('/api/costs');

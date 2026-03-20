@@ -35,7 +35,7 @@ export interface UseCaptionEditorReturn extends CaptionEditorState, CaptionEdito
 
 const SCENE_DURATION = 6; // seconds
 
-function createDefaultCaption(sceneIndex: number): Caption {
+function createDefaultCaption(_sceneIndex: number): Caption {
   return {
     id: uuidv4(),
     text: '',

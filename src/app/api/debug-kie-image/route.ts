@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProviderConfig } from '@/lib/providers';
 import { callExternalApi } from '@/lib/providers/api-wrapper';
-import { buildApiUrl } from '@/lib/constants/api-endpoints';
 
 export async function GET(request: NextRequest) {
   try {

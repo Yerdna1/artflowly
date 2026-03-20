@@ -7,7 +7,6 @@ interface PaginationControlsProps {
   totalItems: number;
   itemsPerPage: number;
   itemName: string;
-  t: (key: string, params?: Record<string, string | number | Date>) => string;
   variant?: 'default' | 'pending';
 }
 
@@ -17,7 +16,6 @@ export const PaginationControls = ({
   totalItems,
   itemsPerPage,
   itemName,
-  t,
   variant = 'default',
 }: PaginationControlsProps) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);

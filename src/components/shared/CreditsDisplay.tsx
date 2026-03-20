@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Coins, TrendingDown, ChevronDown, Sparkles, Video, Mic, Image } from 'lucide-react';
+import { Coins, ChevronDown, Sparkles, Video, Mic, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -47,7 +46,7 @@ export function CreditsDisplay({ className }: CreditsDisplayProps) {
       case 'video':
         return <Video className="w-3 h-3" />;
       case 'image':
-        return <Image className="w-3 h-3" />;
+        return <ImageIcon className="w-3 h-3" />;
       case 'voiceover':
         return <Mic className="w-3 h-3" />;
       default:
@@ -108,7 +107,7 @@ export function CreditsDisplay({ className }: CreditsDisplayProps) {
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1">
-                <Image className="w-3 h-3 text-purple-400" />
+                <ImageIcon className="w-3 h-3 text-purple-400" />
                 {t('credits.image')}
               </span>
               <span className="text-muted-foreground">{COSTS.IMAGE_GENERATION}p</span>

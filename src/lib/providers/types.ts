@@ -46,7 +46,7 @@ export interface BaseGenerationResponse {
   error?: string;
   cost?: number;
   realCost?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Provider interfaces
@@ -150,7 +150,7 @@ export interface UnifiedGenerationResponse {
   result?: BaseGenerationResponse;
   createdAt: string;
   updatedAt: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   error?: string;
 }
 
@@ -160,7 +160,7 @@ export interface BatchGenerationRequest {
     type: GenerationType;
     provider?: ProviderType;
     config: ImageGenerationRequest | VideoGenerationRequest | TTSGenerationRequest | MusicGenerationRequest;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }>;
   webhookUrl?: string;
   parallel?: boolean;
@@ -214,7 +214,7 @@ export class ProviderError extends Error {
     message: string,
     public code: string,
     public provider: string,
-    public details?: Record<string, any>
+    public details?: Record<string, unknown>
   ) {
     super(message);
     this.name = 'ProviderError';
@@ -222,14 +222,14 @@ export class ProviderError extends Error {
 }
 
 export class ProviderValidationError extends ProviderError {
-  constructor(message: string, provider: string, details?: Record<string, any>) {
+  constructor(message: string, provider: string, details?: Record<string, unknown>) {
     super(message, 'VALIDATION_ERROR', provider, details);
     this.name = 'ProviderValidationError';
   }
 }
 
 export class ProviderAuthError extends ProviderError {
-  constructor(message: string, provider: string, details?: Record<string, any>) {
+  constructor(message: string, provider: string, details?: Record<string, unknown>) {
     super(message, 'AUTH_ERROR', provider, details);
     this.name = 'ProviderAuthError';
   }

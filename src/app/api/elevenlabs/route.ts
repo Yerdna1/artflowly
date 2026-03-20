@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 import { spendCredits, COSTS, checkBalance } from '@/lib/services/credits';
-import { ACTION_COSTS, calculateVoiceCost } from '@/lib/services/real-costs';
+import { calculateVoiceCost } from '@/lib/services/real-costs';
 import { uploadAudioToS3, isS3Configured } from '@/lib/services/s3-upload';
 
 const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1';
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET endpoint to list available voices
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Get API key from user's database settings only
     const session = await auth();

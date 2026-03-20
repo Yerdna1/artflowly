@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/lib/stores/project-store';
 import { useApiKeys } from '@/hooks';
@@ -39,15 +39,13 @@ interface Step6Props {
 
 export function Step6Export({
   project: initialProject,
-  permissions,
-  userRole,
   isReadOnly = false,
-  isAuthenticated = false
 }: Step6Props) {
   const t = useTranslations();
   const { projects } = useProjectStore();
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
   const [showMusicGenerateDialog, setShowMusicGenerateDialog] = useState(false);
+  const musicResolveRef = useRef<(() => void) | null>(null);
 
   // Get live project data from store (updated with dialogue after loading)
   const storeProject = projects.find((p) => p.id === initialProject.id);
@@ -60,7 +58,7 @@ export function Step6Export({
   const { data: apiKeys } = useApiKeys();
 
   // Load dialogue data from database (same as Step 5)
-  const { dialogueLoaded, isLoadingDialogue } = useDialogueLoader(project);
+  useDialogueLoader(project);
 
   // Custom hooks
   const { stats } = useProjectStats(project);
@@ -70,23 +68,19 @@ export function Step6Export({
   const exportHandlers = useExportHandlers(project);
   const downloadHandlers = useDownloadHandlers(project);
 
-  // Music generation with confirmation
   const handleGenerateMusicWithConfirm = async () => {
-    // Show dialog and wait for user confirmation
     return new Promise<void>((resolve) => {
       setShowMusicGenerateDialog(true);
-      // Store resolve function to be called after confirmation
-      (handleGenerateMusicWithConfirm as any)._resolve = resolve;
+      musicResolveRef.current = resolve;
     });
   };
 
   const handleConfirmMusicGeneration = async () => {
     setShowMusicGenerateDialog(false);
     await backgroundMusic.generateMusic();
-    // Resolve the promise if it exists
-    if ((handleGenerateMusicWithConfirm as any)._resolve) {
-      (handleGenerateMusicWithConfirm as any)._resolve();
-      delete (handleGenerateMusicWithConfirm as any)._resolve;
+    if (musicResolveRef.current) {
+      musicResolveRef.current();
+      musicResolveRef.current = null;
     }
   };
 

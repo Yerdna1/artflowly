@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UnifiedGenerateConfirmationDialog } from '../UnifiedGenerateConfirmationDialog';
@@ -11,14 +12,14 @@ vi.mock('next-intl', () => ({
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: Record<string, unknown> & { children?: React.ReactNode }) => <div {...props}>{children}</div>,
   },
-  AnimatePresence: ({ children }: any) => children,
+  AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
 }));
 
 // Mock ProviderLogo component
 vi.mock('@/components/ui/ProviderLogo', () => ({
-  ProviderLogo: ({ provider, size }: any) => (
+  ProviderLogo: ({ provider, size }: { provider: string; size: string }) => (
     <div data-testid="provider-logo" data-provider={provider} data-size={size}>
       {provider}
     </div>

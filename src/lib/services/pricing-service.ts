@@ -220,7 +220,7 @@ export async function upsertActionCost(
     modality: null,
     quality: null,
     length: null,
-  } as any;
+  } as Record<string, string | null>;
 
   const record = await prisma.actionCost.upsert({
     where: {
@@ -310,7 +310,7 @@ export async function seedPricingData(): Promise<void> {
       modality: null,
       quality: null,
       length: null,
-    } as any;
+    } as Record<string, string | null>;
 
     await prisma.actionCost.upsert({
       where: {

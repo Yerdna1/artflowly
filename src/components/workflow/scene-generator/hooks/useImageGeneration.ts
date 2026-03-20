@@ -14,11 +14,10 @@ type GeneratingImageState = {
 
 // Simplified hook that always uses Inngest for all image generation
 export function useImageGeneration(
-  project: { id: string; scenes?: any[]; characters?: any[] },
+  project: { id: string; scenes?: Array<{ id: string; imageUrl?: string | null }> },
   sceneAspectRatio: AspectRatio = '16:9',
   imageResolution: ImageResolution = '2k'
 ) {
-  const { updateScene } = useProjectStore();
   const { handleApiResponse } = useCredits();
 
   // Image generation state
@@ -232,8 +231,8 @@ export function useImageGeneration(
                   if (Array.isArray(errors) && errors.length > 0 && errors[0]?.error) {
                     firstError = errors[0].error;
                   }
-                } catch (e) {
-                  console.error('Failed to parse errorDetails:', e);
+                } catch (_e) {
+                  console.error('Failed to parse errorDetails:', _e);
                 }
               }
 
@@ -250,8 +249,8 @@ export function useImageGeneration(
                   if (Array.isArray(errors) && errors.length > 0 && errors[0]?.error) {
                     errorMessage = errors[0].error;
                   }
-                } catch (e) {
-                  console.error('Failed to parse errorDetails:', e);
+                } catch (_e) {
+                  console.error('Failed to parse errorDetails:', _e);
                 }
               }
 
@@ -380,7 +379,7 @@ export function useImageGeneration(
         }
       }
     },
-    handleCancelSceneGeneration: async () => { }, // No longer needed
+    handleCancelSceneGeneration: async () => { /* No longer needed */ },
     startPolling,
 
     // Helpers

@@ -56,6 +56,7 @@ export function PromptsPreview({ project, getFullMarkdown }: PromptsPreviewProps
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     {character.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={character.imageUrl}
                         alt={character.name}

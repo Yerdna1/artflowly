@@ -71,7 +71,7 @@ export class NewApiTTSProvider extends BaseTTSProvider implements AsyncProvider<
     }
 
     if (!finalResult.base64 && finalResult.externalUrl) {
-      const base64 = await downloadAudioAsBase64(finalResult.externalUrl, finalResult.format as any);
+      const base64 = await downloadAudioAsBase64(finalResult.externalUrl, finalResult.format as 'mp3' | 'wav' | 'opus' | 'aac');
       if (!base64) {
         throw new ProviderError('Failed to download generated audio', 'DOWNLOAD_ERROR', this.name);
       }
@@ -85,7 +85,7 @@ export class NewApiTTSProvider extends BaseTTSProvider implements AsyncProvider<
     const { text, voice, voiceSettings, format = 'mp3', languageCode = 'en-US' } = request;
     const model = this.config.model || NEW_API_DEFAULT_MODELS.tts;
 
-    const metadata: Record<string, any> = {
+    const metadata: Record<string, unknown> = {
       voice: voice || 'adam',
       language: languageCode,
       output_format: format,

@@ -13,7 +13,7 @@ interface SceneGeneratorDialogsProps {
   apiKeysLlmProvider?: string | null;
   apiKeysOpenRouterModel?: string | null;
   apiKeysKieLlmModel?: string | null;
-  projectSettings: any;
+  projectSettings: { sceneCount?: number };
   scenes: Scene[];
   sceneTextCreditsNeeded: number;
 
@@ -23,7 +23,7 @@ interface SceneGeneratorDialogsProps {
   onConfirmGenerateImages: () => Promise<void>;
   imageProvider?: string | null;
   imageModel?: string | null;
-  projectSettingsForImages: any;
+  projectSettingsForImages: { imageResolution?: string; aspectRatio?: string };
 
   // Request Regeneration Dialog
   showRequestRegenDialog: boolean;
@@ -110,9 +110,8 @@ export function SceneGeneratorDialogs({
           { label: 'Aspect Ratio', value: projectSettingsForImages.aspectRatio || '16:9', icon: ImageIcon },
         ]}
         estimatedCost={scenes.filter(s => !s.imageUrl).length * getImageCreditCost(
-          (projectSettingsForImages.aspectRatio || '16:9') as any,
-          (projectSettingsForImages.imageResolution || '2k') as any,
-          imageProvider as any
+          projectSettingsForImages.imageResolution || '2k',
+          imageProvider || 'gemini'
         )}
       />
 

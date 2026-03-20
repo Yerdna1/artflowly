@@ -8,7 +8,7 @@ interface CheckVisibilityRequest {
 }
 
 // GET /api/page-visibility - Get all page visibility rules for the current user
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const authCtx = await optionalAuth();
 

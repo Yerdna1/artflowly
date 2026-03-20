@@ -2,6 +2,7 @@
 // Plans are hosted on Polar.sh (org: pt-yerdna) and provisioned via New API webhook bridge.
 // Artflowly links directly to Polar checkout — no Polar SDK needed for checkout flow.
 
+import crypto from 'crypto';
 import { Polar } from '@polar-sh/sdk';
 import { prisma } from '@/lib/db/prisma';
 import { addCredits } from './credits';
@@ -10,9 +11,6 @@ import { addCredits } from './credits';
 export const polar = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
 });
-
-// Polar.sh org for checkout URLs
-const POLAR_ORG = 'pt-yerdna';
 
 // Polar Product IDs → mapped to New API plans via webhook bridge
 const POLAR_PRODUCTS = {
@@ -191,9 +189,10 @@ export async function createCheckout(
 
     const checkout = await response.json();
     return { url: checkout.url };
-  } catch (error: any) {
-    console.error('Error creating checkout:', error?.statusCode, error?.body || error?.message || error);
-    const message = error?.body?.detail || error?.message || 'Failed to create checkout';
+  } catch (error: unknown) {
+    const err = error as { statusCode?: number; body?: { detail?: string }; message?: string };
+    console.error('Error creating checkout:', err?.statusCode, err?.body || err?.message || error);
+    const message = err?.body?.detail || err?.message || 'Failed to create checkout';
     return { error: typeof message === 'string' ? message : JSON.stringify(message) };
   }
 }
@@ -373,7 +372,6 @@ export function verifyWebhookSignature(
   payload: string,
   signature: string
 ): boolean {
-  const crypto = require('crypto');
   const secret = process.env.POLAR_WEBHOOK_SECRET;
 
   if (!secret) {

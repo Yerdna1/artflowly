@@ -15,6 +15,7 @@
  */
 
 import { getActionCostSync } from './pricing-service';
+import { formatPrice, formatPriceWithSymbol } from '@/lib/utils/currency';
 
 // Image resolution options
 export type ImageResolution = '1k' | '2k' | '4k';
@@ -304,9 +305,7 @@ export function estimateCost(
  * Format cost as currency string
  * @deprecated Use formatPrice from '@/lib/utils/currency' instead
  */
-export function formatCost(cost: number, currency: string = 'EUR'): string {
-  // Import dynamically to avoid circular dependencies
-  const { formatPrice } = require('@/lib/utils/currency');
+export function formatCost(cost: number): string {
   return formatPrice(cost);
 }
 
@@ -315,8 +314,6 @@ export function formatCost(cost: number, currency: string = 'EUR'): string {
  * Uses the configured currency from settings
  */
 export function formatCostCompact(cost: number): string {
-  // Import dynamically to avoid circular dependencies
-  const { formatPriceWithSymbol } = require('@/lib/utils/currency');
   return formatPriceWithSymbol(cost);
 }
 

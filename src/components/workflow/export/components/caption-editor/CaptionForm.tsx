@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Save, X, Wand2, Clock, Palette, Type, AlignVerticalJustifyCenter, Sparkles } from 'lucide-react';
+import { Save, X, Clock, Palette, Type, AlignVerticalJustifyCenter, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 import { SCENE_DURATION } from './caption-constants';
 import type { Caption } from '@/types/project';
 

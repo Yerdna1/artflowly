@@ -6,8 +6,7 @@ import type { Scene } from '@/types/project';
 import type { RegenerationRequest } from '@/types/collaboration';
 import { usePendingRegenerationRequests, useApprovedRegenerationRequests, usePendingDeletionRequests } from '@/hooks';
 
-export function useStep3Collaboration(projectId: string, scenes: Scene[]) {
-  const { updateScene } = useProjectStore();
+export function useStep3Collaboration(projectId: string, _scenes: Scene[]) {
 
   // Use SWR hooks for collaboration data with deduplication
   const {

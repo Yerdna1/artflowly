@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { toast } from '@/lib/toast';
-import type { User, AppConfig, CreditAction } from '../types';
+import type { User, CreditAction } from '../types';
 
 interface UseAdminActionsProps {
   fetchData: () => void;
@@ -70,7 +70,7 @@ export const useAdminActions = ({ fetchData }: UseAdminActionsProps) => {
       } else {
         toast.error(data.error);
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to update user');
     }
   }, [fetchData]);
@@ -93,7 +93,7 @@ export const useAdminActions = ({ fetchData }: UseAdminActionsProps) => {
       } else {
         toast.error(data.error);
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to update approval');
     }
   }, [fetchData]);
@@ -124,7 +124,7 @@ export const useAdminActions = ({ fetchData }: UseAdminActionsProps) => {
       } else {
         toast.error(data.error);
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to update config');
     }
   }, [fetchData]);

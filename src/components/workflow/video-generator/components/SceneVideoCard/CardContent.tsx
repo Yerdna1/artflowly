@@ -6,8 +6,8 @@ import type { CardContentProps } from './types';
 
 export function CardContent({
   scene,
-  isLocked,
-  isVideoStale: videoStale,
+  isLocked: _isLocked,
+  isVideoStale: _videoStale,
   buildFullI2VPrompt,
 }: CardContentProps) {
   return (

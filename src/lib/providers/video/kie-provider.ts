@@ -11,7 +11,6 @@ import {
 } from '../types';
 import { RegisterProvider } from '../provider-factory';
 import { pollTask, mapProviderState, extractResult } from '@/lib/api/generation';
-import { downloadVideoAsBase64 } from '@/lib/api/generation';
 import { prisma } from '@/lib/db/prisma';
 
 const KIE_API_URL = 'https://api.kie.ai';
@@ -139,7 +138,7 @@ export class KieVideoProvider extends BaseVideoProvider implements AsyncProvider
       }
     }
 
-    const body: any = {
+    const body: Record<string, unknown> = {
       image_url: imageUrl,
       prompt: enhancePromptForMotion(prompt || ''),
       model: apiModelId,

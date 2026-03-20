@@ -8,7 +8,7 @@ import type { Project } from '@/types/project';
 interface ProjectBottomNavProps {
     project: Project;
     previousStep: (id: string) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     nextStep: (id: string) => void;
     onComplete: () => Promise<void>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -12,11 +12,6 @@ import {
   getTtsModels,
   getMusicModels,
   getLlmModels,
-  getVideoModelById,
-  getImageModelById,
-  getTtsModelById,
-  getMusicModelById,
-  getLlmModelById,
 } from '@/lib/db/kie-models';
 
 export async function GET(request: NextRequest) {

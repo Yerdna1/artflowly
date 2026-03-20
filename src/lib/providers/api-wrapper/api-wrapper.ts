@@ -22,6 +22,7 @@ export interface ApiCallOptions {
   type: GenerationType;
   endpoint?: string; // For custom/modal endpoints
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
   headers?: Record<string, string>;
   timeout?: number;
@@ -29,6 +30,7 @@ export interface ApiCallOptions {
   loadingMessage?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
@@ -41,6 +43,7 @@ export interface ApiResponse<T = any> {
  * Make an API call to an external service
  * Uses provider configuration as single source of truth
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function callExternalApi<T = any>(
   options: ApiCallOptions
 ): Promise<ApiResponse<T>> {
@@ -104,8 +107,8 @@ export async function callExternalApi<T = any>(
       try {
         // Extract messages from body to build prompt
         const messages = body?.messages || [];
-        const systemMessage = messages.find((m: any) => m.role === 'system')?.content || '';
-        const userMessage = messages.find((m: any) => m.role === 'user')?.content || '';
+        const systemMessage = messages.find((m: { role: string; content: string }) => m.role === 'system')?.content || '';
+        const userMessage = messages.find((m: { role: string; content: string }) => m.role === 'user')?.content || '';
         const fullPrompt = systemMessage ? `${systemMessage}\n\n${userMessage}` : userMessage;
 
         // Call Claude SDK CLI
@@ -122,9 +125,9 @@ export async function callExternalApi<T = any>(
           provider,
           model: 'claude-sdk',
         };
-      } catch (error: any) {
+      } catch (error: unknown) {
         return {
-          error: error.message || 'Claude SDK call failed',
+          error: error instanceof Error ? error.message : 'Claude SDK call failed',
           status: 500,
           provider,
           model: 'claude-sdk',

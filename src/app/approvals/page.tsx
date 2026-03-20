@@ -27,7 +27,6 @@ import {
   FinalApprovalSection,
   PromptEditRequestCard,
 } from './components';
-import type { DeletionRequest, RegenerationRequest, PromptEditRequest } from '@/types/collaboration';
 
 export default function ApprovalsPage() {
   const { data: session, status } = useSession();
@@ -61,7 +60,6 @@ export default function ApprovalsPage() {
     setRegenerationRequests,
     setPromptEditRequests,
     setProcessingIds,
-    fetchAllRequests,
   } = useApprovalData({ isAdmin });
 
   // Actions
@@ -141,7 +139,7 @@ export default function ApprovalsPage() {
       const current = userCounts.get(r.requesterId) || { name: r.requester?.name || t('common.unknown'), count: 0 };
       userCounts.set(r.requesterId, { ...current, count: current.count + 1 });
     });
-    return Array.from(userCounts.entries()).filter(([_, v]) => v.count > 1);
+    return Array.from(userCounts.entries()).filter(([, v]) => v.count > 1);
   }, [filteredDeletions, t]);
 
   const usersWithRegenerations = useMemo(() => {
@@ -150,7 +148,7 @@ export default function ApprovalsPage() {
       const current = userCounts.get(r.requesterId) || { name: r.requester?.name || t('common.unknown'), count: 0 };
       userCounts.set(r.requesterId, { ...current, count: current.count + 1 });
     });
-    return Array.from(userCounts.entries()).filter(([_, v]) => v.count > 1);
+    return Array.from(userCounts.entries()).filter(([, v]) => v.count > 1);
   }, [filteredRegenerations, t]);
 
   const usersWithPromptEdits = useMemo(() => {
@@ -159,7 +157,7 @@ export default function ApprovalsPage() {
       const current = userCounts.get(r.requesterId) || { name: r.requester?.name || t('common.unknown'), count: 0 };
       userCounts.set(r.requesterId, { ...current, count: current.count + 1 });
     });
-    return Array.from(userCounts.entries()).filter(([_, v]) => v.count > 1);
+    return Array.from(userCounts.entries()).filter(([, v]) => v.count > 1);
   }, [filteredPromptEdits, t]);
 
   const totalPending = filteredDeletions.length + filteredRegenerations.length + filteredPromptEdits.length + awaitingFinalApproval.length;

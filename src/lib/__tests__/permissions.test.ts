@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { prisma } from '@/test/setup'
 import { createTestUser } from '@/test/factories/user'
 import { createTestProject, addProjectMember } from '@/test/factories/project'
 import {
@@ -8,7 +7,6 @@ import {
   verifyPermission,
   getProjectAdmins,
   ROLE_PERMISSIONS,
-  type ProjectPermissions
 } from '../permissions'
 
 describe('Permissions System', () => {
@@ -78,8 +76,8 @@ describe('Permissions System', () => {
 
   describe('checkPermission', () => {
     describe('Admin permissions', () => {
-      let owner: any
-      let project: any
+      let owner: { id: string }
+      let project: { id: string }
 
       beforeEach(async () => {
         owner = await createTestUser()
@@ -129,7 +127,7 @@ describe('Permissions System', () => {
 
     describe('Collaborator permissions', () => {
       let owner: any
-      let collaborator: any
+      let collaborator: { id: string }
       let project: any
 
       beforeEach(async () => {
@@ -182,7 +180,7 @@ describe('Permissions System', () => {
 
     describe('Reader permissions', () => {
       let owner: any
-      let reader: any
+      let reader: { id: string }
       let project: any
 
       beforeEach(async () => {

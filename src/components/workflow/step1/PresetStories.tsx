@@ -62,6 +62,7 @@ export function PresetStories({ selectedPresetId, onApplyPreset, isReadOnly, isP
                 isLocked ? 'opacity-50' : ''
               }`}>
                 {/* Preset Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={preset.imageUrl}
                   alt={t(preset.labelKey)}

@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
     const generatedImage = result.files?.[0];
     if (generatedImage?.base64) {
       // The mimeType might be stored as 'mediaType' in some versions
-      const mimeType = (generatedImage as any).mimeType || (generatedImage as any).mediaType || 'image/png';
+      const mimeType = (generatedImage as unknown as Record<string, unknown>).mimeType || (generatedImage as unknown as Record<string, unknown>).mediaType || 'image/png';
       const base64DataUrl = `data:${mimeType};base64,${generatedImage.base64}`;
 
       // Track cost if user is authenticated - use resolution-based pricing

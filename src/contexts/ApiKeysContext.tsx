@@ -190,14 +190,14 @@ export function ApiKeysProvider({ children }: { children: ReactNode }) {
   // Helper to check if API key exists
   const hasApiKey = useCallback((key: string): boolean => {
     if (!apiKeys) return false;
-    const value = (apiKeys as any)[key];
+    const value = (apiKeys as Record<string, unknown>)[key];
     return typeof value === 'string' && value.length > 0;
   }, [apiKeys]);
 
   // Helper to get API key value
   const getApiKey = useCallback((key: string): string | null => {
     if (!apiKeys) return null;
-    const value = (apiKeys as any)[key];
+    const value = (apiKeys as Record<string, unknown>)[key];
     return typeof value === 'string' && value.length > 0 ? value : null;
   }, [apiKeys]);
 
@@ -245,9 +245,9 @@ export function ApiKeysProvider({ children }: { children: ReactNode }) {
       debouncedSetApiKeys(updatedKeys);
     };
 
-    window.addEventListener('apiKeysUpdated' as any, handleApiKeysUpdate);
+    window.addEventListener('apiKeysUpdated' as string, handleApiKeysUpdate as EventListener);
     return () => {
-      window.removeEventListener('apiKeysUpdated' as any, handleApiKeysUpdate);
+      window.removeEventListener('apiKeysUpdated' as string, handleApiKeysUpdate as EventListener);
       // Cancel any pending debounced updates
       debouncedSetApiKeys.cancel();
     };

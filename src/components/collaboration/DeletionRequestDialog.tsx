@@ -77,7 +77,7 @@ export function DeletionRequestDialog({
       setTimeout(() => {
         handleClose();
       }, 2000);
-    } catch (e) {
+    } catch {
       setError('Failed to submit request');
     } finally {
       setIsLoading(false);
@@ -94,7 +94,7 @@ export function DeletionRequestDialog({
   };
 
   const getTargetLabel = (type: string) => {
-    return t(`collaborationModals.deletion.targetTypes.${type}` as any) || type;
+    return t(`collaborationModals.deletion.targetTypes.${type}` as string) || type;
   };
 
   return (

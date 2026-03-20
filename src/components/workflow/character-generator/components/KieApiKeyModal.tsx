@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Key, Eye, EyeOff, Loader2, Image } from 'lucide-react';
+import { Key, Eye, EyeOff, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useImageModels, type KieImageModel } from '@/hooks/use-kie-models';
+import { useImageModels } from '@/hooks/use-kie-models';
 
 interface KieApiKeyModalProps {
   isOpen: boolean;
@@ -24,22 +24,22 @@ interface KieApiKeyModalProps {
 }
 
 export function KieApiKeyModal({ isOpen, onClose, onSave, isLoading = false }: KieApiKeyModalProps) {
-  const t = useTranslations();
   const tModal = useTranslations('apiModals.kie');
   const tError = useTranslations('error');
   const tCommon = useTranslations('common');
-  const { models: imageModels, loading: modelsLoading } = useImageModels();
+  const { models: imageModels } = useImageModels();
   const [apiKey, setApiKey] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [showKey, setShowKey] = useState(false);
   const [error, setError] = useState('');
 
-  // Affordable models for free users (sorted by price) - filtered from database
-  const AFFORDABLE_KIE_MODELS = imageModels
-    .filter(m => m.credits <= 25) // Filter for affordable models
-    .sort((a, b) => a.credits - b.credits); // Sort by price (cheapest first)
+  const AFFORDABLE_KIE_MODELS = useMemo(() =>
+    imageModels
+      .filter(m => m.credits <= 25)
+      .sort((a, b) => a.credits - b.credits),
+    [imageModels]
+  );
 
-  // Set default model when models load
   useEffect(() => {
     if (AFFORDABLE_KIE_MODELS.length > 0 && !selectedModel) {
       setSelectedModel(AFFORDABLE_KIE_MODELS[0].modelId);
@@ -127,7 +127,6 @@ export function KieApiKeyModal({ isOpen, onClose, onSave, isLoading = false }: K
                 </SelectTrigger>
                 <SelectContent className="glass-strong border-white/10 max-h-80 overflow-y-auto">
                   {AFFORDABLE_KIE_MODELS.map((model) => {
-                    const isSelected = selectedModel === model.modelId;
                     return (
                       <SelectItem key={model.modelId} value={model.modelId} className="cursor-pointer">
                         <div className="flex flex-col gap-0.5 py-1">
@@ -215,7 +214,7 @@ export function KieApiKeyModal({ isOpen, onClose, onSave, isLoading = false }: K
           {/* Info about credits */}
           <div className="glass rounded-lg p-3 border border-cyan-500/20">
             <p className="text-xs text-muted-foreground text-center">
-              <Image className="w-3 h-3 inline mr-1 text-cyan-400" />
+              <ImageIcon className="w-3 h-3 inline mr-1 text-cyan-400" />
               {tModal('creditsNote')}
             </p>
           </div>

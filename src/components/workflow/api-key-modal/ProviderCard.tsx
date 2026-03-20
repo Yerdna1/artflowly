@@ -24,7 +24,7 @@ interface ProviderCardProps {
   hasKeyConfigured: boolean;
   values: Record<string, string>;
   errors: Record<string, string>;
-  kieModels: Record<string, any[]>;
+  kieModels: Record<string, { modelId: string; name: string }[]>;
   loadingKieModels: boolean;
   onSelectProvider: (providerId: string) => Promise<void>;
   onInputChange: (key: string, value: string) => void;
@@ -70,7 +70,7 @@ export function ProviderCard({
     // For KIE, use the operation type directly to get the correct models
     const modelType = opType as keyof typeof kieModels;
     if (modelType && kieModels[modelType]) {
-      modelOptions = kieModels[modelType].map((m: any) => ({
+      modelOptions = kieModels[modelType].map((m: { modelId: string; name: string }) => ({
         value: m.modelId,
         label: m.name,
       }));

@@ -9,7 +9,6 @@ import { GradientBackground } from "../components/GradientBackground";
 import { ParticleField } from "../components/ParticleField";
 import { LogoReveal } from "../components/LogoReveal";
 import { AnimatedText } from "../components/AnimatedText";
-import { StepIndicator } from "../components/StepIndicator";
 import type { VideoText } from "../data/types";
 
 export const SolutionScene: React.FC<{ text: VideoText["solution"] }> = ({

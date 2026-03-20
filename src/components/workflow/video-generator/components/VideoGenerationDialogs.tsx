@@ -8,7 +8,7 @@ import type { Scene } from '@/types/project';
 import type { ApiKeysData } from '@/hooks/use-api-keys';
 
 interface VideoGenerationDialogsProps {
-  project: any;
+  project: { id: string };
   apiKeysData: ApiKeysData | null | undefined;
   selectedScenes: Set<string>;
   scenesNeedingGeneration: Scene[];
@@ -17,10 +17,10 @@ interface VideoGenerationDialogsProps {
   isSavingKieKey: boolean;
   showConfirmDialog: boolean;
   confirmDialogType: 'single' | 'all' | 'selected';
-  confirmDialogScene: any;
-  pendingVideoGeneration: any;
+  confirmDialogScene: Scene | null;
+  pendingVideoGeneration: { type: string; scenes?: Scene[] } | null;
   showRequestRegenDialog: boolean;
-  selectedScenesData: any[];
+  selectedScenesData: Array<{ id: string; title: string; number: number; imageUrl?: string | null }>;
 
   // Callbacks
   onCloseInsufficientCredits: () => void;

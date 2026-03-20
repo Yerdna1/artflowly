@@ -4,7 +4,7 @@
 
 import { prisma } from '@/lib/db/prisma';
 import { COSTS } from './constants';
-import type { CostType, CreditsInfo, TransactionRecord } from './types';
+import type { CostType, TransactionRecord } from './types';
 import { getOrCreateCredits } from './operations';
 
 /**

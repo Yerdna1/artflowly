@@ -32,7 +32,6 @@ export async function POST(request: NextRequest) {
       includeMusic,
       includeVoiceovers = true,
       replaceVideoAudio = false,
-      aiTransitions,
       captionStyle,
       transitionStyle,
       transitionDuration,

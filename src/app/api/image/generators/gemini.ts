@@ -121,7 +121,7 @@ export async function generateWithGemini(options: GeminiGenerationOptions): Prom
     throw new Error('No image was generated');
   }
 
-  const mimeType = (generatedImage as any).mimeType || (generatedImage as any).mediaType || 'image/png';
+  const mimeType = (generatedImage as unknown as Record<string, unknown>).mimeType || (generatedImage as unknown as Record<string, unknown>).mediaType || 'image/png';
   const base64DataUrl = `data:${mimeType};base64,${generatedImage.base64}`;
 
   const realCost = getImageCost(resolution);

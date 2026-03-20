@@ -9,7 +9,7 @@ export type TranslationFunction = (key: string) => string;
 /**
  * Broadcast API key updates to other components via CustomEvent
  */
-export const broadcastApiKeysUpdate = (apiKeys: any) => {
+export const broadcastApiKeysUpdate = (apiKeys: Record<string, string | undefined>) => {
   window.dispatchEvent(new CustomEvent('apiKeysUpdated', {
     detail: apiKeys
   }));
@@ -74,7 +74,7 @@ export const localStorageKeyToDbKey = (key: string): string => {
  */
 export const syncSettingToDatabase = async (
   key: string,
-  value: any
+  value: string | Record<string, string | undefined>
 ): Promise<void> => {
   try {
     const response = await fetch('/api/user/api-keys', {

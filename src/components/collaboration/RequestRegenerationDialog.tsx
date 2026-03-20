@@ -87,7 +87,7 @@ export function RequestRegenerationDialog({
       setTimeout(() => {
         handleClose();
       }, 3000);
-    } catch (e) {
+    } catch {
       setError(t('error.failedToSubmitRequest'));
     } finally {
       setIsLoading(false);

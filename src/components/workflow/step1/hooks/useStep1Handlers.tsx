@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
 import type { ApiKeys } from '@prisma/client';
 import { getUserPermissions, checkRequiredApiKeys, shouldUseOwnApiKeys } from '@/lib/client/user-permissions';
 import { storyPresets } from '../story-presets';
@@ -295,16 +294,19 @@ export function useStep1Handlers(props: UseStep1HandlersProps) {
     setIsGenerating(false);
     setGeneratingModel(undefined);
     setGeneratingProvider(undefined);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    isPremiumUser,
+    effectiveIsPremium,
     aspectRatio,
     videoLanguage,
     storyModel,
     imageProvider,
     voiceProvider,
     project,
-    store,
-    setEditedPrompt,
+    setIsGenerating,
+    setGeneratingModel,
+    setGeneratingProvider,
+    toast,
     props,
   ]);
 
@@ -412,6 +414,7 @@ export function useStep1Handlers(props: UseStep1HandlersProps) {
         variant: "destructive",
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     aspectRatio,
     videoLanguage,

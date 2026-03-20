@@ -14,7 +14,7 @@ import { getProviderDisplayName, getModelDisplayName, formatDuration } from '@/l
 
 // Simplified hook that always uses Inngest for all video generation
 export function useVideoGenerator(initialProject: Project) {
-  const { updateScene, projects } = useProjectStore();
+  const { projects } = useProjectStore();
   const { handleApiResponse } = useCredits();
   const { showApiKeyModal } = useApiKeys();
 

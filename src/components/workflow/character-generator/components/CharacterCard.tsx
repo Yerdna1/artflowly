@@ -156,6 +156,7 @@ function CharacterCardComponent({
               onClick={() => onPreviewImage(character.imageUrl!)}
               className="w-full h-full"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 key={character.imageUrl}
                 src={character.imageUrl}

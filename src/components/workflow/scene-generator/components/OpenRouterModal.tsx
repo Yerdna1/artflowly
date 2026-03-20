@@ -94,8 +94,7 @@ export function OpenRouterModal({
 
   if (!isOpen) return null;
 
-  const selectedModelConfig = OPENROUTER_MODELS.find(m => m.id === selectedModel);
-  const totalCost = selectedModelConfig ? selectedModelConfig.costPerScene * sceneCount : 0;
+  const _selectedModelConfig = OPENROUTER_MODELS.find(m => m.id === selectedModel);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,7 +177,6 @@ export function OpenRouterModal({
                 </SelectTrigger>
                 <SelectContent className="glass-strong border-white/10 max-h-80 overflow-y-auto">
                   {OPENROUTER_MODELS.map((model) => {
-                    const isSelected = selectedModel === model.id;
                     return (
                       <SelectItem key={model.id} value={model.id} className="cursor-pointer">
                         <div className="flex flex-col gap-0.5 py-1">

@@ -19,7 +19,7 @@ function getImageCostFromDescription(description: string | null): number {
 }
 
 // Fix old transaction costs to use correct ACTION_COSTS values
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth();
 

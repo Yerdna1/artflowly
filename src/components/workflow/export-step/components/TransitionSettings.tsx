@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import type { useVideoComposer } from '../../export/hooks';
+import type { TransitionStyle } from '../../export/hooks/useVideoComposer';
 
 interface TransitionSettingsProps {
   videoComposer: ReturnType<typeof useVideoComposer>;
@@ -18,7 +19,7 @@ export function TransitionSettings({ videoComposer }: TransitionSettingsProps) {
 
       <div className="space-y-1.5">
         <label className="text-xs text-muted-foreground">{t('steps.export.transitionType')}</label>
-        <Select value={videoComposer.options.transitionStyle} onValueChange={(value) => videoComposer.setTransitionStyle(value as any)}>
+        <Select value={videoComposer.options.transitionStyle} onValueChange={(value) => videoComposer.setTransitionStyle(value as TransitionStyle)}>
           <SelectTrigger className="h-9">
             <SelectValue />
           </SelectTrigger>

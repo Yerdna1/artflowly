@@ -175,7 +175,7 @@ export const createProjectSlice: StateCreator<ProjectSlice> = (set, get) => ({
       set({ currentProject: null });
       return;
     }
-    let project = get().projects.find((p) => p.id === id);
+    const project = get().projects.find((p) => p.id === id);
 
     set({ currentProject: project || null });
   },

@@ -1,14 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Clock, MessageSquare, Loader2 } from 'lucide-react';
+import { Clock, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
 
 interface RequestCardProps {
-  id: string;
+  id?: string;
   colorClass: string; // e.g., 'orange', 'cyan', 'purple'
   icon: React.ReactNode;
   title: React.ReactNode;
@@ -16,7 +16,7 @@ interface RequestCardProps {
   requesterImage?: string | null;
   createdAt: string;
   reason?: string | null;
-  isProcessing: boolean;
+  isProcessing?: boolean;
   showNoteInput: boolean;
   reviewNote: string;
   formatDate: (date: string) => string;
@@ -27,7 +27,6 @@ interface RequestCardProps {
 }
 
 export function RequestCard({
-  id,
   colorClass,
   icon,
   title,
@@ -35,7 +34,6 @@ export function RequestCard({
   requesterImage,
   createdAt,
   reason,
-  isProcessing,
   showNoteInput,
   reviewNote,
   formatDate,
@@ -79,7 +77,7 @@ export function RequestCard({
 
           {reason && (
             <div className="mt-2 p-2 bg-white/5 rounded text-sm text-muted-foreground">
-              "{reason}"
+              &quot;{reason}&quot;
             </div>
           )}
 

@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import {
   createTestUser,
   createTestProject,
-  addProjectMember,
   createProjectInvitation,
   createFullTestEnvironment
 } from '@/test/factories'
@@ -194,7 +193,7 @@ describe('Invitation Flow Tests', () => {
     it('non-admin cannot revoke invitation', async () => {
       const { users, project } = await createFullTestEnvironment()
 
-      const invitation = await createProjectInvitation(
+      await createProjectInvitation(
         project.id,
         'pending@example.com',
         'collaborator'

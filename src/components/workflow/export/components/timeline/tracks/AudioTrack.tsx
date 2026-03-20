@@ -12,7 +12,7 @@ interface AudioTrackProps {
 export function AudioTrack({
   scenes,
   pixelsPerScene,
-  scrollLeft,
+  scrollLeft: _scrollLeft,
 }: AudioTrackProps) {
   return (
     <div className="flex border-b border-white/10">

@@ -1,5 +1,3 @@
-import type { LogEntry } from './types';
-
 export const formatDate = (dateString: string, t: (key: string, params?: Record<string, string | number | Date>) => string) => {
   const date = new Date(dateString);
   const now = new Date();

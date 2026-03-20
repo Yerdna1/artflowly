@@ -34,7 +34,6 @@ interface ApiKeyModalProps {
 }
 
 export function ApiKeyModal({ isOpen, onClose, onSave, isLoading = false }: ApiKeyModalProps) {
-  const t = useTranslations();
   const tModal = useTranslations('apiModals.openRouter');
   const tError = useTranslations('error');
   const tCommon = useTranslations('common');

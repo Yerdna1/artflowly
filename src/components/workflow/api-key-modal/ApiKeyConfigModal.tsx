@@ -1,21 +1,19 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { X, Info, Loader2, Settings } from 'lucide-react';
+import { Info, Loader2, Settings } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SaveStatus, type SaveStatus as SaveStatusType } from '@/components/ui/SaveStatus';
 import { toast } from '@/lib/toast';
 import { useApiKeys } from '@/contexts/ApiKeysContext';
-import { formatApiKeyName } from '@/lib/services/user-permissions';
 import { debounce } from '@/lib/utils/debounce';
 import { CurrentSelectionSummary } from './CurrentSelectionSummary';
 import { OperationTabContent } from './OperationTabContent';
 import { API_KEY_FIELDS, OPERATION_INFO } from './constants';
 import type { ApiKeyConfigModalProps, OperationType } from './types';
 import { useProvidersByOperation } from '@/hooks/use-providers';
-import { useModels } from '@/hooks/use-models';
 
 export function ApiKeyConfigModal({
   isOpen,
@@ -30,7 +28,7 @@ export function ApiKeyConfigModal({
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatusType>('idle');
   const [activeTab, setActiveTab] = useState<OperationType | 'all'>(operation || 'llm');
-  const [kieModels, setKieModels] = useState<Record<string, any[]>>({
+  const [kieModels, setKieModels] = useState<Record<string, { modelId: string; name: string }[]>>({
     llm: [],
     image: [],
     video: [],
@@ -73,31 +71,31 @@ export function ApiKeyConfigModal({
 
         // Update API_KEY_FIELDS with fetched KIE models
         if (llmData.models?.length) {
-          API_KEY_FIELDS.kieLlmModel.options = llmData.models.map((m: any) => ({
+          API_KEY_FIELDS.kieLlmModel.options = llmData.models.map((m: { modelId: string; name: string }) => ({
             value: m.modelId,
             label: m.name,
           }));
         }
         if (imageData.models?.length) {
-          API_KEY_FIELDS.kieImageModel.options = imageData.models.map((m: any) => ({
+          API_KEY_FIELDS.kieImageModel.options = imageData.models.map((m: { modelId: string; name: string }) => ({
             value: m.modelId,
             label: m.name,
           }));
         }
         if (videoData.models?.length) {
-          API_KEY_FIELDS.kieVideoModel.options = videoData.models.map((m: any) => ({
+          API_KEY_FIELDS.kieVideoModel.options = videoData.models.map((m: { modelId: string; name: string }) => ({
             value: m.modelId,
             label: m.name,
           }));
         }
         if (ttsData.models?.length) {
-          API_KEY_FIELDS.kieTtsModel.options = ttsData.models.map((m: any) => ({
+          API_KEY_FIELDS.kieTtsModel.options = ttsData.models.map((m: { modelId: string; name: string }) => ({
             value: m.modelId,
             label: m.name,
           }));
         }
         if (musicData.models?.length) {
-          API_KEY_FIELDS.kieMusicModel.options = musicData.models.map((m: any) => ({
+          API_KEY_FIELDS.kieMusicModel.options = musicData.models.map((m: { modelId: string; name: string }) => ({
             value: m.modelId,
             label: m.name,
           }));
@@ -124,7 +122,7 @@ export function ApiKeyConfigModal({
 
     // Include all API_KEY_FIELDS
     Object.keys(API_KEY_FIELDS).forEach((key) => {
-      const value = (apiKeys as any)[key];
+      const value = (apiKeys as Record<string, string | undefined>)[key];
       if (value) {
         initialValues[key] = value;
       }
@@ -133,7 +131,7 @@ export function ApiKeyConfigModal({
     // Include provider fields (these are NOT in API_KEY_FIELDS)
     const providerFields = ['llmProvider', 'imageProvider', 'videoProvider', 'ttsProvider', 'musicProvider'];
     providerFields.forEach((field) => {
-      const value = (apiKeys as any)[field];
+      const value = (apiKeys as Record<string, string | undefined>)[field];
       if (value) {
         initialValues[field] = value;
       }
@@ -248,23 +246,23 @@ export function ApiKeyConfigModal({
 
     // Determine what changed
     const changedFields: string[] = [];
-    if (value !== ((apiKeys as any)?.[key] || '')) {
+    if (value !== ((apiKeys as Record<string, string | undefined>)?.[key] || '')) {
       changedFields.push(key);
     }
     // Check for auto-set provider changes
-    if (key === 'kieLlmModel' && value && newValues.llmProvider !== ((apiKeys as any)?.llmProvider || '')) {
+    if (key === 'kieLlmModel' && value && newValues.llmProvider !== ((apiKeys as Record<string, string | undefined>)?.llmProvider || '')) {
       changedFields.push('llmProvider');
     }
-    if (key === 'kieTtsModel' && value && newValues.ttsProvider !== ((apiKeys as any)?.ttsProvider || '')) {
+    if (key === 'kieTtsModel' && value && newValues.ttsProvider !== ((apiKeys as Record<string, string | undefined>)?.ttsProvider || '')) {
       changedFields.push('ttsProvider');
     }
-    if (key === 'kieImageModel' && value && newValues.imageProvider !== ((apiKeys as any)?.imageProvider || '')) {
+    if (key === 'kieImageModel' && value && newValues.imageProvider !== ((apiKeys as Record<string, string | undefined>)?.imageProvider || '')) {
       changedFields.push('imageProvider');
     }
-    if (key === 'kieVideoModel' && value && newValues.videoProvider !== ((apiKeys as any)?.videoProvider || '')) {
+    if (key === 'kieVideoModel' && value && newValues.videoProvider !== ((apiKeys as Record<string, string | undefined>)?.videoProvider || '')) {
       changedFields.push('videoProvider');
     }
-    if (key === 'kieMusicModel' && value && newValues.musicProvider !== ((apiKeys as any)?.musicProvider || '')) {
+    if (key === 'kieMusicModel' && value && newValues.musicProvider !== ((apiKeys as Record<string, string | undefined>)?.musicProvider || '')) {
       changedFields.push('musicProvider');
     }
 
@@ -328,7 +326,7 @@ export function ApiKeyConfigModal({
       // Only send changed values
       const changedValues: Record<string, string> = {};
       Object.entries(values).forEach(([key, value]) => {
-        const currentValue = (apiKeys as any)?.[key] || '';
+        const currentValue = (apiKeys as Record<string, string | undefined>)?.[key] || '';
         if (value !== currentValue) {
           changedValues[key] = value;
         }
@@ -355,7 +353,7 @@ export function ApiKeyConfigModal({
   const getCurrentProvider = (opType: OperationType) => {
     const providerField = `${opType}Provider` as string;
     // Check local values first (unsaved changes), then fall back to apiKeys
-    return values[providerField] || (apiKeys as any)?.[providerField];
+    return values[providerField] || (apiKeys as Record<string, string | undefined>)?.[providerField];
   };
 
   // Get current model for an operation type (checks local values first, then apiKeys)
@@ -367,7 +365,7 @@ export function ApiKeyConfigModal({
     if (!providerConfig?.modelField) return null;
 
     // Check local values first (unsaved changes), then fall back to apiKeys
-    return values[providerConfig.modelField] || (apiKeys as any)?.[providerConfig.modelField];
+    return values[providerConfig.modelField] || (apiKeys as Record<string, string | undefined>)?.[providerConfig.modelField];
   };
 
   // Handler for selecting a provider

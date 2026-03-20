@@ -28,7 +28,7 @@ export function KieVideoModal({ isOpen, onClose, onSave, isLoading = false }: Ki
   const tCommon = useTranslations('common');
   const tError = useTranslations('error');
   const [apiKey, setApiKey] = useState('');
-  const [models, setModels] = useState<any[]>([]);
+  const [models, setModels] = useState<KieModelConfig[]>([]);
   const [selectedModel, setSelectedModel] = useState('grok-imagine/image-to-video'); // Default to Grok Imagine (cheapest)
   const [showKey, setShowKey] = useState(false);
   const [error, setError] = useState('');
@@ -139,7 +139,6 @@ export function KieVideoModal({ isOpen, onClose, onSave, isLoading = false }: Ki
                 </SelectTrigger>
                 <SelectContent className="glass-strong border-white/10 max-h-80 overflow-y-auto">
                   {models.map((model) => {
-                    const isSelected = selectedModel === model.modelId;
                     return (
                       <SelectItem key={model.modelId} value={model.modelId} className="cursor-pointer">
                         <div className="flex flex-col gap-0.5 py-1">

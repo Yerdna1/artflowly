@@ -106,14 +106,14 @@ export async function checkRequiredApiKeys(
 
   if (provider && providerKeyMap[provider]) {
     const requiredKey = providerKeyMap[provider];
-    hasRequiredKey = !!(apiKeys as any)[requiredKey];
+    hasRequiredKey = !!(apiKeys as Record<string, unknown>)[requiredKey];
     if (!hasRequiredKey) {
       missing.push(requiredKey);
     }
   } else {
     // Check if any of the possible keys exist
     for (const key of requiredKeys) {
-      if (!(apiKeys as any)[key]) {
+      if (!(apiKeys as Record<string, unknown>)[key]) {
         missing.push(key);
       } else {
         hasRequiredKey = true;

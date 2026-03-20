@@ -2,14 +2,13 @@
 // All provider configurations come from Settings (single source of truth)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db/prisma';
 import { optionalAuth, requireCredits, uploadMediaToS3 } from '@/lib/api';
 import { spendCredits, COSTS } from '@/lib/services/credits';
 import { calculateVoiceCost } from '@/lib/services/real-costs';
 import { rateLimit } from '@/lib/services/rate-limit';
 import { callExternalApi, pollKieTask } from '@/lib/providers/api-wrapper';
 import { getProviderConfig } from '@/lib/providers';
-import type { TTSProvider } from '@/types/project';
+import type { Provider } from '@/lib/services/real-costs';
 
 export const maxDuration = 60;
 
@@ -75,7 +74,7 @@ async function generateWithWrapper(
   console.log(`[${provider}] Generating TTS with wrapper`);
 
   // Build request body based on provider
-  let requestBody: any;
+  let requestBody: Record<string, unknown>;
 
   switch (provider) {
     case 'gemini-tts':
@@ -232,7 +231,7 @@ async function generateWithWrapper(
     case 'elevenlabs':
       // ElevenLabs returns binary audio data
       if (response.data instanceof ArrayBuffer || response.data instanceof Buffer) {
-        const base64 = Buffer.from(response.data as any).toString('base64');
+        const base64 = Buffer.from(response.data as ArrayBuffer).toString('base64');
         audioUrl = `data:audio/mpeg;base64,${base64}`;
       } else {
         throw new Error('ElevenLabs did not return audio data');
@@ -244,7 +243,7 @@ async function generateWithWrapper(
     case 'openai-tts':
       // OpenAI returns binary audio data
       if (response.data instanceof ArrayBuffer || response.data instanceof Buffer) {
-        const base64 = Buffer.from(response.data as any).toString('base64');
+        const base64 = Buffer.from(response.data as ArrayBuffer).toString('base64');
         audioUrl = `data:audio/mpeg;base64,${base64}`;
       } else {
         throw new Error('OpenAI did not return audio data');
@@ -360,7 +359,7 @@ async function generateWithWrapper(
       'voiceover',
       `${provider} TTS (${text.length} chars)`,
       projectId,
-      provider as any,
+      provider as Provider,
       { characterCount: text.length },
       realCost
     );
@@ -386,7 +385,6 @@ export async function POST(request: NextRequest) {
       language = 'en',
       projectId,
       skipCreditCheck = false,
-      model: requestModel,
       voiceInstructions,
       voiceStability,
       voiceSimilarityBoost,

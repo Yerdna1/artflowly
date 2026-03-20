@@ -300,7 +300,7 @@ Return ONLY the JSON array, no other text.`;
       cleanResponse = cleanResponse.trim();
 
       scenes = JSON.parse(cleanResponse);
-    } catch (parseError) {
+    } catch {
       console.error('Failed to parse Claude response:', fullResponse);
       return NextResponse.json(
         { error: 'Failed to parse generated scenes', raw: fullResponse },
@@ -309,9 +309,9 @@ Return ONLY the JSON array, no other text.`;
     }
 
     // Map character names to IDs
-    const scenesWithIds = scenes.map((scene: any) => ({
+    const scenesWithIds = scenes.map((scene: Record<string, unknown>) => ({
       ...scene,
-      dialogue: scene.dialogue?.map((line: any) => {
+      dialogue: (scene.dialogue as Array<{ characterName?: string; text?: string }>)?.map((line: { characterName?: string; text?: string }) => {
         const character = characters.find(
           (c) => c.name.toLowerCase() === line.characterName?.toLowerCase()
         );

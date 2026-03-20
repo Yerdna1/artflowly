@@ -204,6 +204,7 @@ export function AddSceneDialog({
                       <SelectItem key={char.id} value={char.id}>
                         <div className="flex items-center gap-2">
                           {char.imageUrl ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
                             <img src={char.imageUrl} alt={char.name} className="w-4 h-4 rounded-full object-cover" />
                           ) : (
                             <User className="w-4 h-4" />

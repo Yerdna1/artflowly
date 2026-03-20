@@ -1,4 +1,4 @@
-import { Film, Camera, Sparkles, Wand2 } from 'lucide-react';
+import { Film, Camera, Sparkles } from 'lucide-react';
 import type { StylePreset } from '@/types/project';
 
 export const genres = ['adventure', 'comedy', 'drama', 'fantasy', 'horror', 'mystery', 'romance', 'scifi', 'family'] as const;

@@ -59,7 +59,7 @@ export const generateScenesBatch = inngest.createFunction(
     }
 
     // Get storyModel from project settings (from Step1)
-    const projectSettings = project.settings as any;
+    const projectSettings = project.settings as Record<string, unknown> | null;
     const storyModel = projectSettings?.storyModel || DEFAULT_STORY_MODEL;
 
     console.log(`[Inngest Scenes] Using storyModel from project settings: ${storyModel}`);
@@ -82,18 +82,19 @@ export const generateScenesBatch = inngest.createFunction(
       llmModel = providerConfig.model || storyModel;
 
       console.log(`[Inngest Scenes] Provider config: provider=${llmProvider}, model=${llmModel}, storyModel=${storyModel}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { message?: string };
       console.error('[Inngest Scenes] Failed to get provider config:', error);
       await step.run('update-job-failed-no-provider', async () => {
         await prisma.sceneGenerationJob.update({
           where: { id: jobId },
           data: {
             status: 'failed',
-            errorDetails: error.message || 'No LLM provider configured',
+            errorDetails: err.message || 'No LLM provider configured',
           },
         });
       });
-      return { success: false, error: error.message || 'No LLM provider configured' };
+      return { success: false, error: err.message || 'No LLM provider configured' };
     }
 
     // Update job with LLM provider and model
@@ -321,16 +322,17 @@ export async function generateScenesSynchronously(data: SceneGenerationData) {
     llmModel = providerConfig.model || storyModel;
 
     console.log(`[Sync Scenes] Provider config: provider=${llmProvider}, model=${llmModel}`);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { message?: string };
     console.error('[Sync Scenes] Failed to get provider config:', error);
     await prisma.sceneGenerationJob.update({
       where: { id: jobId },
       data: {
         status: 'failed',
-        errorDetails: error.message || 'No LLM provider configured',
+        errorDetails: err.message || 'No LLM provider configured',
       },
     });
-    return { success: false, error: error.message || 'No LLM provider configured' };
+    return { success: false, error: err.message || 'No LLM provider configured' };
   }
 
   // Prepare prompt data

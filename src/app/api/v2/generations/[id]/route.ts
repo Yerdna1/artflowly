@@ -9,9 +9,9 @@ import { activeGenerations } from '../generation-store';
 
 // GET /api/v2/generations/[id] - Get generation status
 export const GET = withAuth<{ id: string }>(async (
-  request: NextRequest,
+  _request: NextRequest,
   context: { params: Promise<{ id: string }> },
-  { userId }
+  _auth
 ) => {
   try {
     const { id } = await context.params;
@@ -32,7 +32,7 @@ export const GET = withAuth<{ id: string }>(async (
       status: generation.status,
       createdAt: generation.createdAt.toISOString(),
       updatedAt: new Date().toISOString(),
-      ...(generation.result && { result: generation.result }),
+      ...(generation.result ? { result: generation.result as UnifiedGenerationResponse['result'] } : {}),
       ...(generation.error && { error: generation.error }),
     };
 
@@ -48,9 +48,9 @@ export const GET = withAuth<{ id: string }>(async (
 
 // DELETE /api/v2/generations/[id] - Cancel generation
 export const DELETE = withAuth<{ id: string }>(async (
-  request: NextRequest,
+  _request: NextRequest,
   context: { params: Promise<{ id: string }> },
-  { userId }
+  _auth
 ) => {
   try {
     const { id } = await context.params;

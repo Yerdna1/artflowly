@@ -1,13 +1,13 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 export default function DebugClientPage() {
     const { data: session, status } = useSession();
-    const [apiResponse, setApiResponse] = useState<any>(null);
-    const [error, setError] = useState<any>(null);
+    const [apiResponse, setApiResponse] = useState<{ status: number; data: unknown } | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchProjects = async () => {
         try {
@@ -17,8 +17,8 @@ export default function DebugClientPage() {
                 status: res.status,
                 data: data
             });
-        } catch (e: any) {
-            setError(e.toString());
+        } catch (e: unknown) {
+            setError(e instanceof Error ? e.message : String(e));
         }
     };
 

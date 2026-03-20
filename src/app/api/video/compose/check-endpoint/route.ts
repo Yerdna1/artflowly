@@ -7,7 +7,7 @@ import { prisma } from '@/lib/db/prisma';
  * Returns user's configured endpoint if authenticated, or server default if available.
  * This allows unauthenticated users to access video composition when server has default endpoint.
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await auth();
 

@@ -10,15 +10,15 @@ interface VideoGridProps {
   playingVideo: string | null;
   pendingVideoRegenSceneIds: Set<string>;
   pendingDeletionSceneIds: Set<string>;
-  approvedRegenBySceneId: Map<string, any>;
+  approvedRegenBySceneId: Map<string, unknown>;
   canDeleteDirectly: boolean;
   isReadOnly: boolean;
   isAuthenticated: boolean;
-  videoStates: Record<string, any>;
+  videoStates: Record<string, unknown>;
   videoBlobCache: React.RefObject<Map<string, string>>;
 
   // Callbacks
-  getSceneStatus: (sceneId: string) => any;
+  getSceneStatus: (sceneId: string) => string;
   getCachedVideoUrl: (url: string) => string | undefined;
   buildFullI2VPrompt: (scene: Scene) => string;
   onToggleSelect: (sceneId: string) => void;

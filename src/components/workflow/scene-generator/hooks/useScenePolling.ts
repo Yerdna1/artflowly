@@ -26,10 +26,10 @@ export function useScenePolling(project: Project) {
 
   // Check for existing jobs on mount and resume polling
   useExistingJobsChecker(project, {
-    onImageJobFound: (jobId, progress, status) => {
+    onImageJobFound: (jobId, _progress, _status) => {
       imageJobActions.startPolling(jobId);
     },
-    onSceneJobFound: (jobId, progress, status) => {
+    onSceneJobFound: (jobId, _progress, _status) => {
       sceneJobActions.startPolling(jobId);
     },
   });

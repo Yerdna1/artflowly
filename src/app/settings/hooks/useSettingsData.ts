@@ -64,7 +64,7 @@ export function useSettingsData({
       toast.success(tPage('toasts.dataExported'), {
         description: tPage('toasts.dataExportedDesc'),
       });
-    } catch (error) {
+    } catch {
       toast.error(tPage('toasts.exportFailed'), {
         description: tPage('toasts.exportFailedDesc'),
       });

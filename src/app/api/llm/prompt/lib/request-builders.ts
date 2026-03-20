@@ -16,7 +16,7 @@ export function buildOpenRouterRequest(options: BuildRequestOptions) {
   const { model, prompt, systemPrompt, provider } = options;
 
   // KIE uses model in URL path, not in body
-  const body: any = {
+  const body: Record<string, unknown> = {
     messages: [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: prompt },
@@ -67,7 +67,7 @@ export function buildGeminiRequest(options: BuildRequestOptions) {
 /**
  * Build request body based on provider
  */
-export function buildRequestBody(options: BuildRequestOptions): any {
+export function buildRequestBody(options: BuildRequestOptions): Record<string, unknown> {
   const { provider } = options;
 
   switch (provider) {

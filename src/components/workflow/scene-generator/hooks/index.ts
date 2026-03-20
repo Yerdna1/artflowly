@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useProjectStore } from '@/lib/stores/project-store';
 import type { Project, AspectRatio } from '@/types/project';
 import type { ImageResolution } from '@/lib/services/real-costs';
@@ -99,7 +99,7 @@ export function useSceneGenerator(initialProject: Project) {
       });
 
       if (!response.ok) {
-        let errorData: any = {};
+        let errorData: { error?: string; message?: string; jobId?: string } = {};
         try {
           errorData = await response.json();
         } catch (jsonError) {
@@ -187,7 +187,7 @@ export function useSceneGenerator(initialProject: Project) {
   }, [polling]);
 
   // Wrapper for background generation that passes polling data
-  const handleStartBackgroundGeneration = useCallback(async (limit?: number) => {
+  const handleStartBackgroundGeneration = useCallback(async (_limit?: number) => {
     // With unified Inngest approach, all generation is background generation
     await imageGen.handleGenerateAllSceneImages();
   }, [imageGen]);
@@ -196,9 +196,6 @@ export function useSceneGenerator(initialProject: Project) {
   const handleGenerateBatch = useCallback((batchSize: number) => {
     imageGen.handleGenerateBatch(batchSize);
   }, [imageGen]);
-
-  // Scene job start time ref for timeout tracking
-  const sceneJobStartTime = useRef<number | null>(null);
 
   return {
     // Project data

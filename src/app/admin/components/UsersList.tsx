@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Users, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { UserRow } from './UserRow';
@@ -24,10 +24,10 @@ export const UsersList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
 
-  // Reset to first page when search changes
-  useEffect(() => {
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value);
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, []);
 
   const filteredUsers = users.filter(user => {
     const query = searchQuery.toLowerCase();
@@ -37,7 +37,6 @@ export const UsersList = ({
     );
   });
 
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -63,7 +62,7 @@ export const UsersList = ({
         <Input
           placeholder={t('searchUsers')}
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="pl-10"
         />
       </div>
@@ -94,7 +93,6 @@ export const UsersList = ({
           totalItems={filteredUsers.length}
           itemsPerPage={itemsPerPage}
           itemName="users"
-          t={t}
         />
       </div>
     </div>

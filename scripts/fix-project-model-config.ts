@@ -19,7 +19,7 @@ async function fixProjectModelConfig(projectId?: string) {
 
   try {
     // Find projects that need fixing
-    const whereClause: any = {};
+    const whereClause: Record<string, unknown> = {};
 
     if (projectId) {
       whereClause.id = projectId;

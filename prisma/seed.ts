@@ -29,7 +29,7 @@ async function main() {
 
   // Create or update API keys for the user
   // NOTE: Replace these placeholder values with your actual API keys
-  const apiKeys = await prisma.apiKeys.upsert({
+  await prisma.apiKeys.upsert({
     where: { userId: user.id },
     update: {
       geminiApiKey: process.env.SEED_GEMINI_API_KEY || 'your-gemini-api-key-here',
@@ -52,8 +52,19 @@ async function main() {
 
   console.log(`API keys created/updated for user: ${user.email}`);
 
+  interface ActionCostEntry {
+    actionType: string;
+    provider: string;
+    cost: number;
+    description: string;
+    model?: string;
+    modality?: string;
+    quality?: string;
+    length?: string;
+  }
+
   // Seed action costs
-  const actionCosts = [
+  const actionCosts: ActionCostEntry[] = [
     // Image generation
     { actionType: 'image', provider: 'gemini', cost: 0.04, description: 'Gemini Imagen 3 Standard ($0.04/image)' },
     { actionType: 'image', provider: 'nanoBanana', cost: 0.04, description: 'Nano Banana image generation' },
@@ -127,9 +138,9 @@ async function main() {
         actionType: cost.actionType,
         provider: cost.provider,
         model: cost.model || null,
-        modality: (cost as any).modality || null,
-        quality: (cost as any).quality || null,
-        length: (cost as any).length || null,
+        modality: cost.modality || null,
+        quality: cost.quality || null,
+        length: cost.length || null,
       },
     });
 
@@ -148,9 +159,9 @@ async function main() {
         data: {
           ...cost,
           model: cost.model || null,
-          modality: (cost as any).modality || null,
-          quality: (cost as any).quality || null,
-          length: (cost as any).length || null,
+          modality: cost.modality || null,
+          quality: cost.quality || null,
+          length: cost.length || null,
         },
       });
     }

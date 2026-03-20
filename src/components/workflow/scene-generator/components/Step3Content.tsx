@@ -2,8 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import type { Scene, Character, ImageProvider, AspectRatio } from '@/types/project';
+import type { RegenerationRequest } from '@/types/collaboration';
 import { SCENES_PER_PAGE } from '@/lib/constants/workflow';
-import { getImageCreditCost } from '@/lib/services/credits';
+import type { ImageResolution } from '@/lib/services/real-costs';
 import { Pagination } from '@/components/workflow/video-generator/components/Pagination';
 import { RequestRegenerationDialog } from '@/components/collaboration/RequestRegenerationDialog';
 import { KieApiKeyModal } from '@/components/workflow/character-generator/components/KieApiKeyModal';
@@ -43,8 +44,8 @@ interface Step3ContentProps {
   isAddingScene: boolean;
   setIsAddingScene: (value: boolean) => void;
   editingScene: string | null;
-  editSceneData: any;
-  setEditSceneData: (value: any) => void;
+  editSceneData: Record<string, unknown> | null;
+  setEditSceneData: (value: Record<string, unknown> | null) => void;
   expandedScenes: string[];
   previewImage: string | null;
   setPreviewImage: (value: string | null) => void;
@@ -70,7 +71,7 @@ interface Step3ContentProps {
 
   // Actions
   toggleExpanded: (sceneId: string) => void;
-  handleAddScene: (scene: any) => void;
+  handleAddScene: (scene: { title: string; description: string; cameraShot: string; dialogue: { characterId: string; characterName: string; text: string }[] }) => void;
   saveEditScene: () => void;
   cancelEditScene: () => void;
   handleGenerateAllScenesWithCreditCheck: () => void;
@@ -86,7 +87,7 @@ interface Step3ContentProps {
   // Collaboration
   pendingImageRegenSceneIds: Set<string>;
   pendingDeletionSceneIds: Set<string>;
-  approvedRegenBySceneId: Map<string, any>;
+  approvedRegenBySceneId: Map<string, RegenerationRequest>;
   canDeleteDirectly: boolean;
   isAdmin: boolean;
   fetchRegenerationRequests: () => void;
@@ -106,7 +107,7 @@ interface Step3ContentProps {
   pendingSceneTextGeneration: boolean;
   sceneTextCreditsNeeded: number;
   handleSaveOpenRouterKey: (apiKey: string, model: string) => Promise<void>;
-  creditsData: any;
+  creditsData: { credits: { balance: number } } | undefined;
 
   // Permissions
   isReadOnly: boolean;
@@ -127,10 +128,10 @@ export function Step3Content({
   sceneJobProgress,
   sceneJobStatus,
   isSceneJobRunning,
-  backgroundJobProgress,
-  isBackgroundJobRunning,
-  isGenerating,
-  useInngest,
+  backgroundJobProgress: _backgroundJobProgress,
+  isBackgroundJobRunning: _isBackgroundJobRunning,
+  isGenerating: _isGenerating,
+  useInngest: _useInngest,
   isAddingScene,
   setIsAddingScene,
   editingScene,
@@ -213,7 +214,7 @@ export function Step3Content({
         sceneCount={projectSettings.sceneCount || 12}
         totalScenes={scenes.length}
         scenesWithImages={scenesWithImages}
-        imageResolution={imageResolution as any}
+        imageResolution={imageResolution as ImageResolution}
         aspectRatio={sceneAspectRatio}
         imageProvider={imageProvider}
         hasCharacters={characters.length > 0}
@@ -256,7 +257,7 @@ export function Step3Content({
               isExpanded={expandedScenes.includes(scene.id)}
               isGeneratingImage={generatingImageForScene === scene.id}
               isGeneratingAllImages={isGeneratingAllImages}
-              imageResolution={imageResolution as any}
+              imageResolution={imageResolution as ImageResolution}
               characters={characters}
               isSelected={selectedScenes.has(scene.id)}
               hasPendingRegeneration={pendingImageRegenSceneIds.has(scene.id)}

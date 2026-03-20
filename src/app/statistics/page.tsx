@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
@@ -20,12 +20,10 @@ import {
   Loader2,
   RefreshCw,
   Plus,
-  ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { formatCost, formatCostCompact } from '@/lib/services/real-costs';
 
 interface Statistics {
@@ -88,18 +86,12 @@ const providerLabels: Record<string, string> = {
 
 export default function StatisticsPage() {
   const t = useTranslations();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [stats, setStats] = useState<Statistics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      fetchStatistics();
-    }
-  }, [status]);
-
-  const fetchStatistics = async () => {
+  const fetchStatistics = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch('/api/statistics');
@@ -120,7 +112,13 @@ export default function StatisticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchStatistics();
+    }
+  }, [status, fetchStatistics]);
 
   if (status === 'loading' || loading) {
     return (

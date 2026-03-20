@@ -23,7 +23,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { SelectionQuickActions } from '@/components/shared/SelectionQuickActions';
 import { formatCostCompact, getImageCost, type ImageResolution } from '@/lib/services/real-costs';
-import type { Scene } from '@/types/project';
 import { toast } from '@/lib/toast';
 
 interface QuickActionsProps {

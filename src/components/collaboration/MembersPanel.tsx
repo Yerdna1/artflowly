@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Users,
   UserPlus,
@@ -81,7 +81,6 @@ export function MembersPanel({
     error: membersError,
     updateMember,
     removeMember,
-    refresh: refreshMembers,
   } = useProjectMembers(projectId);
 
   const {
@@ -112,7 +111,7 @@ export function MembersPanel({
         const data = await response.json();
         setError(data.error || 'Failed to update role');
       }
-    } catch (e) {
+    } catch {
       setError('Failed to update role');
     } finally {
       setUpdatingMemberId(null);
@@ -134,7 +133,7 @@ export function MembersPanel({
         const data = await response.json();
         setError(data.error || 'Failed to remove member');
       }
-    } catch (e) {
+    } catch {
       setError('Failed to remove member');
     }
   };
@@ -214,7 +213,6 @@ export function MembersPanel({
         {members.map((member) => {
           const RoleIcon = roleIcons[member.role as ProjectRole];
           const isCurrentUserAdmin = currentUserRole === 'admin';
-          const isSelf = false; // TODO: Check if this is the current user
           const canModify = isCurrentUserAdmin && member.role !== 'admin';
 
           return (

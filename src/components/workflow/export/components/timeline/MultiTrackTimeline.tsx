@@ -8,7 +8,7 @@ import { VideoTrack } from './tracks/VideoTrack';
 import { AudioTrack } from './tracks/AudioTrack';
 import { MusicTrack } from './tracks/MusicTrack';
 import { CaptionTrack } from './tracks/CaptionTrack';
-import type { Project, TransitionType } from '@/types/project';
+import type { Project } from '@/types/project';
 import type { UseTimelineEditorReturn } from '../../hooks/useTimelineEditor';
 
 interface MultiTrackTimelineProps {

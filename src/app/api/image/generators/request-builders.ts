@@ -9,7 +9,7 @@ export function buildKieRequestBody(
   kieModelId: string,
   referenceImages: Array<{ name: string; imageUrl: string }>,
   resolution: string = '2k'
-): any {
+): Record<string, unknown> {
   return {
     model: kieModelId,
     input: {
@@ -32,7 +32,7 @@ export function buildModalRequestBody(
   resolution: ImageResolution,
   referenceImages: Array<{ name: string; imageUrl: string }>,
   randomSeed: number
-): any {
+): Record<string, unknown> {
   return {
     prompt,
     aspect_ratio: aspectRatio,
@@ -49,7 +49,7 @@ export function buildModalEditRequestBody(
   aspectRatio: string,
   referenceImages: Array<{ name: string; imageUrl: string }>,
   randomSeed: number
-): any {
+): Record<string, unknown> {
   if (referenceImages.length === 0) {
     throw new Error('Modal-Edit requires reference images');
   }

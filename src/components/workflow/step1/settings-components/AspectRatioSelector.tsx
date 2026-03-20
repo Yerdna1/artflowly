@@ -29,7 +29,7 @@ export function AspectRatioSelector({ aspectRatio, setAspectRatio, isReadOnly }:
         {ratios.map(({ value, icon: Icon, label }) => (
           <button
             key={value}
-            onClick={() => !isReadOnly && setAspectRatio(value as any)}
+            onClick={() => !isReadOnly && setAspectRatio(value as '16:9' | '21:9' | '4:3' | '1:1' | '9:16' | '3:4')}
             disabled={isReadOnly}
             className={`rounded-lg p-3 border-2 transition-all flex flex-col items-center justify-center gap-2 ${
               aspectRatio === value

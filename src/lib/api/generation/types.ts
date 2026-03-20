@@ -55,7 +55,7 @@ export interface GenerationWebhookPayload {
   result?: BaseGenerationResponse;
   error?: string;
   completedAt: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Batch generation types
@@ -64,7 +64,7 @@ export interface BatchGenerationRequest {
     type: GenerationType;
     provider?: ProviderType;
     config: BaseGenerationRequest;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }>;
   webhookUrl?: string;
   parallel?: boolean;

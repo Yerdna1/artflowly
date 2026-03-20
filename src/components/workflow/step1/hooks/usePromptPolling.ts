@@ -83,6 +83,7 @@ export function usePromptPolling(project: Project) {
       console.error('[Prompt Polling] Error polling job status:', error);
       // Don't stop polling on network errors
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.id, store]);
 
   // Start polling for prompt generation job

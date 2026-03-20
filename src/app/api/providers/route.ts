@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { auth } from '@/lib/auth';
 import { unstable_cache } from 'next/cache';
+import type { Prisma } from '@prisma/client';
 
 // Cache providers for 5 minutes
 const getCachedProviders = unstable_cache(
   async (modality?: string) => {
-    const where: any = { isActive: true };
+    const where: Prisma.ProviderWhereInput = { isActive: true };
 
     // If modality is specified, filter providers that support it
     if (modality) {
@@ -92,7 +93,7 @@ export async function GET(request: NextRequest) {
 }
 
 // Admin endpoint to create provider (future implementation)
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user) {

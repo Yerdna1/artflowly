@@ -10,7 +10,7 @@ interface CreditsSummaryProps {
   compact?: boolean;
 }
 
-export function CreditsSummary({ credits, compact = false }: CreditsSummaryProps) {
+export function CreditsSummary({ credits, compact: _compact = false }: CreditsSummaryProps) {
   const t = useTranslations();
 
   return (

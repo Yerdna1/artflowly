@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import {
   createTestUser,
@@ -8,7 +8,6 @@ import {
   createTestScenes,
   createFullTestEnvironment,
   createRegenerationRequest,
-  createApprovedRegenRequest
 } from '@/test/factories'
 
 describe('Regeneration Request Flow Tests', () => {
@@ -69,7 +68,7 @@ describe('Regeneration Request Flow Tests', () => {
 
   describe('Admin Approval', () => {
     it('calculates prepayment as 3x cost', async () => {
-      const { users, project, scenes, credits } = await createFullTestEnvironment()
+      const { users, project, scenes } = await createFullTestEnvironment()
 
       const request = await createRegenerationRequest(project.id, users.collaborator.id, {
         targetType: 'image',
@@ -173,7 +172,7 @@ describe('Regeneration Request Flow Tests', () => {
       // Admin has only 50 credits, needs 81
       await createTestCredits(admin.id, { balance: 50 })
 
-      const request = await createRegenerationRequest(project.id, collaborator.id, {
+      await createRegenerationRequest(project.id, collaborator.id, {
         targetType: 'image',
         targetId: scenes[0].id
       })

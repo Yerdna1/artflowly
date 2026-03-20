@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
         acc[key] = value;
       }
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, unknown>);
 
     // Check if organization keys exist
     const existingKeys = await prisma.organizationApiKeys.findFirst();

@@ -37,22 +37,24 @@ const expectedFields = [
 ];
 
 // Type guard to check if data is valid ApiKeys object
-export function isValidApiKeysData(data: any): data is ApiKeys {
+export function isValidApiKeysData(data: unknown): data is ApiKeys {
   if (!data || typeof data !== 'object') {
     console.warn('[validateApiKeys] Invalid data: not an object', data);
     return false;
   }
 
+  const record = data as Record<string, unknown>;
+
   // Check if it has required fields (at minimum id and userId)
-  if (!data.id || !data.userId) {
-    console.warn('[validateApiKeys] Missing required fields: id or userId', data);
+  if (!record.id || !record.userId) {
+    console.warn('[validateApiKeys] Missing required fields: id or userId', record);
     return false;
   }
 
   // Check if all fields are either expected or null/undefined
-  for (const key of Object.keys(data)) {
+  for (const key of Object.keys(record)) {
     if (!expectedFields.includes(key)) {
-      console.warn(`[validateApiKeys] Unexpected field: ${key}`, data);
+      console.warn(`[validateApiKeys] Unexpected field: ${key}`, record);
       // Don't reject, just warn - the API might have new fields
     }
   }
@@ -91,7 +93,7 @@ export function isValidApiKeysData(data: any): data is ApiKeys {
   ];
 
   for (const field of stringFields) {
-    const value = data[field];
+    const value = record[field];
     if (value !== null && value !== undefined && typeof value !== 'string') {
       console.warn(`[validateApiKeys] Field ${field} is not a string:`, value);
       return false;
@@ -99,15 +101,15 @@ export function isValidApiKeysData(data: any): data is ApiKeys {
   }
 
   // Type check boolean field
-  if (data.preferOwnKeys !== undefined && typeof data.preferOwnKeys !== 'boolean') {
-    console.warn('[validateApiKeys] preferOwnKeys is not a boolean:', data.preferOwnKeys);
+  if (record.preferOwnKeys !== undefined && typeof record.preferOwnKeys !== 'boolean') {
+    console.warn('[validateApiKeys] preferOwnKeys is not a boolean:', record.preferOwnKeys);
     return false;
   }
 
   // Type check date fields
   const dateFields = ['createdAt', 'updatedAt'];
   for (const field of dateFields) {
-    const value = data[field];
+    const value = record[field];
     if (value !== null && value !== undefined) {
       // Accept string dates or Date objects
       const isValidDate = typeof value === 'string' || value instanceof Date;

@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import { useSession, signOut } from 'next-auth/react';
 import {
   Film,
-  Plus,
   Settings,
   ChevronDown,
   LogOut,

@@ -9,14 +9,12 @@ import {
 import { LoadingModal } from '../../shared';
 import type { Character } from '@/types/project';
 import type { CharacterFormData, EditCharacterData } from '../../character-generator/types';
-import type { AspectRatio } from '@/lib/services/real-costs';
 
 interface CharacterModalsProps {
   // Add Character Dialog
   isAddingCharacter: boolean;
   onCloseAddDialog: () => void;
   onAddCharacter: (data: CharacterFormData) => void;
-  characterImageProvider: 'gemini' | 'modal' | 'modal-edit' | 'kie';
 
   // Edit Character Dialog
   editingCharacterId: string | null;
@@ -56,7 +54,6 @@ export function CharacterModals({
   isAddingCharacter,
   onCloseAddDialog,
   onAddCharacter,
-  characterImageProvider,
   editingCharacterId,
   editCharacterData,
   onCloseEditDialog,
@@ -95,7 +92,7 @@ export function CharacterModals({
         open={!!editingCharacterId}
         onOpenChange={onCloseEditDialog}
         editData={editCharacterData}
-        onEditDataChange={(data) => {/* handled in parent */}}
+        onEditDataChange={(_data) => {/* handled in parent */}}
         onSave={() => editingCharacterId && editCharacterData && onSaveEdit(editingCharacterId, editCharacterData)}
         onCancel={onCloseEditDialog}
       />

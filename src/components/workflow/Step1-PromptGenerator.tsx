@@ -8,13 +8,12 @@ import { StoryForm } from './step1/StoryForm';
 import { MasterPromptSection } from './step1/MasterPromptSection';
 import { PresetStories } from './step1/PresetStories';
 import { LoadingModal } from './shared';
-import { genres, tones, sceneOptions, storyModels, voiceProviders, imageProviders } from './step1/constants';
+import { genres, tones, sceneOptions } from './step1/constants';
 import { useStep1State, useStep1Handlers } from './step1/hooks';
 import { useApiKeys } from '@/contexts/ApiKeysContext';
 import { PaymentMethodToggle } from './PaymentMethodToggle';
 import { StepActionBar } from './shared/StepActionBar';
 import { FileText } from 'lucide-react';
-import { toast } from '@/lib/toast';
 import { UnifiedGenerateConfirmationDialog } from './shared/UnifiedGenerateConfirmationDialog';
 
 interface Step1Props {
@@ -54,17 +53,9 @@ export function Step1PromptGenerator({
     setAspectRatio,
     videoLanguage,
     setVideoLanguage,
-    storyModel,
-    setStoryModel,
-    imageProvider,
-    setImageProvider,
-    voiceProvider,
-    setVoiceProvider,
     videoLanguages,
     generatingModel,
     generatingProvider,
-    // Job polling state
-    promptJobId,
     promptJobProgress,
     promptJobStatus,
     isPromptJobRunning,
@@ -79,13 +70,6 @@ export function Step1PromptGenerator({
     confirmDialogData,
     doGeneratePrompt,
   } = handlers;
-
-  const handleSaveApiKey = async (keyName: string, value: string) => {
-    const success = await apiKeysContext.updateApiKey(keyName, value);
-    if (!success) {
-      console.error('Failed to save API key');
-    }
-  };
 
   return (
     <div className="max-w-[1920px] mx-auto">

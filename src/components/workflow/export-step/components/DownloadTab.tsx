@@ -5,7 +5,6 @@ import {
   FileText,
   Scissors,
   Download,
-  Archive,
   ImageDown,
   VideoIcon,
   Music,

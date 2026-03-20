@@ -48,8 +48,9 @@ export class ModalImageProvider extends BaseImageProvider {
           this.name
         );
       }
-    } catch (error: any) {
-      if (error?.code === 'ECONNREFUSED' || error?.cause?.code === 'ECONNREFUSED') {
+    } catch (error: unknown) {
+      const err = error as { code?: string; cause?: { code?: string } };
+      if (err?.code === 'ECONNREFUSED' || err?.cause?.code === 'ECONNREFUSED') {
         throw new ProviderValidationError(
           'Cannot connect to Modal endpoint',
           this.name
@@ -138,12 +139,13 @@ export class ModalImageProvider extends BaseImageProvider {
         base64: result.images[0],
         mimeType: 'image/png',
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof ProviderError) {
         throw error;
       }
 
-      if (error?.cause?.code === 'ECONNRESET' || error?.cause?.code === 'ETIMEDOUT') {
+      const err = error as { message?: string; cause?: { code?: string } };
+      if (err?.cause?.code === 'ECONNRESET' || err?.cause?.code === 'ETIMEDOUT') {
         throw new ProviderError(
           'Modal endpoint timeout - container may be cold starting',
           'TIMEOUT',
@@ -152,10 +154,10 @@ export class ModalImageProvider extends BaseImageProvider {
       }
 
       throw new ProviderError(
-        `Modal request failed: ${error.message}`,
+        `Modal request failed: ${err.message}`,
         'REQUEST_ERROR',
         this.name,
-        { error: error.message }
+        { error: err.message }
       );
     }
   }
@@ -280,12 +282,13 @@ export class ModalEditImageProvider extends ModalImageProvider {
         base64: result.images[0],
         mimeType: 'image/png',
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof ProviderError) {
         throw error;
       }
 
-      if (error?.cause?.code === 'ECONNRESET' || error?.cause?.code === 'ETIMEDOUT') {
+      const err = error as { message?: string; cause?: { code?: string } };
+      if (err?.cause?.code === 'ECONNRESET' || err?.cause?.code === 'ETIMEDOUT') {
         throw new ProviderError(
           'Modal-Edit endpoint timeout - container may be cold starting',
           'TIMEOUT',
@@ -294,10 +297,10 @@ export class ModalEditImageProvider extends ModalImageProvider {
       }
 
       throw new ProviderError(
-        `Modal-Edit request failed: ${error.message}`,
+        `Modal-Edit request failed: ${err.message}`,
         'REQUEST_ERROR',
         this.name,
-        { error: error.message }
+        { error: err.message }
       );
     }
   }

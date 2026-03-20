@@ -66,7 +66,7 @@ export default function InvitePage({ params }: InvitePageProps) {
         }
 
         setInvitation(data.invitation);
-      } catch (e) {
+      } catch {
         setError(t('failedToLoad'));
       } finally {
         setIsLoading(false);
@@ -74,7 +74,7 @@ export default function InvitePage({ params }: InvitePageProps) {
     };
 
     fetchInvitation();
-  }, [token]);
+  }, [token, t]);
 
   const handleAccept = async () => {
     if (!token) return;
@@ -98,7 +98,7 @@ export default function InvitePage({ params }: InvitePageProps) {
       setTimeout(() => {
         router.push(`/project/${data.projectId}`);
       }, 2000);
-    } catch (e) {
+    } catch {
       setError(t('failedToAccept'));
     } finally {
       setIsProcessing(false);
@@ -115,7 +115,7 @@ export default function InvitePage({ params }: InvitePageProps) {
         method: 'POST',
       });
       router.push('/');
-    } catch (e) {
+    } catch {
       router.push('/');
     }
   };
@@ -241,7 +241,7 @@ export default function InvitePage({ params }: InvitePageProps) {
               </motion.div>
               <h2 className="text-xl font-semibold mb-2">Welcome to the Team!</h2>
               <p className="text-muted-foreground mb-4">
-                You've joined "{invitation?.project?.name}"
+                You&apos;ve joined &quot;{invitation?.project?.name}&quot;
               </p>
               <p className="text-sm text-muted-foreground">Redirecting to project...</p>
             </CardContent>

@@ -5,17 +5,18 @@
 import { useCallback, useEffect, type Dispatch, type SetStateAction } from 'react';
 import { useProjectStore } from '@/lib/stores/project-store';
 import { toast } from '@/lib/toast';
-import { broadcastApiKeysUpdate, syncSettingToDatabase } from './utils';
+import type { ApiConfig } from '@/types/project';
+import { broadcastApiKeysUpdate } from './utils';
 import type { TranslationFunction } from './utils';
 
 export interface UseSettingsApiKeysParams {
   showKeys: Record<string, boolean>;
   savedKeys: Record<string, boolean>;
-  localConfig: Record<string, any>;
+  localConfig: ApiConfig;
   setShowKeys: Dispatch<SetStateAction<Record<string, boolean>>>;
   setSavedKeys: Dispatch<SetStateAction<Record<string, boolean>>>;
-  setLocalConfig: Dispatch<SetStateAction<Record<string, any>>>;
-  setApiConfig: (value: any) => void;
+  setLocalConfig: Dispatch<SetStateAction<ApiConfig>>;
+  setApiConfig: (value: Partial<ApiConfig>) => void;
   tPage: TranslationFunction;
 }
 
@@ -41,9 +42,9 @@ export function useSettingsApiKeys({
       }
     };
 
-    window.addEventListener('apiKeysUpdated' as any, handleApiKeysUpdate);
+    window.addEventListener('apiKeysUpdated', handleApiKeysUpdate as EventListener);
     return () => {
-      window.removeEventListener('apiKeysUpdated' as any, handleApiKeysUpdate);
+      window.removeEventListener('apiKeysUpdated', handleApiKeysUpdate as EventListener);
     };
   }, [setApiConfig, setLocalConfig]);
 

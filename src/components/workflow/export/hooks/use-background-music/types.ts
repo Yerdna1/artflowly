@@ -17,7 +17,7 @@ export interface UseBackgroundMusicProps {
   project: Project;
   apiKeys?: {
     musicProvider?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   } | null;
 }
 

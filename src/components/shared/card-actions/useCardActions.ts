@@ -36,7 +36,6 @@ export interface UseCardActionsProps {
 export function useCardActions({
   isLocked = false,
   canDeleteDirectly = true,
-  approvedRegeneration,
   onToggleLock,
   onUseRegenerationAttempt,
   onSelectRegeneration,

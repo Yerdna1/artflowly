@@ -1,4 +1,4 @@
-import type { Project, Caption, TransitionType } from '@/types/project';
+import type { Project, Caption } from '@/types/project';
 
 export interface Step6Props {
   project: Project;

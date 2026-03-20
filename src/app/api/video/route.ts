@@ -10,7 +10,7 @@ import { rateLimit } from '@/lib/services/rate-limit';
 import { getUserPermissions, shouldUseOwnApiKeys, checkRequiredApiKeys, getMissingRequirementError } from '@/lib/services/user-permissions';
 import { callExternalApi, pollKieTask } from '@/lib/providers/api-wrapper';
 import { getProviderConfig } from '@/lib/providers';
-import type { VideoProvider } from '@/types/project';
+import type { Provider } from '@/lib/services/real-costs';
 
 export const maxDuration = 120;
 
@@ -83,7 +83,7 @@ async function generateWithWrapper(
   }
 
   // Build request body based on provider
-  let requestBody: any;
+  let requestBody: Record<string, unknown>;
 
   switch (provider) {
     case 'modal':
@@ -119,12 +119,9 @@ async function generateWithWrapper(
           image_urls: [publicImageUrl],
           prompt: enhancePromptForMotion(prompt),
           mode: effectiveMode,
+          ...(seed !== undefined && { seed }),
         },
       };
-
-      if (seed !== undefined) {
-        requestBody.input.seed = seed;
-      }
       break;
 
     default:
@@ -230,7 +227,7 @@ async function generateWithWrapper(
       'video',
       `${provider} video ${actionType}`,
       projectId,
-      provider as any,
+      provider as Provider,
       { isRegeneration, sceneId },
       realCost
     );
@@ -241,7 +238,7 @@ async function generateWithWrapper(
       'video',
       `${provider} video ${actionType} - prepaid`,
       projectId,
-      provider as any,
+      provider as Provider,
       { isRegeneration, sceneId, prepaidRegeneration: true }
     );
   }
@@ -274,7 +271,6 @@ export async function POST(request: NextRequest) {
       sceneId,
       skipCreditCheck = false,
       ownerId,
-      model: requestModel
     }: VideoGenerationRequest = await request.json();
 
     if (!imageUrl || !prompt) {

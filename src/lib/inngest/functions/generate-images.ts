@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db/prisma';
 import { spendCredits, getImageCreditCost } from '@/lib/services/credits';
 import { uploadImageToS3, isS3Configured } from '@/lib/services/s3-upload';
 import { cache, cacheKeys } from '@/lib/cache';
-import { callExternalApi, pollKieTask } from '@/lib/providers/api-wrapper';
+import { callExternalApi } from '@/lib/providers/api-wrapper';
 import { getProviderConfig } from '@/lib/providers';
 import { buildApiUrl } from '@/lib/constants/api-endpoints';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
@@ -130,11 +130,12 @@ async function generateSingleImage(
         throw new Error('No image generated');
       }
 
-      const mimeType = (generatedImage as any).mimeType || 'image/png';
+      const mimeType = (generatedImage as Record<string, unknown>).mimeType as string || 'image/png';
       imageUrl = `data:${mimeType};base64,${generatedImage.base64}`;
 
     } else {
       // Use API wrapper for other providers
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let requestBody: any;
       const randomSeed = Math.floor(Math.random() * 2147483647);
 

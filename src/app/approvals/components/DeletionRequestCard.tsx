@@ -51,7 +51,7 @@ export const DeletionRequestCard = ({ request, processingIds, onAction, t }: Del
       </div>
       {request.reason && (
         <p className="text-xs text-muted-foreground bg-white/5 rounded p-2">
-          "{request.reason}"
+          &quot;{request.reason}&quot;
         </p>
       )}
       <div className="flex gap-1">

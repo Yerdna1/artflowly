@@ -1,6 +1,6 @@
 'use client';
 
-import { Settings, Key } from 'lucide-react';
+import { Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApiKeys } from '@/contexts/ApiKeysContext';
 import { useTranslations } from 'next-intl';

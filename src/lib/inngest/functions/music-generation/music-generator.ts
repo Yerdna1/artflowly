@@ -99,6 +99,7 @@ async function generateWithProvider(
   userId: string,
   projectId: string | undefined
 ): Promise<{ audioUrl: string; title?: string; taskId?: string; realCost: number }> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let requestBody: any;
 
   // Map model name for KIE

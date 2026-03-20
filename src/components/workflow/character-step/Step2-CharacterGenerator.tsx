@@ -31,7 +31,7 @@ import {
 import { PaymentMethodToggle } from '../PaymentMethodToggle';
 import { StepActionBar } from '../shared/StepActionBar';
 import { UnifiedGenerateConfirmationDialog } from '../shared/UnifiedGenerateConfirmationDialog';
-import { Users, Plus, ImageIcon } from 'lucide-react';
+import { Users, Plus, Image as ImageIcon } from 'lucide-react';
 
 export function Step2CharacterGenerator({ project: initialProject, isReadOnly = false }: Step2Props) {
   const t = useTranslations();
@@ -69,14 +69,11 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
   } = useCharacterManagement(project.id, project.style);
 
   const {
-    userApiKeys,
-    isApiKeysLoading,
     isKieModalOpen,
     setIsKieModalOpen,
     isSavingKieKey,
     pendingCharacterGeneration,
     setPendingCharacterGeneration,
-    modalReason,
     setModalReason,
     handleSaveKieApiKey: saveKieApiKey,
   } = useApiKeyManagement({
@@ -89,13 +86,12 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     imageStates,
     isGeneratingAll,
     isGeneratingSingle,
-    generationProgress,
+    generationProgress: _generationProgress,
     generatingCharacterName,
     generateCharacterImage,
     requestGenerateCharacterImage,
     confirmGenerateImage,
     handleGenerateAll,
-    getCharacterStatus,
     showGenerateDialog,
     setShowGenerateDialog,
   } = useCharacterImage(project, characterAspectRatio, characterImageProvider, characterImageModel);
@@ -163,8 +159,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
   }, [
     handleAddCharacter,
     characterImageProvider,
-    characterAspectRatio,
-    characterImageModel,
     settings.imageResolution,
     updateSettings,
     project.id,
@@ -176,7 +170,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     setModalReason,
     setIsKieModalOpen,
     setPendingCharacterGeneration,
-    setIsInsufficientCreditsModalOpen,
   ]);
 
   // Generate single character image
@@ -222,8 +215,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     requestGenerateCharacterImage(character);
   }, [
     characterImageProvider,
-    characterAspectRatio,
-    characterImageModel,
     apiKeys,
     apiKeysLoading,
     creditsData,
@@ -232,7 +223,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     setModalReason,
     setIsKieModalOpen,
     setPendingCharacterGeneration,
-    setIsInsufficientCreditsModalOpen,
   ]);
 
   // Generate all images with credit check
@@ -258,8 +248,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     creditsNeeded,
     creditsData,
     characterImageProvider,
-    characterAspectRatio,
-    characterImageModel,
     handleGenerateAll,
     apiKeys?.kieApiKey,
     setModalReason,
@@ -284,12 +272,8 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
     }
   }, [
     pendingCharacterGeneration,
-    characterImageProvider,
-    characterAspectRatio,
-    characterImageModel,
     generateCharacterImage,
     setPendingCharacterGeneration,
-    setIsInsufficientCreditsModalOpen,
   ]);
 
   // Upload image handler
@@ -299,7 +283,7 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
   }, []);
 
   // Select image handler
-  const handleSelectImage = useCallback((character: Character, imageIndex: number) => {
+  const _handleSelectImage = useCallback((character: Character, imageIndex: number) => {
     // TODO: Implement image selection when multiple images are supported
     console.log('Image selection not implemented yet', character.id, imageIndex);
   }, []);
@@ -371,7 +355,7 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
         onDelete={(characterId) => handleDeleteCharacter(characterId, characters.find(c => c.id === characterId)?.name || '')}
         onPreviewImage={setPreviewImage}
         onGenerateImage={handleGenerateCharacterImage}
-        onRegeneratePrompt={(character) => {
+        onRegeneratePrompt={(_character) => {
           // TODO: Implement regenerate prompt
         }}
         onUploadImage={handleUploadImage}
@@ -382,7 +366,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
         isAddingCharacter={isAddingCharacter}
         onCloseAddDialog={() => setIsAddingCharacter(false)}
         onAddCharacter={handleAddCharacterWithImage}
-        characterImageProvider={characterImageProvider}
 
         // Edit Character
         editingCharacterId={editingCharacter}
@@ -440,7 +423,6 @@ export function Step2CharacterGenerator({ project: initialProject, isReadOnly = 
           { label: 'Aspect Ratio', value: characterAspectRatio, icon: ImageIcon },
         ]}
         estimatedCost={getImageCreditCost(
-          characterAspectRatio as AspectRatio,
           settings.imageResolution as ImageResolution,
           characterImageProvider as ImageProvider
         )}

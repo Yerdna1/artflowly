@@ -68,6 +68,7 @@ export function DraggableSceneClip({
 
       {/* Media content - use imageUrl for thumbnail */}
       {scene.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={scene.imageUrl}
           alt={scene.title}

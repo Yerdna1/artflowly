@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { prisma } from '@/test/setup'
 import { createTestUser } from '@/test/factories/user'
 import { createTestCredits, createCreditsWithHistory, addCreditsTransaction } from '@/test/factories/credits'
@@ -255,7 +255,7 @@ describe('Credits API Tests', () => {
       const user2Credits = await createTestCredits(user2.id, { balance: 500 })
 
       // User1 trying to spend from their own account
-      const result = await spendCredits(user1.id, 100, 'image')
+      await spendCredits(user1.id, 100, 'image')
 
       // User2's balance unchanged
       const user2CreditsAfter = await prisma.credits.findUnique({
@@ -313,7 +313,7 @@ describe('Credits API Tests', () => {
       ])
 
       const successes = results.filter(
-        r => r.status === 'fulfilled' && (r.value as any).success
+        r => r.status === 'fulfilled' && (r.value as { success: boolean }).success
       )
 
       const credits = await prisma.credits.findFirst({ where: { userId: user.id } })
@@ -344,6 +344,135 @@ describe('Credits API Tests', () => {
       const credits = await getOrCreateCredits(user.id)
 
       expect(credits.balance).toBe(500)
+    })
+
+    it('is idempotent - calling twice returns same record', async () => {
+      const user = await createTestUser()
+
+      const credits1 = await getOrCreateCredits(user.id)
+      const credits2 = await getOrCreateCredits(user.id)
+
+      expect(credits1.id).toBe(credits2.id)
+      expect(credits1.balance).toBe(credits2.balance)
+    })
+
+    it('initializes with zero totals', async () => {
+      const user = await createTestUser()
+
+      const credits = await getOrCreateCredits(user.id)
+
+      expect(credits.balance).toBe(0)
+      expect(credits.totalSpent).toBe(0)
+      expect(credits.totalEarned).toBe(0)
+    })
+  })
+
+  describe('Real Cost Tracking', () => {
+    it('records real cost on spend transaction', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100 })
+
+      await spendCredits(
+        user.id,
+        27,
+        'image',
+        'Image generation',
+        undefined,
+        'gemini',
+        undefined,
+        0.134
+      )
+
+      const transaction = await prisma.creditTransaction.findFirst({
+        where: { credits: { userId: user.id }, type: 'image' }
+      })
+      expect(transaction?.realCost).toBe(0.134)
+    })
+
+    it('records zero real cost for free providers', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100 })
+
+      await spendCredits(
+        user.id,
+        2,
+        'scene',
+        'Scene generation (free)',
+        undefined,
+        'claude-sdk',
+        undefined,
+        0
+      )
+
+      const transaction = await prisma.creditTransaction.findFirst({
+        where: { credits: { userId: user.id }, type: 'scene' }
+      })
+      expect(transaction?.realCost).toBe(0)
+    })
+
+    it('tracks real cost separately from credit amount', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100 })
+
+      await spendCredits(
+        user.id,
+        20,
+        'video',
+        'Video generation',
+        undefined,
+        'grok',
+        undefined,
+        0.10
+      )
+
+      const transaction = await prisma.creditTransaction.findFirst({
+        where: { credits: { userId: user.id }, type: 'video' }
+      })
+      expect(transaction?.amount).toBe(-20)
+      expect(transaction?.realCost).toBe(0.10)
+    })
+  })
+
+  describe('TotalSpent Tracking', () => {
+    it('updates totalSpent when spending credits', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 100, totalSpent: 0 })
+
+      await spendCredits(user.id, 27, 'image', 'Image gen')
+      await spendCredits(user.id, 20, 'video', 'Video gen')
+
+      const credits = await prisma.credits.findFirst({ where: { userId: user.id } })
+      expect(credits?.totalSpent).toBe(47)
+      expect(credits?.balance).toBe(53)
+    })
+  })
+
+  describe('Multiple Transaction Types', () => {
+    it('tracks different generation types for same project', async () => {
+      const user = await createTestUser()
+      await createTestCredits(user.id, { balance: 500 })
+      const project = await createTestProject(user.id)
+
+      await spendCredits(user.id, 2, 'scene', 'Scene gen', project.id)
+      await spendCredits(user.id, 2, 'character', 'Char gen', project.id)
+      await spendCredits(user.id, 27, 'image', 'Image gen', project.id)
+      await spendCredits(user.id, 20, 'video', 'Video gen', project.id)
+      await spendCredits(user.id, 6, 'voiceover', 'TTS gen', project.id)
+
+      const transactions = await prisma.creditTransaction.findMany({
+        where: { projectId: project.id }
+      })
+
+      const types = transactions.map(t => t.type)
+      expect(types).toContain('scene')
+      expect(types).toContain('character')
+      expect(types).toContain('image')
+      expect(types).toContain('video')
+      expect(types).toContain('voiceover')
+      expect(transactions).toHaveLength(5)
+
+      const credits = await prisma.credits.findFirst({ where: { userId: user.id } })
+      expect(credits?.balance).toBe(500 - 2 - 2 - 27 - 20 - 6) // 443
     })
   })
 })

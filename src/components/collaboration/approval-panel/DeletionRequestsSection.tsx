@@ -84,7 +84,7 @@ export function DeletionRequestsSection({
                       {t('collaborationModals.approvalPanel.deleteType', { type: request.targetType })}
                     </span>
                     {request.targetName && (
-                      <span className="text-muted-foreground">"{request.targetName}"</span>
+                      <span className="text-muted-foreground">&quot;{request.targetName}&quot;</span>
                     )}
                   </>
                 }

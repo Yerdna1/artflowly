@@ -11,7 +11,7 @@ import type { Project } from '@/types/project';
 interface StoryFormProps {
   project: Project;
   isReadOnly: boolean;
-  updateStory: (id: string, story: any) => void;
+  updateStory: (id: string, story: Partial<Project['story']>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   genres: readonly string[];
   tones: readonly string[];

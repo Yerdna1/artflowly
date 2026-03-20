@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
   Check,
-  X,
   Users,
   Trash2,
   AlertCircle,
@@ -64,7 +63,6 @@ export function NotificationBell() {
     unreadCount,
     markAsRead: handleMarkAsRead,
     markAllAsRead: handleMarkAllAsRead,
-    refresh
   } = useNotifications();
 
   const markAsRead = async (id: string) => {

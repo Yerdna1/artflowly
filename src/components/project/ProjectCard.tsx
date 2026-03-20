@@ -31,7 +31,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useProjectStore } from '@/lib/stores/project-store';
 import type { Project, StylePreset } from '@/types/project';
-import { formatPriceWithSymbol, getCurrencySymbol } from '@/lib/utils/currency';
+import { formatPriceWithSymbol } from '@/lib/utils/currency';
 
 interface ProjectCost {
   credits: number;
@@ -63,8 +63,6 @@ export function ProjectCard({ project, variant = 'default', cost }: ProjectCardP
   const formatRealCost = (amount: number) => {
     return formatPriceWithSymbol(amount);
   };
-
-  const currencySymbol = getCurrencySymbol();
 
   // Get thumbnail - supports both full project and summary format
   const thumbnailUrl = useMemo(() => {

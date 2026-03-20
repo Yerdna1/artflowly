@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Wand2, User, FileText, Video, Mic,
+  Video, Mic,
   Image as ImageIcon, Music, Brain,
   LucideIcon, Loader2, CheckCircle,
   AlertCircle, RefreshCw, DollarSign

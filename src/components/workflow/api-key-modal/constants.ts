@@ -1,4 +1,4 @@
-import type { ProviderConfig, ApiKeyField, OperationType } from './types';
+import type { ApiKeyField, OperationType } from './types';
 import { DEFAULT_MODELS as SHARED_DEFAULT_MODELS } from '@/lib/constants/default-models';
 
 // Default provider and model settings for new users

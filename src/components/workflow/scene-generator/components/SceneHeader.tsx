@@ -4,22 +4,11 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Sparkles, StopCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   ACTION_COSTS,
   formatCostCompact,
-  getImageCost,
-  IMAGE_RESOLUTIONS,
-  ASPECT_RATIOS,
   type ImageResolution,
 } from '@/lib/services/real-costs';
 import type { ImageProvider, AspectRatio } from '@/types/project';
@@ -40,21 +29,13 @@ interface SceneHeaderProps {
   onStopSceneGeneration?: () => void;
 }
 
-const IMAGE_PROVIDER_LABELS: Record<ImageProvider, string> = {
-  newapi: 'ArtFlowly AI',
-  gemini: 'Gemini',
-  modal: 'Modal Qwen',
-  'modal-edit': 'Qwen-Edit',
-  kie: 'Kie.ai',
-};
-
 export function SceneHeader({
   sceneCount,
   totalScenes,
-  scenesWithImages,
-  imageResolution,
-  aspectRatio,
-  imageProvider,
+  scenesWithImages: _scenesWithImages,
+  imageResolution: _imageResolution,
+  aspectRatio: _aspectRatio,
+  imageProvider: _imageProvider,
   hasCharacters,
   isGeneratingScenes,
   sceneJobProgress = 0,

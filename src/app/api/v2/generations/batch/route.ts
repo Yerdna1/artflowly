@@ -1,13 +1,12 @@
 // Batch Generation API
 // POST /api/v2/generations/batch
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { withAuth } from '@/lib/api/middleware';
 import {
   createProvider,
   getProviderConfig,
   selectOptimalProvider,
-  type GenerationType,
   type ProviderType,
   type BatchGenerationRequest,
   type BatchGenerationResponse

@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import type { MusicProvider } from '@/types/project';
-import type { SunoModel, UseBackgroundMusicProps } from './types';
 import { POLL_INTERVAL } from './constants';
 
 export interface GenerationState {

@@ -7,7 +7,7 @@ import {
   ProviderValidationError
 } from '../types';
 import { uploadMediaToS3 } from '@/lib/api';
-import { getActionCost } from '@/lib/services/real-costs';
+import { getActionCost, type Provider as RealCostProvider } from '@/lib/services/real-costs';
 
 export abstract class BaseVideoProvider implements Provider<VideoGenerationRequest, VideoGenerationResponse> {
   abstract name: string;
@@ -79,7 +79,7 @@ export abstract class BaseVideoProvider implements Provider<VideoGenerationReque
       }
 
       // Calculate costs (fixed for now, could be based on duration later)
-      const realCost = getActionCost('video', this.config.provider as any);
+      const realCost = getActionCost('video', this.config.provider as RealCostProvider);
 
       return {
         status: 'complete',
@@ -111,7 +111,7 @@ export abstract class BaseVideoProvider implements Provider<VideoGenerationReque
   }
 
   estimateCost(): number {
-    return getActionCost('video', this.config.provider as any);
+    return getActionCost('video', this.config.provider as RealCostProvider);
   }
 
   /**

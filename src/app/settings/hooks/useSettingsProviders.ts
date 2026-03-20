@@ -4,8 +4,7 @@
 
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
 import { useProjectStore } from '@/lib/stores/project-store';
-import { toast } from '@/lib/toast';
-import type { LLMProvider, MusicProvider, TTSProvider, ImageProvider, VideoProvider, ModalEndpoints } from '@/types/project';
+import type { ApiConfig, LLMProvider, MusicProvider, TTSProvider, ImageProvider, VideoProvider, ModalEndpoints } from '@/types/project';
 import { handleKieModelChange, syncSettingToDatabase, showToast } from './utils';
 import type { TranslationFunction } from './utils';
 
@@ -34,7 +33,7 @@ export interface UseSettingsProvidersParams {
   setKieMusicModel: (value: string) => void;
   setKieLlmModel: (value: string) => void;
   setModalEndpoints: Dispatch<SetStateAction<ModalEndpoints>>;
-  setApiConfig: (value: any) => void;
+  setApiConfig: (value: Partial<ApiConfig>) => void;
   tPage: TranslationFunction;
 }
 
@@ -219,7 +218,7 @@ export function useSettingsProviders({
           tPage('toasts.modalEndpointsSavedDesc') || 'Your self-hosted endpoints are configured'
         );
       }
-    } catch (error) {
+    } catch {
       showToast('error', tPage('toasts.saveFailed') || 'Failed to save', '');
     }
   }, [modalEndpoints, tPage]);

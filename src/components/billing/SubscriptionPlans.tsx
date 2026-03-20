@@ -16,6 +16,7 @@ interface Plan {
   features: string[];
   productId?: string;
   hidden?: boolean;
+  quota?: string;
 }
 
 interface SubscriptionPlansProps {
@@ -131,7 +132,7 @@ export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: Subscrip
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {Object.entries(plans)
-        .filter(([, plan]) => !(plan as any).hidden)
+        .filter(([, plan]) => !plan.hidden)
         .map(([key, plan], index) => {
         const isCurrentPlan = key === currentPlan;
         const isPopular = key === 'standard';
@@ -171,8 +172,8 @@ export function SubscriptionPlans({ plans, currentPlan, onSelectPlan }: Subscrip
               <CardContent className="flex-1 flex flex-col">
                 <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm mb-4 ${planBadgeColors[key]}`}>
                   <Sparkles className="w-3 h-3" />
-                  {(plan as any).quota
-                    ? translateFeature((plan as any).quota)
+                  {plan.quota
+                    ? translateFeature(plan.quota)
                     : `${plan.credits.toLocaleString()} ${t('billing.credits')}${t('billing.perMonth')}`
                   }
                 </div>

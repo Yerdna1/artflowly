@@ -68,6 +68,7 @@ export function TimelineView({ project, stats }: TimelineViewProps) {
                   {scene.videoUrl ? (
                     <video src={scene.videoUrl} className="w-full h-full object-cover" muted />
                   ) : scene.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={scene.imageUrl}
                       alt={scene.title}

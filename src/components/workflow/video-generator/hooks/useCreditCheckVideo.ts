@@ -4,17 +4,17 @@ import type { ApiKeysData } from '@/hooks/use-api-keys';
 
 export interface PendingVideoGeneration {
   type: 'single' | 'all' | 'selected';
-  scene?: any;
-  scenes?: any[];
+  scene?: { id: string; title?: string; imageUrl?: string | null };
+  scenes?: Array<{ id: string; title?: string; imageUrl?: string | null }>;
 }
 
 export interface UseCreditCheckVideoProps {
   apiKeysData: ApiKeysData | null | undefined;
-  onGenerateVideo: (scene: any) => Promise<void>;
+  onGenerateVideo: (scene: { id: string; imageUrl?: string | null }) => Promise<void>;
   onGenerateAll: () => Promise<void>;
   onGenerateSelected: () => Promise<void>;
-  scenesNeedingGeneration: any[];
-  scenes: any[];
+  scenesNeedingGeneration: Array<{ id: string }>;
+  scenes: Array<{ id: string; imageUrl?: string | null }>;
   selectedScenes: Set<string>;
 }
 
@@ -26,10 +26,10 @@ export interface UseCreditCheckVideoReturn {
   pendingVideoGeneration: PendingVideoGeneration | null;
   showConfirmDialog: boolean;
   confirmDialogType: 'single' | 'all' | 'selected';
-  confirmDialogScene: any;
+  confirmDialogScene: { id: string; title?: string; imageUrl?: string | null } | null;
 
   // Actions
-  handleGenerateVideoWithCreditCheck: (scene: any) => void;
+  handleGenerateVideoWithCreditCheck: (scene: { id: string; title?: string; imageUrl?: string | null }) => void;
   handleGenerateAllWithCreditCheck: () => void;
   handleGenerateSelectedWithCreditCheck: () => void;
   handleConfirmGeneration: () => Promise<void>;
@@ -60,10 +60,10 @@ export function useCreditCheckVideo({
   // Confirmation dialog state
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [confirmDialogType, setConfirmDialogType] = useState<'single' | 'all' | 'selected'>('all');
-  const [confirmDialogScene, setConfirmDialogScene] = useState<any>(null);
+  const [confirmDialogScene, setConfirmDialogScene] = useState<{ id: string; title?: string; imageUrl?: string | null } | null>(null);
 
   // Credit check wrapper for single video generation
-  const handleGenerateVideoWithCreditCheck = useCallback((scene: any) => {
+  const handleGenerateVideoWithCreditCheck = useCallback((scene: { id: string; title?: string; imageUrl?: string | null }) => {
     setConfirmDialogType('single');
     setConfirmDialogScene(scene);
     setShowConfirmDialog(true);

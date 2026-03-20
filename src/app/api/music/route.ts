@@ -6,7 +6,7 @@ import { prisma } from '@/lib/db/prisma';
 import { requireAuth, isErrorResponse, requireCredits, uploadMediaToS3 } from '@/lib/api';
 import { spendCredits, COSTS } from '@/lib/services/credits';
 import { rateLimit } from '@/lib/services/rate-limit';
-import { callExternalApi, pollKieTask } from '@/lib/providers/api-wrapper';
+import { callExternalApi } from '@/lib/providers/api-wrapper';
 import { getProviderConfig } from '@/lib/providers';
 import { createMusicTask, getMusicTaskStatus, PIAPI_MUSIC_COST } from '@/lib/services/piapi';
 import { getEndpointUrl, getProviderHeaders } from '@/lib/constants/api-endpoints';
@@ -71,8 +71,7 @@ async function generateWithWrapper(
   console.log(`[${provider}] Generating music with wrapper`);
 
   // Build request body based on provider
-  let requestBody: any;
-  let modelConfig: Awaited<ReturnType<typeof prisma.kieMusicModel.findUnique>> | null = null;
+  let requestBody: Record<string, unknown>;
 
   switch (provider) {
     case 'modal':
@@ -262,7 +261,6 @@ export async function POST(request: NextRequest) {
       instrumental = true,
       projectId,
       title,
-      style
     }: MusicGenerationRequest = await request.json();
 
     if (!prompt) {

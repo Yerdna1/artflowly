@@ -1,5 +1,3 @@
-import type { Caption, CaptionStyle } from '@/types/project';
-
 export const SCENE_DURATION = 6;
 
 export const animationOptions = [

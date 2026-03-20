@@ -5,7 +5,7 @@ import { COSTS } from '@/lib/services/credits';
 import { ACTION_COSTS } from '@/lib/services/real-costs';
 
 // Fix missing video cost records by scanning projects for videos without transactions
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth();
 
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const userId = session.user.id;
 
     // Get user's credits record
-    let credits = await prisma.credits.findUnique({
+    const credits = await prisma.credits.findUnique({
       where: { userId },
       include: {
         transactions: {
@@ -77,9 +77,6 @@ export async function POST(request: NextRequest) {
     // Create missing transactions
     const videoCreditCost = COSTS.VIDEO_GENERATION; // 20 credits per video
     const videoRealCost = ACTION_COSTS.video.grok; // $0.10 per video
-
-    const totalCreditsToDeduct = missingTransactions * videoCreditCost;
-    const totalRealCostToAdd = missingTransactions * videoRealCost;
 
     // Create transactions for each project proportionally
     const createdTransactions: { projectId: string; count: number }[] = [];
@@ -164,7 +161,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET - Preview what would be fixed without making changes
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await auth();
 

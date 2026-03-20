@@ -68,7 +68,7 @@ export function useSceneGeneratorSelection({
       });
     }
     return options;
-  }, [scenes.length, scenesWithImages, selectAll, selectAllWithImages, scenes]);
+  }, [scenes, scenesWithImages, selectAll, selectAllWithImages]);
 
   /**
    * Get selected scenes data for the regeneration request dialog

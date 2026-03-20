@@ -60,7 +60,7 @@ function MiniProjectCard({ project }: { project: Project }) {
 }
 
 // List view project item
-function ProjectListItem({ project, cost }: { project: Project; cost?: any }) {
+function ProjectListItem({ project, cost }: { project: Project; cost?: { credits: number; realCost: number } }) {
   const t = useTranslations();
   const thumbnailUrl = (() => {
     if ('thumbnailUrl' in project && project.thumbnailUrl) {

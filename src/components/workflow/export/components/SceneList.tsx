@@ -16,7 +16,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Play, Image as ImageIcon, Video, Trash2 } from 'lucide-react';
+import { GripVertical, Image as ImageIcon, Video, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Scene } from '@/types/project';
 
@@ -91,6 +91,7 @@ function SortableSceneItem({ scene, index, isSelected, onSelect, onDelete }: Sor
             muted
           />
         ) : scene.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={scene.imageUrl}
             alt={scene.title}

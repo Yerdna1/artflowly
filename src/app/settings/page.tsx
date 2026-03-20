@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const tPage = useTranslations('settingsPage');
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [subscriptionPlan, setSubscriptionPlan] = useState<string | null>(null);
+  const [, setSubscriptionPlan] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // API Keys Context
@@ -36,8 +36,6 @@ export default function SettingsPage() {
     language,
     darkMode,
     reducedMotion,
-    notifyOnComplete,
-    autoSave,
     isExporting,
     actionCosts,
     costsLoading,
@@ -50,7 +48,6 @@ export default function SettingsPage() {
     imageProvider,
     videoProvider,
     modalEndpoints,
-    currency,
     kieImageModel,
     kieVideoModel,
     kieTtsModel,
@@ -64,9 +61,6 @@ export default function SettingsPage() {
     handleLanguageChange,
     handleDarkModeChange,
     handleReducedMotionChange,
-    handleNotifyChange,
-    handleAutoSaveChange,
-    handleCurrencyChange,
     handleExportData,
     handleDeleteAllData,
     fetchActionCosts,
@@ -148,16 +142,16 @@ export default function SettingsPage() {
                 showKeys={showKeys}
                 savedKeys={savedKeys}
                 localConfig={(apiKeysContext.apiKeys ? Object.fromEntries(
-                  Object.entries(apiKeysContext.apiKeys).filter(([key, value]) =>
-                    typeof value === 'string' || typeof value === 'undefined'
+                  Object.entries(apiKeysContext.apiKeys).filter(([, v]) =>
+                    typeof v === 'string' || typeof v === 'undefined'
                   )
                 ) : localConfig) as Record<string, string | undefined>}
                 apiConfig={apiKeysContext.apiKeys ? {
                   ...apiConfig,
                   ...Object.fromEntries(
                     Object.entries(apiKeysContext.apiKeys)
-                      .filter(([key, value]) => typeof value === 'string' || typeof value === 'undefined')
-                      .map(([key, value]) => [key, value || undefined])
+                      .filter(([, v]) => typeof v === 'string' || typeof v === 'undefined')
+                      .map(([k, v]) => [k, v || undefined])
                   )
                 } : apiConfig}
                 llmProvider={(apiKeysContext.apiKeys?.llmProvider || llmProvider) as LLMProvider}

@@ -16,7 +16,7 @@ export interface Provider {
   isDefault?: boolean;
   requiresEndpoint: boolean;
   helpLink?: string;
-  setupGuide?: any;
+  setupGuide?: Record<string, unknown>;
 }
 
 interface UseProvidersOptions {
@@ -28,7 +28,7 @@ interface UseProvidersOptions {
 interface UseProvidersReturn {
   providers: Provider[];
   isLoading: boolean;
-  error: any;
+  error: Error | undefined;
   mutate: () => void;
 }
 

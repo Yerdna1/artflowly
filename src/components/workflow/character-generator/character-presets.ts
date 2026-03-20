@@ -1,4 +1,4 @@
-import { User, Sparkles, Crown, Heart } from 'lucide-react';
+import { User, Sparkles, Crown, Heart, type LucideIcon } from 'lucide-react';
 
 export interface CharacterPreset {
   id: string;
@@ -7,7 +7,7 @@ export interface CharacterPreset {
   personality: string;
   description: string;
   visualDescription: string;
-  icon: any;
+  icon: LucideIcon;
   iconBg: string;
   iconColor: string;
 }

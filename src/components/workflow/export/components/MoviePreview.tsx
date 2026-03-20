@@ -197,6 +197,7 @@ export function MoviePreview({
                 transition={{ duration: getTransitionDuration(currentIndex) }}
               />
             ) : hasImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <motion.img
                 key={`image-${currentIndex}`}
                 src={currentScene.imageUrl!}
@@ -459,6 +460,7 @@ export function MoviePreview({
                   title={`${index + 1}. ${scene.title}`}
                 >
                   {scene.imageUrl ? (
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={scene.imageUrl} alt={scene.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-white/5 flex items-center justify-center">

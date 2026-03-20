@@ -1,4 +1,4 @@
-import { Film, Camera, Sparkles, Wand2 } from 'lucide-react';
+import { Film, Camera, Sparkles, Wand2, type LucideIcon } from 'lucide-react';
 import type { StoryConfig, StylePreset } from '@/types/project';
 
 export interface StoryPreset {
@@ -10,7 +10,7 @@ export interface StoryPreset {
   storyTitleKey: string;
   settingKey: string;
   conceptKey: string;
-  icon: any;
+  icon: LucideIcon;
   iconBg: string;
   iconColor: string;
   gradient: string; // Gradient for image card

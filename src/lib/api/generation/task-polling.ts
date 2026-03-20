@@ -11,7 +11,7 @@ export interface PollingOptions {
   timeout?: number;
 }
 
-export interface PollingResult<T = any> {
+export interface PollingResult<T = unknown> {
   success: boolean;
   status: GenerationStatus;
   result?: T;
@@ -23,7 +23,7 @@ export interface PollingResult<T = any> {
 /**
  * Generic task polling with exponential backoff
  */
-export async function pollTask<T = any>(
+export async function pollTask<T = unknown>(
   options: PollingOptions
 ): Promise<PollingResult<T>> {
   const {
@@ -68,7 +68,7 @@ export async function pollTask<T = any>(
         return {
           success: true,
           status: 'complete',
-          result: status as any,
+          result: status as unknown as T,
           attempts,
           duration: Date.now() - startTime,
         };
@@ -188,12 +188,13 @@ export function mapProviderState(
 /**
  * Extract result URL from provider-specific response
  */
-export interface ResultExtractor<T = any> {
-  (response: any): T | null;
+export interface ResultExtractor<T = unknown> {
+  (response: Record<string, unknown>): T | null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const DEFAULT_RESULT_EXTRACTORS: Record<string, ResultExtractor<string>> = {
-  kie_video: (data) => {
+  kie_video: (data: any) => {
     // KIE video result extraction
     if (data.resultJson) {
       try {
@@ -205,7 +206,7 @@ export const DEFAULT_RESULT_EXTRACTORS: Record<string, ResultExtractor<string>> 
     }
     return data.resultUrl || null;
   },
-  kie_music: (data) => {
+  kie_music: (data: any) => {
     // KIE music result extraction
     if (data.resultJson) {
       try {
@@ -217,7 +218,7 @@ export const DEFAULT_RESULT_EXTRACTORS: Record<string, ResultExtractor<string>> 
     }
     return data.audioUrl || null;
   },
-  kie_tts: (data) => {
+  kie_tts: (data: any) => {
     // KIE TTS result extraction
     if (data.resultJson) {
       try {
@@ -229,17 +230,18 @@ export const DEFAULT_RESULT_EXTRACTORS: Record<string, ResultExtractor<string>> 
     }
     return data.audioUrl || data.audio_url || data.resultUrl || null;
   },
-  suno: (data) => {
+  suno: (data: any) => {
     // Suno result extraction
     return data.audio_url || data.audioUrl || null;
   },
-  piapi: (data) => {
+  piapi: (data: any) => {
     // PiAPI result extraction
     return data.result?.audio_url || data.result?.audioUrl || null;
   },
 };
 
-export function extractResult<T = any>(
+export function extractResult<T = unknown>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: any,
   provider: string,
   type: string

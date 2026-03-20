@@ -24,21 +24,20 @@ export function useMusicForm({ apiKeys }: UseBackgroundMusicProps): UseMusicForm
     (apiKeys?.musicProvider || DEFAULT_VALUES.PROVIDER) as MusicProvider
   );
 
-  // Sync provider state when apiKeys changes
-  useEffect(() => {
-    if (apiKeys?.musicProvider) {
-      setProvider(apiKeys.musicProvider as MusicProvider);
+  const musicProvider = apiKeys?.musicProvider;
+  const kieMusicModel = apiKeys?.kieMusicModel;
 
-      // Also sync model based on provider
-      if (apiKeys.musicProvider === 'kie' && apiKeys.kieMusicModel) {
-        // KIE uses model names like 'suno/v3-music', keep as is
-        setModel(apiKeys.kieMusicModel as SunoModel);
-      } else if (apiKeys.musicProvider === 'piapi') {
-        // PiAPI uses V4, V4.5, etc.
+  useEffect(() => {
+    if (musicProvider) {
+      setProvider(musicProvider as MusicProvider);
+
+      if (musicProvider === 'kie' && kieMusicModel) {
+        setModel(kieMusicModel as SunoModel);
+      } else if (musicProvider === 'piapi') {
         setModel('V4.5');
       }
     }
-  }, [apiKeys?.musicProvider, apiKeys?.kieMusicModel ?? '']); // Use empty string fallback to keep array size constant
+  }, [musicProvider, kieMusicModel]);
 
   return {
     prompt,

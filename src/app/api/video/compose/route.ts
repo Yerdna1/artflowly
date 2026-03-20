@@ -13,7 +13,7 @@ export { POST } from './handlers/compose';
 export { GET } from './handlers/status';
 
 // OPTIONS - Return CORS headers for preflight
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS(_request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {

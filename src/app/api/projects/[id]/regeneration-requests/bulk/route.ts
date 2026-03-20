@@ -74,7 +74,6 @@ export async function PUT(
 
     // Get requester info (all requests in a batch should have the same requester)
     const requesterId = requests[0].requesterId;
-    const requesterName = requests[0].requester?.name || requests[0].requester?.email || 'Unknown';
 
     if (approved) {
       // Calculate total cost for ALL requests (each with 3 attempts)
